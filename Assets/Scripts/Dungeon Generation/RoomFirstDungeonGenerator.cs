@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -67,9 +68,9 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
             }
 
             HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closestRoom);
-            corridors.UnionWith(newCorridor);
+            HashSet<Vector2Int> new3by3Corridor = IncreaseCorridorBrush3by3(newCorridor.ToList()).ToHashSet<Vector2Int>();
+            corridors.UnionWith(new3by3Corridor);
 
-            // Agrega la habitación recién conectada al conjunto de habitaciones conectadas
             connectedRooms.Add(closestRoom);
             roomCenters.Remove(closestRoom);
         }
@@ -148,5 +149,22 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         }
 
         return floor;
+    }
+
+    private List<Vector2Int> IncreaseCorridorBrush3by3(List<Vector2Int> corridor)
+    {
+        List<Vector2Int> newCorridor = new();
+        for (int i = 1; i < corridor.Count; i++)
+        {
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    newCorridor.Add(corridor[i - 1] + new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return newCorridor;
     }
 }
