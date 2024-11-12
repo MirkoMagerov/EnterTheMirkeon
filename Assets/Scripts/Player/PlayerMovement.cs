@@ -20,6 +20,11 @@ public class PlayerMovement : MonoBehaviour
         vertical = Input.GetAxisRaw("Vertical");
     }
 
+    public float GetHorizontalMovement()
+    {
+        return horizontal;
+    }
+
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal, vertical).normalized * moveSpeed;
