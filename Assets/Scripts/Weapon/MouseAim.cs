@@ -43,17 +43,19 @@ public class MouseAim : MonoBehaviour
 
     private void FlipPlayerLocalScale()
     {
-        Vector3 playerLocalScale = playerGameObject.transform.localScale;
+        Vector3 playerSpriteLocalScale = playerFlip.GetPlayerSpriteScale();
 
-        if (mousePos.x < playerGameObject.transform.position.x && playerLocalScale.x > 0)
+        if (mousePos.x < playerGameObject.transform.position.x && playerSpriteLocalScale.x > 0)
         {
-            playerFlip.SetPlayerLocalScale(new Vector3(-Mathf.Abs(playerLocalScale.x), playerLocalScale.y, playerLocalScale.z));
+            playerFlip.SetPlayerSpriteLocalScale(new Vector3(-Mathf.Abs(playerSpriteLocalScale.x), playerSpriteLocalScale.y, playerSpriteLocalScale.z));
         }
-        else if (mousePos.x > playerGameObject.transform.position.x && playerLocalScale.x < 0)
+        else if (mousePos.x > playerGameObject.transform.position.x && playerSpriteLocalScale.x < 0)
         {
-            playerFlip.SetPlayerLocalScale(new Vector3(Mathf.Abs(playerLocalScale.x), playerLocalScale.y, playerLocalScale.z));
+            playerFlip.SetPlayerSpriteLocalScale(new Vector3(Mathf.Abs(playerSpriteLocalScale.x), playerSpriteLocalScale.y, playerSpriteLocalScale.z));
         }
     }
+
+    public Vector2 GetMousePos() => mousePos;
 
     private void OnDrawGizmos()
     {

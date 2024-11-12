@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerFlip : MonoBehaviour
 {
-    public void SetPlayerLocalScale(Vector3 newLocalScale)
+    [SerializeField] private GameObject playerSpriteGameObject;
+
+    public void SetPlayerSpriteLocalScale(Vector3 newLocalScale)
     {
-        transform.localScale = new(newLocalScale.x, newLocalScale.y, newLocalScale.z);
+        playerSpriteGameObject.transform.localScale = new(newLocalScale.x, newLocalScale.y, newLocalScale.z);
     }
 
-    public Vector3 GetPlayerLocalScale()
+    public Vector3 GetPlayerSpriteScale()
     {
-        return transform.localScale;
+        return playerSpriteGameObject.transform.localScale;
     }
 }

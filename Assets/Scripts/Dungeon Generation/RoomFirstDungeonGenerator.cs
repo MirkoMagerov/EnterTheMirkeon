@@ -156,9 +156,9 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         List<Vector2Int> newCorridor = new();
         for (int i = 1; i < corridor.Count; i++)
         {
-            for (int x = -1; x < 2; x++)
+            for (int x = 0; x < 2; x++)
             {
-                for (int y = -1; y < 2; y++)
+                for (int y = 0; y < 2; y++)
                 {
                     newCorridor.Add(corridor[i - 1] + new Vector2Int(x, y));
                 }
