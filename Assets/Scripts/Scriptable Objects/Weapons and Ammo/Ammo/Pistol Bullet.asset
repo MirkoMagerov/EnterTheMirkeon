@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27859fde6954c804ca1d3f3afc0b51a5, type: 3}
-  m_Name: SimpleRandomWalkParameters_BigDungeon
+  m_Script: {fileID: 11500000, guid: 594d9a15ef7b629428925deedb84f272, type: 3}
+  m_Name: Pistol Bullet
   m_EditorClassIdentifier: 
-  walkLength: 100
-  iterations: 100
-  startRandomlyEachIteration: 1
+  ammoName: Pistol Bullet
+  projectilePrefab: {fileID: 0}
+  speed: 20
+  damage: 15
+  canPierce: 0
