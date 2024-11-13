@@ -17,6 +17,7 @@ public class WeaponHolder : MonoBehaviour
     {
         mouseAim = GetComponent<MouseAim>();
         weaponRenderer = GetComponentInChildren<SpriteRenderer>();
+        weaponRenderer.sortingLayerName = playerRenderer.sortingLayerName;
     }
 
     void Update()

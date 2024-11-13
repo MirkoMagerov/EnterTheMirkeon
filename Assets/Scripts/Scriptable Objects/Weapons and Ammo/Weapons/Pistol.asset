@@ -17,6 +17,6 @@ MonoBehaviour:
   fireRate: 0.5
   bulletsPerShot: 1
   spread: 0
-  ammoType: {fileID: 0}
-  magSize: 0
+  ammoType: {fileID: 11400000, guid: 829973e5f99875149b6c13bf9946519b, type: 2}
+  magSize: 14
   fireSound: {fileID: 0}

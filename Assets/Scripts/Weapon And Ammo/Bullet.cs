@@ -4,27 +4,28 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private float speed;
     private int damage;
     private bool canPierce;
     private WeaponController weapon;
+    private float maxLifeTime = 5f;
+
+    private void Update()
+    {
+        maxLifeTime -= Time.deltaTime;
+        if (maxLifeTime <= 0)
+        {
+            ReturnToPool();
+        }
+    }
 
     public void Initialize(AmmoSO ammoData)
     {
-        speed = ammoData.speed;
         damage = ammoData.damage;
         canPierce = ammoData.canPierce;
     }
 
-    void Update()
-    {
-        // Mover la bala
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Lógica de impacto
         if (collision.CompareTag("Enemy"))
         {
             //Enemy enemy = collision.GetComponent<Enemy>();
@@ -37,11 +38,6 @@ public class Bullet : MonoBehaviour
             {
                 ReturnToPool();
             }
-        }
-
-        if (collision.CompareTag("Wall") && !canPierce)
-        {
-            ReturnToPool();
         }
     }
 

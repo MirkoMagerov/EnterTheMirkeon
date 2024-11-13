@@ -1,32 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    PlayerMovementInputActions playerMovementInput;
+
     [SerializeField] private float moveSpeed;
 
-    private float horizontal, vertical;
+    private Vector2 movementInput;
     private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        playerMovementInput = new PlayerMovementInputActions();
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        rb.velocity = movementInput.normalized * moveSpeed;
+    }
+
+    private void OnEnable()
+    {
+        playerMovementInput.Enable();
+        playerMovementInput.PlayerMovement.Movement.performed += OnMovement;
+    }
+
+    private void OnDisable()
+    {
+        playerMovementInput.Disable();
+        playerMovementInput.PlayerMovement.Movement.performed -= OnMovement;
+    }
+
+    private void OnMovement(InputAction.CallbackContext context)
+    {
+        movementInput = context.ReadValue<Vector2>();
     }
 
     public float GetHorizontalMovement()
     {
-        return horizontal;
-    }
-
-    private void FixedUpdate()
-    {
-        rb.velocity = new Vector2(horizontal, vertical).normalized * moveSpeed;
+        return movementInput.x;
     }
 }

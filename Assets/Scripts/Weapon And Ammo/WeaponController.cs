@@ -22,7 +22,6 @@ public class WeaponController : MonoBehaviour
         InitializeAmmoPool();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
@@ -37,17 +36,13 @@ public class WeaponController : MonoBehaviour
     {
         for (int i = 0; i < weaponData.bulletsPerShot; i++)
         {
-            // Calcular dirección con dispersión
             float spread = Random.Range(-weaponData.spread, weaponData.spread);
             Vector3 shootDirection = Quaternion.Euler(0, 0, spread) * transform.right;
 
-            // Obtener el proyectil del pool
             GameObject projectile = GetBulletFromPool();
             if (projectile == null) return;
 
-            // Configurar el proyectil
-            projectile.transform.position = bulletSpawnPoint.position;
-            projectile.transform.rotation = Quaternion.identity;
+            projectile.transform.SetPositionAndRotation(bulletSpawnPoint.position, Quaternion.identity);
             projectile.SetActive(true);
 
             Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
@@ -61,7 +56,8 @@ public class WeaponController : MonoBehaviour
         for (int i = 0; i < weaponData.magSize; i++)
         {
             GameObject bullet = Instantiate(weaponData.ammoType.projectilePrefab);
-            bullet.SetWeapon(this);
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            bulletScript.SetWeapon(this);
             bullet.SetActive(false);
             bulletPool.Push(bullet);
         }
@@ -83,6 +79,15 @@ public class WeaponController : MonoBehaviour
     public void ReturnBulletToPool(GameObject bullet)
     {
         bullet.SetActive(false);
+
+        bullet.transform.SetPositionAndRotation(bulletSpawnPoint.localPosition, bulletSpawnPoint.localRotation);
+
+        if (bullet.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
         bulletPool.Push(bullet);
     }
 }
