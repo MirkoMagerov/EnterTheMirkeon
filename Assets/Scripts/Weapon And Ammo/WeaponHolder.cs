@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,24 +6,21 @@ using UnityEngine;
 public class WeaponHolder : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer playerRenderer;
+    [SerializeField] private SpriteRenderer weaponRenderer;
 
+    private Weapon currentWeapon;
     private Vector2 mousePos = Vector2.zero;
-    private SpriteRenderer weaponRenderer;
-
-    #region Other Scripts References
-    private MouseAim mouseAim;
-    #endregion
 
     private void Start()
     {
-        mouseAim = GetComponent<MouseAim>();
-        weaponRenderer = GetComponentInChildren<SpriteRenderer>();
         weaponRenderer.sortingLayerName = playerRenderer.sortingLayerName;
+        weaponRenderer.sortingOrder = playerRenderer.sortingOrder;
+        UpdateWeaponSprite();
     }
 
     void Update()
     {
-        mousePos = mouseAim.GetMousePos();
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
         transform.right = direction;
@@ -44,6 +42,20 @@ public class WeaponHolder : MonoBehaviour
         else if (transform.eulerAngles.z > 180)
         {
             weaponRenderer.sortingOrder = playerRenderer.sortingOrder + 1;
+        }
+    }
+
+    public void EquipWeapon(Weapon newWeapon)
+    {
+        currentWeapon = newWeapon;
+        UpdateWeaponSprite();
+    }
+
+    private void UpdateWeaponSprite()
+    {
+        if (currentWeapon != null && currentWeapon.weaponSprite != null)
+        {
+            weaponRenderer.sprite = currentWeapon.weaponSprite;
         }
     }
 }

@@ -56,15 +56,4 @@ public class MouseAim : MonoBehaviour
     }
 
     public Vector2 GetMousePos() => mousePos;
-
-    private void OnDrawGizmos()
-    {
-        if (GameObject.FindGameObjectWithTag("Player") != null)
-        {
-            Vector2 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(playerPosition, playerPosition + playerToMouseDirection * 10f);
-        }
-    }
 }

@@ -4,90 +4,134 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] private WeaponSO weaponData;
-    [SerializeField] private Transform bulletSpawnPoint;
+    [SerializeField] private WeaponHolder weaponHolder;
 
-    private float nextFireTime = 0f;
-    private SpriteRenderer weaponSpriteRenderer;
-    private Stack<GameObject> bulletPool;
+    public Weapon currentWeapon;
+    public Transform bulletSpawnPoint;
+
+    private float lastFireTime;
+    private int currentAmmo;
+    private bool isReloading = false;
+
+    private void Awake()
+    {
+        if (weaponHolder != null && currentWeapon != null)
+        {
+            SetWeapon(currentWeapon);
+        }
+    }
 
     private void Start()
     {
-        weaponSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        if (weaponSpriteRenderer != null)
+        if (currentWeapon != null)
         {
-            weaponSpriteRenderer.sprite = weaponData.weaponSprite;
+            currentAmmo = currentWeapon.magSize;
         }
-
-        InitializeAmmoPool();
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
-        {
-            FireWeaponSingleBullet();
+        if (currentWeapon == null) return;
 
-            nextFireTime = Time.time + weaponData.fireRate;
+        HandleShooting();
+
+        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < currentWeapon.magSize)
+        {
+            StartCoroutine(Reload());
         }
     }
 
-    void FireWeaponSingleBullet()
+    void HandleShooting()
     {
-        for (int i = 0; i < weaponData.bulletsPerShot; i++)
+        if (isReloading) return;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - bulletSpawnPoint.position).normalized;
+
+        bool canFire = Time.time - lastFireTime >= 1f / currentWeapon.fireRate;
+
+        switch (currentWeapon.weaponType)
         {
-            float spread = Random.Range(-weaponData.spread, weaponData.spread);
-            Vector3 shootDirection = Quaternion.Euler(0, 0, spread) * transform.right;
+            case WeaponType.Automatic:
+                if (Input.GetMouseButton(0) && canFire && currentAmmo > 0)
+                {
+                    Fire(direction);
+                    lastFireTime = Time.time;
+                }
+                break;
 
-            GameObject projectile = GetBulletFromPool();
-            if (projectile == null) return;
+            case WeaponType.SemiAutomatic:
+                if (Input.GetMouseButtonDown(0) && canFire && currentAmmo > 0)
+                {
+                    Fire(direction);
+                    lastFireTime = Time.time;
+                }
+                break;
 
-            projectile.transform.SetPositionAndRotation(bulletSpawnPoint.position, Quaternion.identity);
-            projectile.SetActive(true);
-
-            Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-            rb.velocity = shootDirection * weaponData.ammoType.speed;
+            case WeaponType.Shotgun:
+                if (Input.GetMouseButtonDown(0) && canFire && currentAmmo > 0)
+                {
+                    FireShotgun(direction);
+                    lastFireTime = Time.time;
+                }
+                break;
         }
     }
 
-    private void InitializeAmmoPool()
+    void Fire(Vector2 direction)
     {
-        bulletPool = new Stack<GameObject>();
-        for (int i = 0; i < weaponData.magSize; i++)
+        if (currentAmmo <= 0)
         {
-            GameObject bullet = Instantiate(weaponData.ammoType.projectilePrefab);
-            Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.SetWeapon(this);
-            bullet.SetActive(false);
-            bulletPool.Push(bullet);
+            Debug.Log("Sin munición, recarga necesaria");
+            return;
         }
+
+        GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
+        {
+            bulletBehavior.Initialize(direction, currentWeapon.ammoType);
+        }
+        currentAmmo--;
     }
 
-    private GameObject GetBulletFromPool()
+    void FireShotgun(Vector2 direction)
     {
-        if (bulletPool.Count > 0)
+        if (currentAmmo <= 0)
         {
-            return bulletPool.Pop();
+            Debug.Log("Sin munición, recarga necesaria");
+            return;
         }
-        else
+
+        for (int i = 0; i < currentWeapon.bulletsPerShot; i++)
         {
-            Debug.LogWarning("EL BULLET POOL ESTA VACÍO.");
-            return null;
+            float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2, currentWeapon.spreadAngle / 2);
+            Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
+
+            GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
+            if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
+            {
+                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType);
+            }
         }
+        currentAmmo -= currentWeapon.bulletsPerShot;
     }
 
-    public void ReturnBulletToPool(GameObject bullet)
+    private IEnumerator Reload()
     {
-        bullet.SetActive(false);
+        isReloading = true;
+        Debug.Log($"Reloading: {currentAmmo}, ammoType: {currentWeapon.ammoType.name}");
+        yield return new WaitForSeconds(currentWeapon.reloadTime);
+        currentAmmo = currentWeapon.magSize;
+        isReloading = false;
+        Debug.Log("Recarga completada");
+    }
 
-        bullet.transform.SetPositionAndRotation(bulletSpawnPoint.localPosition, bulletSpawnPoint.localRotation);
-
-        if (bullet.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        bulletPool.Push(bullet);
+    public void SetWeapon(Weapon weapon)
+    {
+        currentWeapon = weapon;
+        lastFireTime = 0;
+        currentAmmo = weapon.magSize;
+        isReloading = false;
+        weaponHolder.EquipWeapon(weapon);
     }
 }

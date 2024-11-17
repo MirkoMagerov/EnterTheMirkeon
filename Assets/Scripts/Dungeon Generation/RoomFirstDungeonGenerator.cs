@@ -23,8 +23,9 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
 
     private void CreateRooms()
     {
-        List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPos,
-            new Vector3Int(dungeonWidth, dungeonHeigth, 0)), minRoomWidth + offset + 1, minRoomHeigth + offset + 1);
+        List<BoundsInt> roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt(
+            (Vector3Int)startPos, new Vector3Int(dungeonWidth, dungeonHeigth, 0)),
+            minRoomWidth + offset +1, minRoomHeigth + offset + 1);
 
         HashSet<Vector2Int> floor = CreateSimpleRooms(roomsList);
 
@@ -148,7 +149,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
             }
         }
 
-        return floor;
+        return floor;  
     }
 
     private List<Vector2Int> IncreaseCorridorBrush3by3(List<Vector2Int> corridor)

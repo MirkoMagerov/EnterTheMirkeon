@@ -6,9 +6,10 @@ public static class ProceduralGenerationAlgorithms
 {
     public static HashSet<Vector2Int> SimpleRandomWalk(Vector2Int startPos, int walkLength)
     {
-        HashSet<Vector2Int> path = new();
-
-        path.Add(startPos);
+        HashSet<Vector2Int> path = new()
+        {
+            startPos
+        };
         Vector2Int previousPos = startPos;
 
         for (int i = 0; i < walkLength; i++)
