@@ -17,8 +17,11 @@ public class Weapon : ScriptableObject
     public int bulletsPerShot = 1;
     public float spreadAngle = 0f;
     public int magSize;
+    public int totalBullets;
     public float reloadTime;
     public WeaponType weaponType;
     public Sprite weaponSprite;
     public Ammo ammoType;
+
+    public bool hasInfiniteAmmo;
 }

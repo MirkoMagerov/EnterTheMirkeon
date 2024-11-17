@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
-  m_Name: Pistol
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  weaponName: Pistol
-  fireRate: 2.2
-  bulletsPerShot: 1
-  spreadAngle: 5
+  weaponName: Simple Shotgun
+  fireRate: 1
+  bulletsPerShot: 3
+  spreadAngle: 10
   magSize: 12
-  totalBullets: 0
-  reloadTime: 1.5
-  weaponType: 1
-  weaponSprite: {fileID: 21300000, guid: 80746b1eeeb22384fbd6fc65c720e703, type: 3}
-  ammoType: {fileID: 11400000, guid: 829973e5f99875149b6c13bf9946519b, type: 2}
-  hasInfiniteAmmo: 1
+  totalBullets: 48
+  reloadTime: 4
+  weaponType: 2
+  weaponSprite: {fileID: 21300000, guid: fdf6bd894ecb735449037b0c55fe9cb2, type: 3}
+  ammoType: {fileID: 11400000, guid: ff039cf16cf16754ea055158c8e4da45, type: 2}
+  hasInfiniteAmmo: 0

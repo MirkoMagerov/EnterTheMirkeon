@@ -69,7 +69,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
             }
 
             HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoom, closestRoom);
-            HashSet<Vector2Int> new3by3Corridor = IncreaseCorridorBrush3by3(newCorridor.ToList()).ToHashSet<Vector2Int>();
+            HashSet<Vector2Int> new3by3Corridor = IncreaseCorridorBrush2by2(newCorridor.ToList()).ToHashSet<Vector2Int>();
             corridors.UnionWith(new3by3Corridor);
 
             connectedRooms.Add(closestRoom);
@@ -152,20 +152,20 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         return floor;  
     }
 
-    private List<Vector2Int> IncreaseCorridorBrush3by3(List<Vector2Int> corridor)
+    private List<Vector2Int> IncreaseCorridorBrush2by2(List<Vector2Int> corridor)
     {
         List<Vector2Int> newCorridor = new();
-        for (int i = 1; i < corridor.Count; i++)
+        foreach (var position in corridor)
         {
-            for (int x = 0; x < 2; x++)
+            for (int x = -1; x <= 1; x++)
             {
-                for (int y = 0; y < 2; y++)
+                for (int y = -1; y <= 1; y++)
                 {
-                    newCorridor.Add(corridor[i - 1] + new Vector2Int(x, y));
+                    newCorridor.Add(position + new Vector2Int(x, y));
                 }
             }
         }
 
-        return newCorridor;
+        return newCorridor.Distinct().ToList();
     }
 }

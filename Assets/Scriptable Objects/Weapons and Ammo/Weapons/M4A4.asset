@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: M4A4
   m_EditorClassIdentifier: 
   weaponName: M4A4
-  fireRate: 4
+  fireRate: 5
   bulletsPerShot: 1
-  spreadAngle: 5
+  spreadAngle: 7
   magSize: 20
+  totalBullets: 60
   reloadTime: 2
   weaponType: 0
   weaponSprite: {fileID: 21300000, guid: 9cc4e3753c0683845869c59437619349, type: 3}
   ammoType: {fileID: 11400000, guid: 56338f9d5646d9643ac0bf3d93839b75, type: 2}
+  hasInfiniteAmmo: 0

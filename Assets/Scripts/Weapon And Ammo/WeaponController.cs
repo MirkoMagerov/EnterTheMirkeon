@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] private WeaponHolder weaponHolder;
-
-    public Weapon currentWeapon;
     public Transform bulletSpawnPoint;
 
+    [SerializeField] private WeaponHolder weaponHolder;
+
     private float lastFireTime;
-    private int currentAmmo;
+    private int currentMag;
+    private int totalBullets;
     private bool isReloading = false;
+
+    private Weapon currentWeapon;
+    private WeaponInventory weaponInventory;
 
     private void Awake()
     {
-        if (weaponHolder != null && currentWeapon != null)
-        {
-            SetWeapon(currentWeapon);
-        }
+        weaponInventory = GetComponent<WeaponInventory>();
     }
 
     private void Start()
     {
         if (currentWeapon != null)
         {
-            currentAmmo = currentWeapon.magSize;
+            currentMag = currentWeapon.magSize;
         }
     }
 
@@ -35,7 +35,7 @@ public class WeaponController : MonoBehaviour
 
         HandleShooting();
 
-        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentAmmo < currentWeapon.magSize)
+        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentMag < currentWeapon.magSize && (currentWeapon.hasInfiniteAmmo || totalBullets > 0))
         {
             StartCoroutine(Reload());
         }
@@ -44,7 +44,7 @@ public class WeaponController : MonoBehaviour
     void HandleShooting()
     {
         if (isReloading) return;
-
+        
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePos - bulletSpawnPoint.position).normalized;
 
@@ -53,7 +53,7 @@ public class WeaponController : MonoBehaviour
         switch (currentWeapon.weaponType)
         {
             case WeaponType.Automatic:
-                if (Input.GetMouseButton(0) && canFire && currentAmmo > 0)
+                if (Input.GetMouseButton(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
                 {
                     Fire(direction);
                     lastFireTime = Time.time;
@@ -61,7 +61,7 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.SemiAutomatic:
-                if (Input.GetMouseButtonDown(0) && canFire && currentAmmo > 0)
+                if (Input.GetMouseButtonDown(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
                 {
                     Fire(direction);
                     lastFireTime = Time.time;
@@ -69,7 +69,7 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Shotgun:
-                if (Input.GetMouseButtonDown(0) && canFire && currentAmmo > 0)
+                if (Input.GetMouseButtonDown(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
                 {
                     FireShotgun(direction);
                     lastFireTime = Time.time;
@@ -80,23 +80,33 @@ public class WeaponController : MonoBehaviour
 
     void Fire(Vector2 direction)
     {
-        if (currentAmmo <= 0)
+        if (currentMag <= 0)
         {
             Debug.Log("Sin munición, recarga necesaria");
             return;
         }
 
+        // Instancia la bala
         GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
         if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
         {
             bulletBehavior.Initialize(direction, currentWeapon.ammoType);
         }
-        currentAmmo--;
+
+        Debug.Log($"Disparo: Cargador restante: {currentMag}");
+
+        currentMag--;
+
+        // Disminuye la munición en WeaponInventory si no tiene munición infinita
+        if (!currentWeapon.hasInfiniteAmmo)
+        {
+            weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
+        }
     }
 
     void FireShotgun(Vector2 direction)
     {
-        if (currentAmmo <= 0)
+        if (currentMag <= 0)
         {
             Debug.Log("Sin munición, recarga necesaria");
             return;
@@ -107,30 +117,63 @@ public class WeaponController : MonoBehaviour
             float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2, currentWeapon.spreadAngle / 2);
             Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
 
+            // Instancia cada bala disparada con dispersión
             GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
             if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
             {
                 bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType);
             }
         }
-        currentAmmo -= currentWeapon.bulletsPerShot;
+
+        Debug.Log($"Disparo Shotgun: Cargador restante: {currentMag}");
+
+        currentMag -= currentWeapon.bulletsPerShot;
+        currentMag = Mathf.Max(currentMag, 0);
+
+        // Disminuye la munición en WeaponInventory si no tiene munición infinita
+        if (!currentWeapon.hasInfiniteAmmo)
+        {
+            weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
+        }
     }
 
     private IEnumerator Reload()
     {
         isReloading = true;
-        Debug.Log($"Reloading: {currentAmmo}, ammoType: {currentWeapon.ammoType.name}");
+        Debug.Log($"Recargando: Cargador actual = {currentMag}, Balas totales = {totalBullets}, Tipo de bala = {currentWeapon.ammoType.name}");
         yield return new WaitForSeconds(currentWeapon.reloadTime);
-        currentAmmo = currentWeapon.magSize;
+
+        WeaponAmmoData ammoData = weaponInventory.GetAmmoData(currentWeapon);
+
+        if (!currentWeapon.hasInfiniteAmmo)
+        {
+            bool reloaded = weaponInventory.ReloadWeapon(currentWeapon);
+            if (reloaded)
+            {
+                currentMag = ammoData.currentMag;
+                totalBullets = ammoData.totalBullets;
+                Debug.Log("Recarga completada");
+            }
+            else
+            {
+                Debug.Log("No se pudo recargar: No hay balas suficientes o el cargador está lleno");
+            }
+        }
+        else
+        {
+            currentMag = ammoData.currentMag;
+            Debug.Log("Recarga completada para arma con balas infinitas");
+        }
+
         isReloading = false;
-        Debug.Log("Recarga completada");
     }
 
-    public void SetWeapon(Weapon weapon)
+    public void SetWeapon(Weapon weapon, int mag, int total)
     {
         currentWeapon = weapon;
+        currentMag = mag;
+        totalBullets = total;
         lastFireTime = 0;
-        currentAmmo = weapon.magSize;
         isReloading = false;
         weaponHolder.EquipWeapon(weapon);
     }
