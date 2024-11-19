@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponInventory : MonoBehaviour
 {
     [SerializeField] private List<Weapon> weapons = new();
+    [SerializeField] private Image currentWeaponImageUI;
+    [SerializeField] private Image previousWeaponImageUI;
+    [SerializeField] private Image nextWeaponImageUI;
 
     private WeaponController weaponController;
     private int currentWeaponIndex = 0;
@@ -12,10 +16,11 @@ public class WeaponInventory : MonoBehaviour
 
     private void Start()
     {
-        if (TryGetComponent<WeaponController>(out weaponController))
+        if (TryGetComponent(out weaponController))
         {
             InitializeAmmo();
             EquipCurrentWeapon();
+            UpdateUI();
         }
     }
 
@@ -35,6 +40,8 @@ public class WeaponInventory : MonoBehaviour
             {
                 SelectPreviousWeapon();
             }
+
+            UpdateUI();
         }
     }
 
@@ -169,6 +176,23 @@ public class WeaponInventory : MonoBehaviour
         else
         {
             weaponAmmo[weapon] = new WeaponAmmoData(weapon.magSize, Mathf.Min(amount, weapon.totalBullets));
+        }
+    }
+
+    private void UpdateUI()
+    {
+        currentWeaponImageUI.sprite = weapons[currentWeaponIndex].weaponSprite;
+
+        previousWeaponImageUI.sprite = null;
+        if (currentWeaponIndex - 1 >= 0 && weapons[currentWeaponIndex - 1] != null)
+        {
+            previousWeaponImageUI.sprite = weapons[currentWeaponIndex - 1].weaponSprite;
+        }
+
+        nextWeaponImageUI.sprite = null;
+        if (currentWeaponIndex + 1 < weapons.Count && weapons[currentWeaponIndex + 1] != null)
+        {
+            nextWeaponImageUI.sprite = weapons[currentWeaponIndex + 1].weaponSprite;
         }
     }
 }

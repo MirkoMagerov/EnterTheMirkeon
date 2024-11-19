@@ -177,7 +177,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void CreateHorizontalCorridor(int xStart, int xEnd, int y)
     {
-        Corridor corridor = new Corridor
+        Corridor corridor = new()
         {
             isHorizontal = true,
             start = new Vector2Int(Mathf.Min(xStart, xEnd), y),
