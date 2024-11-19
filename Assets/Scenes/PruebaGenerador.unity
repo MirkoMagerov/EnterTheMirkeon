@@ -226,7 +226,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0
+  near clip plane: 1.26
   far clip plane: 1000
   field of view: 60
   orthographic: 1
@@ -682,6 +682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1901773085}
   - component: {fileID: 1901773086}
+  - component: {fileID: 1901773087}
   m_Layer: 0
   m_Name: Gungeon Generator
   m_TagString: Untagged
@@ -716,10 +717,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54fd5336868a62744a9950b68fe90e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorTilemap: {fileID: 1217653765}
-  wallTilemap: {fileID: 1304843688}
-  floorTile: {fileID: 11400000, guid: a3847bc3158728341a516165beddc580, type: 2}
-  wallTile: {fileID: 11400000, guid: 93ce7dd23da44c54f8e2026c96b4d095, type: 2}
   dungeonWidth: 200
   dungeonHeight: 200
   roomCount: 20
@@ -729,6 +726,22 @@ MonoBehaviour:
   roomHeightMax: 32
   roomMargin: 4
   corridorMargin: 4
+--- !u!114 &1901773087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901773084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b141c8079ddf74597a984295f8f758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorTilemap: {fileID: 1217653765}
+  wallTilemap: {fileID: 1304843688}
+  floorTile: {fileID: 11400000, guid: a3847bc3158728341a516165beddc580, type: 2}
+  wallTile: {fileID: 11400000, guid: aa5415ef1fa2e114193b6f2acb75ddaa, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
