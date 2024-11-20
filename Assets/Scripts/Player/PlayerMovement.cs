@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 movementInput;
     private Rigidbody2D rb;
+    private bool isDashing;
 
     private void Awake()
     {
@@ -24,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDashing) return;
+
         rb.velocity = movementInput.normalized * moveSpeed;
     }
 
@@ -31,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     {
         playerMovementInput.Enable();
         playerMovementInput.PlayerMovement.Movement.performed += OnMovement;
+        PlayerDash.OnDashStateChanged += HandleDashStateChanged;
     }
 
     private void OnDisable()
@@ -44,8 +48,8 @@ public class PlayerMovement : MonoBehaviour
         movementInput = context.ReadValue<Vector2>();
     }
 
-    public float GetHorizontalMovement()
+    private void HandleDashStateChanged(bool dashing)
     {
-        return movementInput.x;
+        isDashing = dashing;
     }
 }

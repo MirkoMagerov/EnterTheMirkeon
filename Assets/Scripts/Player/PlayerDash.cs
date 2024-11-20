@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerDash : MonoBehaviour
 {
-    [SerializeField] private float dashSpeed = 15f;
+    PlayerMovementInputActions playerMovementInput;
+
+    public delegate void DashStateChanged(bool isDashing);
+    public static event DashStateChanged OnDashStateChanged;
+
+    [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float invulnerabilityDuration = 0.15f;
-    [SerializeField] private float dashCooldown = 1f;
+    [SerializeField] private float invulnerabilityDuration = 0.2f;
+    [SerializeField] private float dashCooldown = .8f;
 
     private bool isDashing = false;
     private bool isInvulnerable = false;
@@ -16,6 +22,11 @@ public class PlayerDash : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 dashDirection;
 
+    private void Awake()
+    {
+        playerMovementInput = new PlayerMovementInputActions();
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,6 +34,8 @@ public class PlayerDash : MonoBehaviour
 
     void Update()
     {
+        if (isDashing) return;
+
         if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
@@ -34,43 +47,44 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        playerMovementInput.Enable();
+        playerMovementInput.PlayerMovement.Movement.performed += OnMovement;
+    }
+
+    private void OnDisable()
+    {
+        playerMovementInput.Disable();
+        playerMovementInput.PlayerMovement.Movement.performed -= OnMovement;
+    }
+
+    private void OnMovement(InputAction.CallbackContext context)
+    {
+        dashDirection = context.ReadValue<Vector2>();
+    }
+
     private void StartDash()
     {
+        isInvulnerable = true;
         isDashing = true;
         dashCooldownTimer = dashCooldown;
 
-        dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        OnDashStateChanged?.Invoke(true);
 
         StartCoroutine(Dash());
     }
 
     IEnumerator Dash()
     {
-        StartInvulnerability();
+        rb.velocity = new Vector2(dashDirection.x * dashSpeed, dashDirection.y * dashSpeed);
 
-        float dashTimer = 0f;
-        while (dashTimer < dashDuration)
-        {
-            rb.velocity = dashDirection * dashSpeed;
-            dashTimer += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(dashDuration);
 
         rb.velocity = Vector2.zero;
-
         isDashing = false;
-        EndInvulnerability();
-    }
-
-    private void StartInvulnerability()
-    {
-        isInvulnerable = true;
-
-        Invoke(nameof(EndInvulnerability), invulnerabilityDuration);
-    }
-
-    private void EndInvulnerability()
-    {
         isInvulnerable = false;
+
+        OnDashStateChanged?.Invoke(false);
     }
 }
