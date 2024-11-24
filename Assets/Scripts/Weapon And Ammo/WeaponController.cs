@@ -90,7 +90,7 @@ public class WeaponController : MonoBehaviour
         GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
         if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
         {
-            bulletBehavior.Initialize(direction, currentWeapon.ammoType);
+            bulletBehavior.Initialize(direction, currentWeapon.ammoType, "player");
         }
 
         Debug.Log($"Disparo: Cargador restante: {currentMag}");
@@ -121,7 +121,7 @@ public class WeaponController : MonoBehaviour
             GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
             if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
             {
-                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType);
+                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, "Player");
             }
         }
 

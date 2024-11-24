@@ -1,229 +1,241 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    // Parámetros de generación
-    public int dungeonWidth = 50;
-    public int dungeonHeight = 50;
+    public Tilemap floorTilemap;
+    public TileBase floorTile;
 
-    public int roomCount = 10;
-    public int roomWidthMin = 5;
-    public int roomWidthMax = 10;
-    public int roomHeightMin = 5;
-    public int roomHeightMax = 10;
+    public GameObject[] roomPrefabs;
+    public int minRooms = 5;
+    public int maxRooms = 15;
+    public int margin = 2;
 
-    public int roomMargin = 2;
-    public int corridorMargin = 2;
+    private List<Vector2Int> gridPositions = new();
+    private Dictionary<Vector2Int, Room> dungeonMap = new();
 
-    // Lista de habitaciones y pasillos generados
-    private List<Room> rooms = new();
-    private List<Corridor> corridors = new();
-
-    // Referencia al DungeonRenderer
-    private DungeonRenderer dungeonRenderer;
-
-    private void Awake()
+    void Start()
     {
-        // Obtener referencia al DungeonRenderer
-        dungeonRenderer = GetComponent<DungeonRenderer>();
-
         GenerateDungeon();
-        SpawnPlayerInFirstRoom();
     }
 
-    void GenerateDungeon()
+    public void GenerateDungeon()
     {
-        // Generar habitaciones
-        for (int i = 0; i < roomCount; i++)
+        gridPositions.Clear();
+        dungeonMap.Clear();
+
+        // Crear la habitación de Spawn en el origen
+        CreateRoomAtPosition(Room.RoomType.Spawn, Vector2Int.zero);
+
+        // Crear otras habitaciones especiales
+        CreateRoom(Room.RoomType.End);
+        CreateRoom(Room.RoomType.Boss);
+        CreateRoom(Room.RoomType.Shop);
+        CreateRoom(Room.RoomType.Loot);
+
+        // Crear habitaciones normales
+        int normalRooms = Mathf.Max(5, Random.Range(minRooms, maxRooms) - 5);
+        for (int i = 0; i < normalRooms; i++)
         {
-            GenerateRoom();
-        }
-
-        // Conectar habitaciones
-        ConnectRooms();
-
-        // Generar paredes alrededor del dungeon (opcional)
-        GenerateDungeonWalls_OPTIONAL();
-    }
-
-    void GenerateRoom()
-    {
-        for (int attempt = 0; attempt < 20; attempt++)
-        {
-            int width = Random.Range(roomWidthMin, roomWidthMax);
-            int height = Random.Range(roomHeightMin, roomHeightMax);
-            Vector2Int size = new Vector2Int(width, height);
-
-            int x = Random.Range(roomMargin + 1, dungeonWidth - width - roomMargin - 1);
-            int y = Random.Range(roomMargin + 1, dungeonHeight - height - roomMargin - 1);
-            Vector2Int position = new Vector2Int(x, y);
-
-            Room newRoom = new Room(position, size, roomMargin);
-
-            // Comprobar superposición con habitaciones existentes
-            bool overlaps = false;
-            foreach (Room room in rooms)
-            {
-                if (newRoom.Overlaps(room))
-                {
-                    overlaps = true;
-                    break;
-                }
-            }
-
-            if (!overlaps)
-            {
-                rooms.Add(newRoom);
-
-                // Notificar al DungeonRenderer para que dibuje la habitación
-                dungeonRenderer.DrawRoom(newRoom);
-
-                // Marcar las paredes de la habitación
-                MarkRoomWalls(newRoom);
-
-                break;
-            }
+            CreateRoom(Room.RoomType.Normal);
         }
     }
 
-    void MarkRoomWalls(Room room)
+    private void CreateRoomAtPosition(Room.RoomType roomType, Vector2Int position)
     {
-        // Calcular posiciones de las paredes y notificar al DungeonRenderer
-        dungeonRenderer.DrawRoomWalls(room);
-    }
+        GameObject roomPrefab = GetRoomPrefabByType(roomType);
+        Room roomData = roomPrefab.GetComponent<Room>();
 
-    void ConnectRooms()
-    {
-        List<Room> unconnectedRooms = new(rooms);
-        List<Room> connectedRooms = new();
-
-        Room currentRoom = unconnectedRooms[Random.Range(0, unconnectedRooms.Count)];
-        unconnectedRooms.Remove(currentRoom);
-        connectedRooms.Add(currentRoom);
-
-        while (unconnectedRooms.Count > 0)
-        {
-            Room closestRoom = null;
-            float closestDistance = Mathf.Infinity;
-
-            foreach (Room room in unconnectedRooms)
-            {
-                float distance = Vector2Int.Distance(currentRoom.center, room.center);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestRoom = room;
-                }
-            }
-
-            if (closestRoom != null)
-            {
-                CreateCorridorBetweenRooms(currentRoom, closestRoom);
-
-                unconnectedRooms.Remove(closestRoom);
-                connectedRooms.Add(closestRoom);
-
-                currentRoom = closestRoom;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
-    void CreateCorridorBetweenRooms(Room roomA, Room roomB)
-    {
-        // Ahora usaremos directamente los centros de las habitaciones
-        Vector2Int pointA = roomA.center;
-        Vector2Int pointB = roomB.center;
-
-        // Crear la abertura en las paredes de las habitaciones
-        dungeonRenderer.CreateDoorway(roomA, pointA);
-        dungeonRenderer.CreateDoorway(roomB, pointB);
-
-        if (Random.value < 0.5f)
-        {
-            // Conectar en x, luego en y
-            CreateHorizontalCorridor(pointA.x, pointB.x, pointA.y);
-            CreateVerticalCorridor(pointB.x, pointA.y, pointB.y);
-        }
-        else
-        {
-            // Conectar en y, luego en x
-            CreateVerticalCorridor(pointA.x, pointA.y, pointB.y);
-            CreateHorizontalCorridor(pointA.x, pointB.x, pointB.y);
-        }
-    }
-
-    Vector2Int AdjustedPoint(Vector2Int center, Room room, int margin)
-    {
-        int x = center.x;
-        int y = center.y;
-
-        if (center.x - room.xMin < margin)
-            x = room.xMin - margin;
-        else if (room.xMax - center.x < margin)
-            x = room.xMax + margin;
-
-        if (center.y - room.yMin < margin)
-            y = room.yMin - margin;
-        else if (room.yMax - center.y < margin)
-            y = room.yMax + margin;
-
-        return new Vector2Int(x, y);
-    }
-
-    void CreateHorizontalCorridor(int xStart, int xEnd, int y)
-    {
-        Corridor corridor = new()
-        {
-            isHorizontal = true,
-            start = new Vector2Int(Mathf.Min(xStart, xEnd), y),
-            end = new Vector2Int(Mathf.Max(xStart, xEnd), y)
-        };
-
-        corridors.Add(corridor);
-
-        // Notificar al DungeonRenderer para que dibuje el pasillo
-        dungeonRenderer.DrawCorridor(corridor);
-    }
-
-    void CreateVerticalCorridor(int x, int yStart, int yEnd)
-    {
-        Corridor corridor = new Corridor
-        {
-            isHorizontal = false,
-            start = new Vector2Int(x, Mathf.Min(yStart, yEnd)),
-            end = new Vector2Int(x, Mathf.Max(yStart, yEnd))
-        };
-
-        corridors.Add(corridor);
-
-        // Notificar al DungeonRenderer para que dibuje el pasillo
-        dungeonRenderer.DrawCorridor(corridor);
-    }
-
-    void GenerateDungeonWalls_OPTIONAL()
-    {
-        // Notificar al DungeonRenderer para que dibuje las paredes externas
-        dungeonRenderer.DrawDungeonWalls(dungeonWidth, dungeonHeight);
-    }
-
-    void SpawnPlayerInFirstRoom()
-    {
-        if (rooms.Count == 0)
-        {
-            Debug.LogError("No hay habitaciones generadas para spawnear al jugador.");
+        if (IsPositionOccupied(position, roomData.roomSize))
             return;
+
+        Vector3 worldPosition = new Vector3(position.x, position.y, 0);
+
+        GameObject roomInstance = Instantiate(roomPrefab, worldPosition, Quaternion.identity);
+        Room room = roomInstance.GetComponent<Room>();
+        room.roomType = roomType;
+        room.gridPosition = position;
+
+        dungeonMap[position] = room;
+        gridPositions.Add(position);
+    }
+
+    private void CreateRoom(Room.RoomType roomType)
+    {
+        GameObject roomPrefab = GetRoomPrefabByType(roomType);
+        Room roomData = roomPrefab.GetComponent<Room>();
+
+        // Obtener una posición válida y la habitación conectada
+        Room connectedRoom;
+        Vector2Int validPosition = GetValidPosition(roomData.roomSize, out connectedRoom);
+
+        if (validPosition == Vector2Int.zero) return; // Si no se encuentra posición válida, salimos
+
+        Vector3 worldPosition = new(validPosition.x, validPosition.y, 0);
+
+        GameObject roomInstance = Instantiate(roomPrefab, worldPosition, Quaternion.identity);
+        Room room = roomInstance.GetComponent<Room>();
+        room.roomType = roomType;
+        room.gridPosition = validPosition;
+
+        dungeonMap[validPosition] = room;
+        gridPositions.Add(validPosition);
+
+        // Crear un pasillo si hay una habitación conectada
+        if (connectedRoom != null)
+        {
+            CreateCorridor(connectedRoom.gridPosition, validPosition);
+        }
+    }
+
+    private GameObject GetRoomPrefabByType(Room.RoomType type)
+    {
+        foreach (var prefab in roomPrefabs)
+        {
+            Room room = prefab.GetComponent<Room>();
+            if (room.roomType == type)
+                return prefab;
+        }
+        return roomPrefabs[Random.Range(0, roomPrefabs.Length)];
+    }
+
+    private Vector2Int GetValidPosition(Vector2Int roomSize, out Room connectedRoom)
+    {
+        connectedRoom = null;
+        int maxAttempts = 20;
+        int maxOffset = 50; // Controla el rango de desplazamiento aleatorio
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            // Seleccionar una habitación existente al azar
+            List<Room> existingRooms = new List<Room>(dungeonMap.Values);
+            Room existingRoom = existingRooms[Random.Range(0, existingRooms.Count)];
+            Vector2Int existingPosition = existingRoom.gridPosition;
+
+            // Generar desplazamientos aleatorios
+            int offsetX = Random.Range(-maxOffset, maxOffset + 1);
+            int offsetY = Random.Range(-maxOffset, maxOffset + 1);
+
+            // Calcular la nueva posición
+            Vector2Int newPosition = existingPosition + new Vector2Int(offsetX, offsetY);
+
+            // Comprobar si la posición es válida
+            if (!IsPositionOccupied(newPosition, roomSize))
+            {
+                connectedRoom = existingRoom;
+                return newPosition;
+            }
         }
 
-        Room firstRoom = rooms[0];
-        Vector2Int centerTile = firstRoom.center;
+        // Si no se encuentra una posición válida, devolver Vector2Int.zero
+        return Vector2Int.zero;
+    }
 
-        Vector3 spawnPos = new Vector3(centerTile.x + 0.5f, centerTile.y + 0.5f, 0);
+    private Vector2Int RandomDirection()
+    {
+        int minStep = 10; // Distancia mínima (tamaño base de una habitación)
+        int maxStep = 20; // Distancia máxima permitida para evitar separación excesiva
 
-        GameManager.Instance.SpawnPlayerInFirstRoom(spawnPos);
+        int stepX = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1); // Aleatorio dentro del rango permitido
+        int stepY = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
+
+        // Asegurarse de que no ambos valores sean 0 (sin desplazamiento)
+        while (stepX == 0 && stepY == 0)
+        {
+            stepX = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
+            stepY = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
+        }
+
+        return new Vector2Int(stepX, stepY);
+    }
+
+    private bool IsPositionTooFar(Vector2Int position, int maxDistance)
+    {
+        foreach (var existingRoom in dungeonMap)
+        {
+            Vector2Int existingPosition = existingRoom.Key;
+
+            // Calcula la distancia Manhattan
+            int distance = Mathf.Abs(position.x - existingPosition.x) + Mathf.Abs(position.y - existingPosition.y);
+
+            if (distance <= maxDistance) return false;
+        }
+        return true;
+    }
+
+    private bool IsPositionOccupied(Vector2Int position, Vector2Int roomSize)
+    {
+        int margin = this.margin; // Usa el margen definido en la clase
+
+        // Definir el rectángulo de la nueva habitación
+        RectInt newRoomRect = new RectInt(
+            position.x - roomSize.x / 2 - margin,
+            position.y - roomSize.y / 2 - margin,
+            roomSize.x + 2 * margin,
+            roomSize.y + 2 * margin);
+
+        foreach (var existingRoom in dungeonMap.Values)
+        {
+            Vector2Int existingPosition = existingRoom.gridPosition;
+            Vector2Int existingSize = existingRoom.roomSize;
+
+            // Definir el rectángulo de la habitación existente
+            RectInt existingRoomRect = new RectInt(
+                existingPosition.x - existingSize.x / 2,
+                existingPosition.y - existingSize.y / 2,
+                existingSize.x,
+                existingSize.y);
+
+            // Comprobar si los rectángulos se superponen
+            if (newRoomRect.Overlaps(existingRoomRect))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void CreateCorridor(Vector2Int fromPosition, Vector2Int toPosition)
+    {
+        Vector2Int currentPosition = fromPosition;
+        List<Vector2Int> corridorPositions = new List<Vector2Int>();
+
+        // Decidir aleatoriamente si moverse primero en X o en Y
+        bool moveFirstInX = Random.value > 0.5f;
+
+        while (currentPosition != toPosition)
+        {
+            if (moveFirstInX && currentPosition.x != toPosition.x)
+            {
+                currentPosition.x += (toPosition.x > currentPosition.x) ? 1 : -1;
+            }
+            else if (!moveFirstInX && currentPosition.y != toPosition.y)
+            {
+                currentPosition.y += (toPosition.y > currentPosition.y) ? 1 : -1;
+            }
+            else if (currentPosition.x != toPosition.x)
+            {
+                currentPosition.x += (toPosition.x > currentPosition.x) ? 1 : -1;
+            }
+            else if (currentPosition.y != toPosition.y)
+            {
+                currentPosition.y += (toPosition.y > currentPosition.y) ? 1 : -1;
+            }
+
+            corridorPositions.Add(currentPosition);
+        }
+
+        // Colocar los tiles de pasillo
+        foreach (var position in corridorPositions)
+        {
+            PlaceCorridorTile(position);
+        }
+    }
+
+    private void PlaceCorridorTile(Vector2Int position)
+    {
+        floorTilemap.SetTile((Vector3Int)position, floorTile);
     }
 }
