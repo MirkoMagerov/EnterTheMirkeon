@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MovementPattern { Straight, ZigZag, Circles }
+
 public class EnemyAI : MonoBehaviour
 {
     public float detectionRadius = 15f;
-    public float stoppingDistance = 5f;
     public float moveSpeed = 3f;
     public float fireRate = 1.5f;
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     public Ammo ammo;
+    public MovementPattern movementPattern;
 
-    private Transform player;
-    private Rigidbody2D rb;
     private float nextFireTime;
+    private bool seenPlayer = false;
+    private Transform player;
     //private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private Rigidbody2D rb;
 
     void Start()
     {
@@ -30,33 +33,19 @@ public class EnemyAI : MonoBehaviour
     {
         if (player == null)
         {
-            // El jugador no está en la escena
             rb.velocity = Vector2.zero;
             return;
         }
 
+        FlipSprite();
+
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (distanceToPlayer <= detectionRadius)
+        if (distanceToPlayer <= detectionRadius || seenPlayer)
         {
-            if (distanceToPlayer > stoppingDistance)
-            {
-                // Perseguir al jugador
-                MoveTowardsPlayer();
-                //animator.SetBool("isMoving", true);
-            }
-            else
-            {
-                // Detenerse y disparar
-                rb.velocity = Vector2.zero;
-                //animator.SetBool("isMoving", false);
-
-                // Mirar hacia el jugador
-                FlipSprite();
-
-                // Disparar
-                ShootAtPlayer();
-            }
+            seenPlayer = true;
+            MoveTowardsPlayer();
+            ShootAtPlayer();
         }
         else
         {
@@ -69,9 +58,20 @@ public class EnemyAI : MonoBehaviour
     void MoveTowardsPlayer()
     {
         Vector2 direction = (player.position - transform.position).normalized;
-        rb.velocity = direction * moveSpeed;
 
-        FlipSprite();
+        switch (movementPattern)
+        {
+            case MovementPattern.Straight:
+                rb.velocity = direction * moveSpeed;
+                break;
+            case MovementPattern.ZigZag:
+                Vector2 zigzagOffset = new Vector2(Mathf.Sin(Time.time * 5f), 0) * 2f;
+                rb.velocity = (direction + zigzagOffset).normalized * moveSpeed;
+                break;
+            case MovementPattern.Circles:
+                rb.velocity = new Vector2(Mathf.Cos(Time.time * moveSpeed), Mathf.Sin(Time.time * moveSpeed)) * moveSpeed;
+                break;
+        }
     }
 
     void FlipSprite()
@@ -101,10 +101,14 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void FireBullet()
+    void FireBullet()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+
         Vector2 direction = (player.position - transform.position).normalized;
+        float inaccuracy = Random.Range(-5f, 5f); // Variación en grados
+        direction = Quaternion.Euler(0, 0, inaccuracy) * direction;
+
         bullet.GetComponent<BulletBehavior>().Initialize(direction, ammo, "Enemy");
     }
 }

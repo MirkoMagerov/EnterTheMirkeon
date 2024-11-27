@@ -306,12 +306,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 15
-  stoppingDistance: 5
-  moveSpeed: 3
-  fireRate: 1.5
+  moveSpeed: 8
+  fireRate: 2
   bulletPrefab: {fileID: 5340651712446323588, guid: e1fba4fa0c4da6c48ac4d85ba0ff65cc, type: 3}
-  bulletSpeed: 10
+  bulletSpeed: 8
   ammo: {fileID: 11400000, guid: 56338f9d5646d9643ac0bf3d93839b75, type: 2}
+  movementPattern: 2
 --- !u!50 &146746882
 Rigidbody2D:
   serializedVersion: 4
