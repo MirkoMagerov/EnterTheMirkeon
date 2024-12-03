@@ -3929,9 +3929,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4051925963684867285}
-  - component: {fileID: 6003050577237125753}
+  - component: {fileID: 3800977685859251829}
   m_Layer: 0
-  m_Name: Spawn 20x20 Room
+  m_Name: Start 20x20 Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3953,7 +3953,7 @@ Transform:
   - {fileID: 4800530143095082233}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6003050577237125753
+--- !u!114 &3800977685859251829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3962,12 +3962,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4185531747721081444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 516db023fc3e7524dac0b5f2e520462e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b66c05b30e834143bdce6ea8db177c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomType: 0
+  size: {x: 20, y: 20}
   gridPosition: {x: 0, y: 0}
-  roomSize: {x: 20, y: 20}
 --- !u!1 &4389291624550546257
 GameObject:
   m_ObjectHideFlags: 0

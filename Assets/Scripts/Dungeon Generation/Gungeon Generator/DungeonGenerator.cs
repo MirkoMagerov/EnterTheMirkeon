@@ -1,241 +1,260 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    [Header("Tilemaps")]
     public Tilemap floorTilemap;
+    public Tilemap wallTilemap;
+
+    [Header("Tiles")]
     public TileBase floorTile;
+    public TileBase wallTile;
 
-    public GameObject[] roomPrefabs;
-    public int minRooms = 5;
-    public int maxRooms = 15;
-    public int margin = 2;
+    [Header("Dungeon Settings")]
+    public int mapWidth = 100;
+    public int mapHeight = 100;
+    public int minRoomSize = 5;
+    public int maxRoomSize = 15;
+    public int corridorWidth = 2;
 
-    private List<Vector2Int> gridPositions = new();
-    private Dictionary<Vector2Int, Room> dungeonMap = new();
+    public List<Room> rooms = new List<Room>();
 
     void Start()
     {
         GenerateDungeon();
     }
 
-    public void GenerateDungeon()
+    void GenerateDungeon()
     {
-        gridPositions.Clear();
-        dungeonMap.Clear();
+        // 1. Generar habitaciones usando BSP
+        rooms = BSPSplit(new RectInt(0, 0, mapWidth, mapHeight), minRoomSize, maxRoomSize);
 
-        // Crear la habitación de Spawn en el origen
-        CreateRoomAtPosition(Room.RoomType.Spawn, Vector2Int.zero);
+        // 2. Asignar tipos de habitaciones
+        AssignRoomTypes();
 
-        // Crear otras habitaciones especiales
-        CreateRoom(Room.RoomType.End);
-        CreateRoom(Room.RoomType.Boss);
-        CreateRoom(Room.RoomType.Shop);
-        CreateRoom(Room.RoomType.Loot);
-
-        // Crear habitaciones normales
-        int normalRooms = Mathf.Max(5, Random.Range(minRooms, maxRooms) - 5);
-        for (int i = 0; i < normalRooms; i++)
+        // 3. Dibujar habitaciones
+        foreach (var room in rooms)
         {
-            CreateRoom(Room.RoomType.Normal);
+            DrawRoom(room);
         }
+
+        // 4. Conectar habitaciones con pasillos
+        ConnectRooms();
+
+        // 5. Dibujar paredes
+        DrawWalls();
     }
 
-    private void CreateRoomAtPosition(Room.RoomType roomType, Vector2Int position)
+    List<Room> BSPSplit(RectInt area, int minSize, int maxSize)
     {
-        GameObject roomPrefab = GetRoomPrefabByType(roomType);
-        Room roomData = roomPrefab.GetComponent<Room>();
+        List<Room> finalRooms = new List<Room>();
+        Queue<RectInt> partitions = new Queue<RectInt>();
+        partitions.Enqueue(area);
 
-        if (IsPositionOccupied(position, roomData.roomSize))
-            return;
-
-        Vector3 worldPosition = new Vector3(position.x, position.y, 0);
-
-        GameObject roomInstance = Instantiate(roomPrefab, worldPosition, Quaternion.identity);
-        Room room = roomInstance.GetComponent<Room>();
-        room.roomType = roomType;
-        room.gridPosition = position;
-
-        dungeonMap[position] = room;
-        gridPositions.Add(position);
-    }
-
-    private void CreateRoom(Room.RoomType roomType)
-    {
-        GameObject roomPrefab = GetRoomPrefabByType(roomType);
-        Room roomData = roomPrefab.GetComponent<Room>();
-
-        // Obtener una posición válida y la habitación conectada
-        Room connectedRoom;
-        Vector2Int validPosition = GetValidPosition(roomData.roomSize, out connectedRoom);
-
-        if (validPosition == Vector2Int.zero) return; // Si no se encuentra posición válida, salimos
-
-        Vector3 worldPosition = new(validPosition.x, validPosition.y, 0);
-
-        GameObject roomInstance = Instantiate(roomPrefab, worldPosition, Quaternion.identity);
-        Room room = roomInstance.GetComponent<Room>();
-        room.roomType = roomType;
-        room.gridPosition = validPosition;
-
-        dungeonMap[validPosition] = room;
-        gridPositions.Add(validPosition);
-
-        // Crear un pasillo si hay una habitación conectada
-        if (connectedRoom != null)
+        while (partitions.Count > 0)
         {
-            CreateCorridor(connectedRoom.gridPosition, validPosition);
-        }
-    }
+            RectInt current = partitions.Dequeue();
 
-    private GameObject GetRoomPrefabByType(Room.RoomType type)
-    {
-        foreach (var prefab in roomPrefabs)
-        {
-            Room room = prefab.GetComponent<Room>();
-            if (room.roomType == type)
-                return prefab;
-        }
-        return roomPrefabs[Random.Range(0, roomPrefabs.Length)];
-    }
-
-    private Vector2Int GetValidPosition(Vector2Int roomSize, out Room connectedRoom)
-    {
-        connectedRoom = null;
-        int maxAttempts = 20;
-        int maxOffset = 50; // Controla el rango de desplazamiento aleatorio
-
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
-        {
-            // Seleccionar una habitación existente al azar
-            List<Room> existingRooms = new List<Room>(dungeonMap.Values);
-            Room existingRoom = existingRooms[Random.Range(0, existingRooms.Count)];
-            Vector2Int existingPosition = existingRoom.gridPosition;
-
-            // Generar desplazamientos aleatorios
-            int offsetX = Random.Range(-maxOffset, maxOffset + 1);
-            int offsetY = Random.Range(-maxOffset, maxOffset + 1);
-
-            // Calcular la nueva posición
-            Vector2Int newPosition = existingPosition + new Vector2Int(offsetX, offsetY);
-
-            // Comprobar si la posición es válida
-            if (!IsPositionOccupied(newPosition, roomSize))
+            if (current.width > maxSize || current.height > maxSize || Random.value > 0.5f)
             {
-                connectedRoom = existingRoom;
-                return newPosition;
+                bool splitHorizontally = current.width > current.height;
+                if (current.width == current.height)
+                    splitHorizontally = Random.value > 0.5f;
+
+                if (splitHorizontally)
+                {
+                    if (current.height < 2 * minSize)
+                    {
+                        finalRooms.Add(new Room(current));
+                        continue;
+                    }
+                    int split = Random.Range(minSize, current.height - minSize);
+                    RectInt top = new RectInt(current.x, current.y, current.width, split);
+                    RectInt bottom = new RectInt(current.x, current.y + split, current.width, current.height - split);
+                    partitions.Enqueue(top);
+                    partitions.Enqueue(bottom);
+                }
+                else
+                {
+                    if (current.width < 2 * minSize)
+                    {
+                        finalRooms.Add(new Room(current));
+                        continue;
+                    }
+                    int split = Random.Range(minSize, current.width - minSize);
+                    RectInt left = new RectInt(current.x, current.y, split, current.height);
+                    RectInt right = new RectInt(current.x + split, current.y, current.width - split, current.height);
+                    partitions.Enqueue(left);
+                    partitions.Enqueue(right);
+                }
+            }
+            else
+            {
+                finalRooms.Add(new Room(current));
             }
         }
 
-        // Si no se encuentra una posición válida, devolver Vector2Int.zero
-        return Vector2Int.zero;
+        return finalRooms;
     }
 
-    private Vector2Int RandomDirection()
+    void AssignRoomTypes()
     {
-        int minStep = 10; // Distancia mínima (tamaño base de una habitación)
-        int maxStep = 20; // Distancia máxima permitida para evitar separación excesiva
+        if (rooms.Count == 0) return;
 
-        int stepX = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1); // Aleatorio dentro del rango permitido
-        int stepY = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
+        // Asignar la primera habitación como Start
+        rooms[0].Type = RoomType.Start;
 
-        // Asegurarse de que no ambos valores sean 0 (sin desplazamiento)
-        while (stepX == 0 && stepY == 0)
+        // Asignar la última habitación como End
+        rooms[^1].Type = RoomType.End;
+
+        // Asignar una habitación aleatoria como Boss
+        if (rooms.Count > 2)
         {
-            stepX = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
-            stepY = Random.Range(-2, 3) * Random.Range(minStep, maxStep + 1);
+            int bossIndex = Random.Range(1, rooms.Count - 1);
+            rooms[bossIndex].Type = RoomType.Boss;
         }
 
-        return new Vector2Int(stepX, stepY);
-    }
-
-    private bool IsPositionTooFar(Vector2Int position, int maxDistance)
-    {
-        foreach (var existingRoom in dungeonMap)
+        // Asignar algunas habitaciones como Loot
+        for (int i = 1; i < rooms.Count - 1; i++)
         {
-            Vector2Int existingPosition = existingRoom.Key;
-
-            // Calcula la distancia Manhattan
-            int distance = Mathf.Abs(position.x - existingPosition.x) + Mathf.Abs(position.y - existingPosition.y);
-
-            if (distance <= maxDistance) return false;
-        }
-        return true;
-    }
-
-    private bool IsPositionOccupied(Vector2Int position, Vector2Int roomSize)
-    {
-        int margin = this.margin; // Usa el margen definido en la clase
-
-        // Definir el rectángulo de la nueva habitación
-        RectInt newRoomRect = new RectInt(
-            position.x - roomSize.x / 2 - margin,
-            position.y - roomSize.y / 2 - margin,
-            roomSize.x + 2 * margin,
-            roomSize.y + 2 * margin);
-
-        foreach (var existingRoom in dungeonMap.Values)
-        {
-            Vector2Int existingPosition = existingRoom.gridPosition;
-            Vector2Int existingSize = existingRoom.roomSize;
-
-            // Definir el rectángulo de la habitación existente
-            RectInt existingRoomRect = new RectInt(
-                existingPosition.x - existingSize.x / 2,
-                existingPosition.y - existingSize.y / 2,
-                existingSize.x,
-                existingSize.y);
-
-            // Comprobar si los rectángulos se superponen
-            if (newRoomRect.Overlaps(existingRoomRect))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void CreateCorridor(Vector2Int fromPosition, Vector2Int toPosition)
-    {
-        Vector2Int currentPosition = fromPosition;
-        List<Vector2Int> corridorPositions = new List<Vector2Int>();
-
-        // Decidir aleatoriamente si moverse primero en X o en Y
-        bool moveFirstInX = Random.value > 0.5f;
-
-        while (currentPosition != toPosition)
-        {
-            if (moveFirstInX && currentPosition.x != toPosition.x)
-            {
-                currentPosition.x += (toPosition.x > currentPosition.x) ? 1 : -1;
-            }
-            else if (!moveFirstInX && currentPosition.y != toPosition.y)
-            {
-                currentPosition.y += (toPosition.y > currentPosition.y) ? 1 : -1;
-            }
-            else if (currentPosition.x != toPosition.x)
-            {
-                currentPosition.x += (toPosition.x > currentPosition.x) ? 1 : -1;
-            }
-            else if (currentPosition.y != toPosition.y)
-            {
-                currentPosition.y += (toPosition.y > currentPosition.y) ? 1 : -1;
-            }
-
-            corridorPositions.Add(currentPosition);
-        }
-
-        // Colocar los tiles de pasillo
-        foreach (var position in corridorPositions)
-        {
-            PlaceCorridorTile(position);
+            if (Random.value > 0.7f)
+                rooms[i].Type = RoomType.Loot;
         }
     }
 
-    private void PlaceCorridorTile(Vector2Int position)
+    void DrawRoom(Room room)
     {
-        floorTilemap.SetTile((Vector3Int)position, floorTile);
+        // Dibuja el suelo
+        for (int x = room.Rect.xMin; x < room.Rect.xMax; x++)
+        {
+            for (int y = room.Rect.yMin; y < room.Rect.yMax; y++)
+            {
+                floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+            }
+        }
+
+        // Crear un GameObject para la habitación
+        GameObject roomObject = new($"Room_{room.Type}");
+        roomObject.transform.parent = this.transform;
+        roomObject.transform.position = new Vector3(room.Center.x, room.Center.y, 0);
+
+        RoomTypeScript roomTypeScript = roomObject.AddComponent<RoomTypeScript>();
+        roomTypeScript.roomType = room.Type;
+    }
+
+    void ConnectRooms()
+    {
+        // Ordenar habitaciones por posición X
+        rooms.Sort((a, b) => a.Center.x.CompareTo(b.Center.x));
+
+        for (int i = 1; i < rooms.Count; i++)
+        {
+            Room current = rooms[i];
+            Room previous = rooms[i - 1];
+            Vector2Int currentCenter = current.Center;
+            Vector2Int previousCenter = previous.Center;
+
+            // Decidir el orden de las conexiones para variedad
+            if (Random.value > 0.5f)
+            {
+                CreateHorizontalCorridor(previousCenter.x, currentCenter.x, previousCenter.y);
+                CreateVerticalCorridor(previousCenter.y, currentCenter.y, currentCenter.x);
+            }
+            else
+            {
+                CreateVerticalCorridor(previousCenter.y, currentCenter.y, previousCenter.x);
+                CreateHorizontalCorridor(previousCenter.x, currentCenter.x, currentCenter.y);
+            }
+
+            // Registrar conexiones
+            current.ConnectedRooms.Add(previous);
+            previous.ConnectedRooms.Add(current);
+        }
+    }
+
+    void CreateHorizontalCorridor(int xStart, int xEnd, int y)
+    {
+        int start = Mathf.Min(xStart, xEnd);
+        int end = Mathf.Max(xStart, xEnd);
+
+        for (int x = start; x <= end; x++)
+        {
+            for (int w = 0; w < corridorWidth; w++)
+            {
+                floorTilemap.SetTile(new Vector3Int(x, y + w, 0), floorTile);
+            }
+        }
+    }
+
+    void CreateVerticalCorridor(int yStart, int yEnd, int x)
+    {
+        int start = Mathf.Min(yStart, yEnd);
+        int end = Mathf.Max(yStart, yEnd);
+
+        for (int y = start; y <= end; y++)
+        {
+            for (int w = 0; w < corridorWidth; w++)
+            {
+                floorTilemap.SetTile(new Vector3Int(x + w, y, 0), floorTile);
+            }
+        }
+    }
+
+    void DrawWalls()
+    {
+        BoundsInt bounds = floorTilemap.cellBounds;
+        foreach (var pos in bounds.allPositionsWithin)
+        {
+            if (!floorTilemap.HasTile(pos))
+                continue;
+
+            // Verificar las 4 direcciones para dibujar paredes
+            Vector3Int[] directions = {
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(0, 1, 0),
+            new Vector3Int(0, -1, 0)
+        };
+
+            foreach (var dir in directions)
+            {
+                Vector3Int neighbor = pos + dir;
+                if (!floorTilemap.HasTile(neighbor) && !wallTilemap.HasTile(neighbor))
+                {
+                    wallTilemap.SetTile(neighbor, wallTile);
+                }
+            }
+        }
+
+        // Eliminar paredes superpuestas en las conexiones de pasillos y habitaciones
+        foreach (var room in rooms)
+        {
+            Vector2Int center = room.Center;
+            foreach (var connectedRoom in room.ConnectedRooms)
+            {
+                Vector2Int connectedCenter = connectedRoom.Center;
+                Vector2Int direction = connectedCenter - center;
+
+                // Determinar la dirección de la conexión
+                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+                {
+                    // Conexión horizontal
+                    for (int w = 0; w < corridorWidth; w++)
+                    {
+                        wallTilemap.SetTile(new Vector3Int((int)(center.x + Mathf.Sign(direction.x)), center.y + w, 0), null);
+                    }
+                }
+                else
+                {
+                    // Conexión vertical
+                    for (int w = 0; w < corridorWidth; w++)
+                    {
+                        wallTilemap.SetTile(new Vector3Int(center.x + w, (int)(center.y + Mathf.Sign(direction.y)), 0), null);
+                    }
+                }
+            }
+        }
     }
 }

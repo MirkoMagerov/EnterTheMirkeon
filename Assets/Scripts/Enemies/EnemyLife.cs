@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyLife : MonoBehaviour, IDamageable
 {
-    private int health;
+    private float health;
 
     void Start()
     {
@@ -16,13 +16,10 @@ public class EnemyLife : MonoBehaviour, IDamageable
         
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        health -= Mathf.Max(health - damage, 0);
-        if (health == 0)
-        {
-            Die();
-        }
+        health -= damage;
+        if (health <= 0) Die();
     }
 
     private void Die()

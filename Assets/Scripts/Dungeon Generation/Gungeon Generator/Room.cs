@@ -1,21 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class Room : MonoBehaviour
+public class Room
 {
-    public enum RoomType
+    public RectInt Rect;
+    public Vector2Int Center => new(Rect.x + Rect.width / 2, Rect.y + Rect.height / 2);
+    public RoomType Type;
+    public List<Room> ConnectedRooms = new();
+
+    public Room(RectInt rect)
     {
-        Spawn,
-        End,
-        Boss,
-        Shop,
-        Loot,
-        Normal
+        Rect = rect;
+        Type = RoomType.Normal;
     }
+}
 
-    public RoomType roomType;
-    public Vector2Int gridPosition;
-
-    public Vector2Int roomSize;
+public enum RoomType
+{
+    Start,
+    End,
+    Boss,
+    Loot,
+    Normal
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -87,4 +88,6 @@ public class PlayerDash : MonoBehaviour
 
         OnDashStateChanged?.Invoke(false);
     }
+
+    public bool GetIsInvulnerable() { return isInvulnerable; }
 }
