@@ -20,6 +20,6 @@ MonoBehaviour:
   totalBullets: 48
   reloadTime: 4
   weaponType: 2
-  weaponSprite: {fileID: 21300000, guid: fdf6bd894ecb735449037b0c55fe9cb2, type: 3}
+  weaponSprite: {fileID: 21300000, guid: 5f57cdf9f1525fa4a90b3b805873f3ba, type: 3}
   ammoType: {fileID: 11400000, guid: ff039cf16cf16754ea055158c8e4da45, type: 2}
   hasInfiniteAmmo: 0

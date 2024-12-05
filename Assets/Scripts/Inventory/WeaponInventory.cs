@@ -32,11 +32,11 @@ public class WeaponInventory : MonoBehaviour
         {
             if (weapons.Count == 0) return;
 
-            if (scroll > 0)
+            if (scroll < 0)
             {
                 SelectNextWeapon();
             }
-            else if (scroll < 0)
+            else if (scroll > 0)
             {
                 SelectPreviousWeapon();
             }

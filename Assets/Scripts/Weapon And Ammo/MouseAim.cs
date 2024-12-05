@@ -9,7 +9,6 @@ public class MouseAim : MonoBehaviour
 
     private GameObject playerGameObject;
     private Vector2 mousePos = Vector2.zero;
-    private Vector2 playerToMouseDirection = Vector2.zero;
 
     #region Other Scripts References
     PlayerFlip playerFlip;
@@ -25,8 +24,6 @@ public class MouseAim : MonoBehaviour
 
     private void Update()
     {
-        playerToMouseDirection = GetDirectionToCrosshair(playerGameObject.transform.position);
-
         FlipPlayerLocalScale();
     }
 
