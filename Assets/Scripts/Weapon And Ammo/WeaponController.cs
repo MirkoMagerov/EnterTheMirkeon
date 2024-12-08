@@ -86,11 +86,15 @@ public class WeaponController : MonoBehaviour
             return;
         }
 
-        // Instancia la bala
+        // Aplica el SpreadAngle
+        float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2f, currentWeapon.spreadAngle / 2f);
+        Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
+
+        // Instancia la bala con la dirección dispersa
         GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
         if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
         {
-            bulletBehavior.Initialize(direction, currentWeapon.ammoType, "player");
+            bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, "player");
         }
 
         Debug.Log($"Disparo: Cargador restante: {currentMag}");

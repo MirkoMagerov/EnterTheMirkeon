@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Sniper
   fireRate: 0.7
   bulletsPerShot: 1
-  spreadAngle: 3
+  spreadAngle: 0
   magSize: 8
   totalBullets: 32
   reloadTime: 2.5

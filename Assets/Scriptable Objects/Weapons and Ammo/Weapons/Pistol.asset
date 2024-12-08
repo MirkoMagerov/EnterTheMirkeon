@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Pistol
   fireRate: 2.2
   bulletsPerShot: 1
-  spreadAngle: 5
+  spreadAngle: 13
   magSize: 12
   totalBullets: 0
   reloadTime: 1.5

@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Simple Shotgun
   fireRate: 1
   bulletsPerShot: 3
-  spreadAngle: 10
+  spreadAngle: 18
   magSize: 12
   totalBullets: 48
   reloadTime: 4
