@@ -4,15 +4,42 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public StatesSO CurrentState;
+    public StatesSO currentState;
     public GameObject target;
+    public Animator anim;
+
+    [SerializeField] private int health = 100;
+    [SerializeField] private float attackDistance = 1f;
+
+    private float distanceToPlayer;
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        target = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    private void Update()
+    {
+        currentState.OnStateUpdate(this);
+
+        if (target != null)
+        {
+            distanceToPlayer = Vector2.Distance(transform.position, target.transform.position);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && distanceToPlayer > attackDistance)
         {
             target = collision.gameObject;
             GoToState<ChaseState>();
+        }
+        else if (collision.gameObject.CompareTag("Player") && distanceToPlayer <= attackDistance)
+        {
+            target = collision.gameObject;
+            GoToState<AttackState>();
         }
     }
 
@@ -31,23 +58,18 @@ public class EnemyController : MonoBehaviour
         GoToState<ChaseState>();
     }
 
-    public void CheckIfAlife()
+    public bool IsDead()
     {
-        
-    }
-
-    private void Update()
-    {
-        CurrentState.OnStateUpdate(this);
+        return health <= 0;
     }
 
     public void GoToState<T>() where T : StatesSO
     {
-        if (CurrentState.StatesToGo.Find(state => state is T))
+        if (currentState.StatesToGo.Find(state => state is T))
         {
-            CurrentState.OnStateExit(this);
-            CurrentState = CurrentState.StatesToGo.Find(obj => obj is T);
-            CurrentState.OnStateEnter(this);
+            currentState.OnStateExit(this);
+            currentState = currentState.StatesToGo.Find(obj => obj is T);
+            currentState.OnStateEnter(this);
         }
     }
 }

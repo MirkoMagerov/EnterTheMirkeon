@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class WeaponInventory : MonoBehaviour
     [SerializeField] private Image currentWeaponImageUI;
     [SerializeField] private Image previousWeaponImageUI;
     [SerializeField] private Image nextWeaponImageUI;
+    [SerializeField] private TextMeshProUGUI currentBullets;
+    [SerializeField] private TextMeshProUGUI totalBullets;
 
     private WeaponController weaponController;
     private int currentWeaponIndex = 0;
@@ -22,6 +25,10 @@ public class WeaponInventory : MonoBehaviour
             EquipCurrentWeapon();
             UpdateUI();
         }
+
+        currentWeaponImageUI.preserveAspect = true;
+        previousWeaponImageUI.preserveAspect = true;
+        nextWeaponImageUI.preserveAspect = true;
     }
 
     void Update()
@@ -187,12 +194,22 @@ public class WeaponInventory : MonoBehaviour
         if (currentWeaponIndex - 1 >= 0 && weapons[currentWeaponIndex - 1] != null)
         {
             previousWeaponImageUI.sprite = weapons[currentWeaponIndex - 1].weaponSprite;
+            previousWeaponImageUI.color = new Color(255, 255, 255, 1f);
+        }
+        else
+        {
+            previousWeaponImageUI.color = new Color(0, 0, 0, 0f);
         }
 
         nextWeaponImageUI.sprite = null;
         if (currentWeaponIndex + 1 < weapons.Count && weapons[currentWeaponIndex + 1] != null)
         {
             nextWeaponImageUI.sprite = weapons[currentWeaponIndex + 1].weaponSprite;
+            nextWeaponImageUI.color = new Color(255, 255, 255, 1f);
+        }
+        else
+        {
+            nextWeaponImageUI.color = new Color(0, 0, 0, 0f);
         }
     }
 }
