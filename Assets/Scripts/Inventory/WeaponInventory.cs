@@ -10,8 +10,6 @@ public class WeaponInventory : MonoBehaviour
     [SerializeField] private Image currentWeaponImageUI;
     [SerializeField] private Image previousWeaponImageUI;
     [SerializeField] private Image nextWeaponImageUI;
-    [SerializeField] private TextMeshProUGUI currentBullets;
-    [SerializeField] private TextMeshProUGUI totalBullets;
 
     private WeaponController weaponController;
     private int currentWeaponIndex = 0;
@@ -173,7 +171,7 @@ public class WeaponInventory : MonoBehaviour
         return false;
     }
 
-    // Para añadir balas de drops o algo en un futuro
+    // Para añadir drops de balas o algo en un futuro
     public void AddBullets(Weapon weapon, int amount)
     {
         if (weaponAmmo.ContainsKey(weapon))

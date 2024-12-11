@@ -13,15 +13,11 @@ public class PlayerDash : MonoBehaviour
 
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float invulnerabilityDuration = 0.2f;
     [SerializeField] private float dashCooldown = .8f;
-
-    private bool isDashing = false;
-    private bool isInvulnerable = false;
-    private float dashCooldownTimer = 0f;
 
     private Rigidbody2D rb;
     private Vector2 dashDirection;
+    private float dashCooldownTimer = 0f;
 
     private void Awake()
     {
@@ -35,14 +31,14 @@ public class PlayerDash : MonoBehaviour
 
     void Update()
     {
-        if (isDashing) return;
+        if (PlayerState.IsDashing) return;
 
         if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && dashCooldownTimer <= 0)
+        if (Input.GetKeyDown(KeyCode.Space) && dashCooldownTimer <= 0)
         {
             StartDash();
         }
@@ -67,8 +63,8 @@ public class PlayerDash : MonoBehaviour
 
     private void StartDash()
     {
-        isInvulnerable = true;
-        isDashing = true;
+        PlayerState.StartInvulnerability();
+        PlayerState.StartDash();
         dashCooldownTimer = dashCooldown;
 
         OnDashStateChanged?.Invoke(true);
@@ -83,11 +79,9 @@ public class PlayerDash : MonoBehaviour
         yield return new WaitForSeconds(dashDuration);
 
         rb.velocity = Vector2.zero;
-        isDashing = false;
-        isInvulnerable = false;
+        PlayerState.StopDash();
+        PlayerState.StopInvulnerability();
 
         OnDashStateChanged?.Invoke(false);
     }
-
-    public bool GetIsInvulnerable() { return isInvulnerable; }
 }
