@@ -27,6 +27,7 @@ public class RoomController : MonoBehaviour
 
     public void Initialize(RoomData roomData)
     {
+        Debug.Log($"Room controller of room type: {data.roomType}");
         this.data = roomData;
         SetDoors(data.connectUp, "up");
         SetDoors(data.connectDown, "down");
@@ -143,10 +144,9 @@ public class RoomController : MonoBehaviour
 
     void SpawnPlayer()
     {
-        // Asume que tienes un GameManager o algo similar que mueva al jugador
-        // Aquí podrías instanciar el jugador si no existe, o situarlo en el centro
-        // Ejemplo:
-        // Player.Instance.transform.position = transform.position + new Vector3(roomWidth/2, roomHeight/2, 0);
+        Debug.Log("Spawning player");
+        Vector3 centerPosition = new Vector3(roomWidth / 2f, roomHeight / 2f, 0) + transform.position;
+        GameManager.Instance.SpawnPlayerInFirstRoom(centerPosition);
     }
 
     void SpawnEnemies()

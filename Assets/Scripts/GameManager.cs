@@ -6,15 +6,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public GameObject player;
 
     [SerializeField] private GameObject playerPrefab;
 
     private void Awake()
     {
+        Debug.Log("Game Manager");
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            player = Instantiate(playerPrefab);
+            player.SetActive(false);
         }
         else
         {
@@ -24,14 +28,9 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayerInFirstRoom(Vector3 spawnPoint)
     {
-        if (playerPrefab != null)
-        {
-            Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
-            Debug.Log("Jugador spawneado en la primera habitación.");
-        }
-        else
-        {
-            Debug.LogError("El prefab del jugador no está asignado en el DungeonGenerator.");
-        }
+        player.SetActive(true);
+        player.transform.position = spawnPoint;
+        CameraController.Instance.EnableCameraFollow(player.transform);
+        Debug.Log("Jugador spawneado en la primera habitación.");
     }
 }

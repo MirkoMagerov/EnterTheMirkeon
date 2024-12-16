@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    [Header("Generation settings")]
     public int gridWidth = 4;
     public int gridHeight = 4;
 
@@ -10,6 +12,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public int maxRooms = 10;
 
+    [Header("Room Prefabs")]
     public GameObject startRoomPrefab;
     public GameObject normalRoomPrefab;
     public GameObject shopRoomPrefab;
@@ -122,6 +125,7 @@ public class DungeonGenerator : MonoBehaviour
             for (int y = 0; y < gridHeight; y++)
             {
                 if (roomLayout[x, y] == null) continue;
+
                 RoomData data = roomLayout[x, y];
                 GameObject prefab = GetPrefabForRoomType(data.roomType);
 
@@ -142,14 +146,14 @@ public class DungeonGenerator : MonoBehaviour
 
     GameObject GetPrefabForRoomType(RoomType type)
     {
-        switch (type)
+        return type switch
         {
-            case RoomType.Start: return startRoomPrefab;
-            case RoomType.Normal: return normalRoomPrefab;
-            case RoomType.Shop: return shopRoomPrefab;
-            case RoomType.Loot: return lootRoomPrefab;
-            case RoomType.Boss: return bossRoomPrefab;
-            default: return normalRoomPrefab;
-        }
+            RoomType.Start => startRoomPrefab,
+            RoomType.Normal => normalRoomPrefab,
+            RoomType.Shop => shopRoomPrefab,
+            RoomType.Loot => lootRoomPrefab,
+            RoomType.Boss => bossRoomPrefab,
+            _ => normalRoomPrefab,
+        };
     }
 }
