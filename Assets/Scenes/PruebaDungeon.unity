@@ -163,18 +163,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 46021637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7511bdb380c20504d824bbf08b2933e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 640a322cf69bf8c4fa5e4ed65f05c02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorTilemap: {fileID: 1293048491}
-  wallTilemap: {fileID: 789874241}
-  floorTile: {fileID: 11400000, guid: a3847bc3158728341a516165beddc580, type: 2}
-  wallTile: {fileID: 11400000, guid: a3435aa757d6f8a4fbab0fbb5c767a6d, type: 2}
-  mapWidth: 100
-  mapHeight: 100
-  minRoomSize: 20
-  maxRoomSize: 30
-  corridorWidth: 2
+  gridWidth: 40
+  gridHeight: 40
+  roomWidthInUnityUnits: 30
+  roomHeightInUnityUnits: 30
+  maxRooms: 10
+  startRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
+  normalRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
+  shopRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
+  lootRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
+  bossRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
 --- !u!1 &525256535
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +584,7 @@ GameObject:
   - component: {fileID: 1893473448}
   - component: {fileID: 1893473447}
   - component: {fileID: 1893473446}
+  - component: {fileID: 1893473449}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -664,6 +666,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1893473449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893473445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

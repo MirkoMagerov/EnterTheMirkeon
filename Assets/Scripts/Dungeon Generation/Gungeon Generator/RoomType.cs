@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomTypeScript : MonoBehaviour
+public enum RoomType
 {
-    public RoomType roomType;
+    Start,
+    Normal,
+    Shop,
+    Loot,
+    Boss
 }
