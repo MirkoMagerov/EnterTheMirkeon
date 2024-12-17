@@ -6,7 +6,8 @@ public enum WeaponType
 {
     Automatic,
     SemiAutomatic,
-    Shotgun
+    Shotgun,
+    Laser
 }
 
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "Weapons/Weapon")]
@@ -19,6 +20,8 @@ public class Weapon : ScriptableObject
     public int magSize;
     public int totalBullets;
     public float reloadTime;
+    public float laserWidth;
+    public float laserDPS;
     public WeaponType weaponType;
     public Sprite weaponSprite;
     public Ammo ammoType;

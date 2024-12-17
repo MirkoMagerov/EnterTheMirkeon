@@ -10,6 +10,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private WeaponHolder weaponHolder;
     [SerializeField] private TextMeshProUGUI currentBulletsUI;
     [SerializeField] private TextMeshProUGUI totalBulletsUI;
+    [SerializeField] private LineRenderer lineRenderer;
 
     private float lastFireTime;
     private int currentMag;
@@ -83,6 +84,77 @@ public class WeaponController : MonoBehaviour
                     lastFireTime = Time.time;
                 }
                 break;
+            case WeaponType.Laser:
+                if (Input.GetMouseButton(0))
+                {
+                    Vector2 adjustedDirection = ((Vector2)mousePos - (Vector2)bulletSpawnPoint.position).normalized;
+
+                    float dotProduct = Vector2.Dot(adjustedDirection, (Vector2)bulletSpawnPoint.position - (Vector2)transform.position);
+                    if (dotProduct < 0)
+                    {
+                        adjustedDirection = -adjustedDirection;
+                    }
+
+                    FireLaser(adjustedDirection);
+                    lastFireTime = Time.time;
+                }
+                break;
+        }
+    }
+
+    void FireLaser(Vector2 direction)
+    {
+        // Lanzar un Raycast en la dirección especificada
+        RaycastHit2D hit = Physics2D.Raycast(bulletSpawnPoint.position, direction, 15);
+
+        Vector2 endPoint;
+
+        if (hit.collider)
+        {
+            // Si hay colisión, la línea termina en el punto de impacto
+            endPoint = hit.point;
+        }
+        else
+        {
+            // Si no hay colisión, la línea se extiende en la dirección especificada
+            endPoint = (Vector2)bulletSpawnPoint.position + direction.normalized * 15;
+        }
+
+        Draw2DRay(bulletSpawnPoint.position, endPoint);
+    }
+
+    void Draw2DRay(Vector2 start, Vector2 end)
+    {
+        lineRenderer.SetPosition(0, start);
+        lineRenderer.SetPosition(1, end);
+    }
+
+    public float waveFrequency = 5f;   // Frecuencia de la onda
+    public float waveAmplitude = 0.5f; // Altura de la onda
+    public int segmentCount = 20;      // Cantidad de segmentos en la línea
+    public float animationSpeed = 2f;  // Velocidad de animación de la onda
+
+    void DrawWavyLaser(Vector2 startPoint, Vector2 endPoint)
+    {
+        lineRenderer.positionCount = segmentCount + 1;
+
+        Vector2 direction = (endPoint - startPoint).normalized;
+        float distance = Vector2.Distance(startPoint, endPoint);
+        float segmentLength = distance / segmentCount;
+
+        for (int i = 0; i <= segmentCount; i++)
+        {
+            // Posición base del punto (lineal)
+            Vector2 point = startPoint + direction * (segmentLength * i);
+
+            // Agregar una onda sinusoidal
+            float waveOffset = Mathf.Sin((Time.time * animationSpeed) + i * waveFrequency) * waveAmplitude;
+
+            // Perpendicular a la dirección del láser para la onda
+            Vector2 perpendicular = new Vector2(-direction.y, direction.x);
+            point += perpendicular * waveOffset;
+
+            lineRenderer.SetPosition(i, point);
         }
     }
 
@@ -186,7 +258,6 @@ public class WeaponController : MonoBehaviour
 
         reloadCoroutine = null;
     }
-
 
     public void SetWeapon(Weapon weapon, int mag, int total)
     {
