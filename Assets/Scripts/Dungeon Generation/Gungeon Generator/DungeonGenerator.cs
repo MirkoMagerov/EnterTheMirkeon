@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -140,6 +139,7 @@ public class DungeonGenerator : MonoBehaviour
                 // Inicializar la sala
                 RoomController rc = roomInstance.GetComponent<RoomController>();
                 rc?.Initialize(data);
+                rc?.GenerateCorridors();
             }
         }
     }

@@ -18,6 +18,7 @@ public class RoomController : MonoBehaviour
     public TileBase downWallTile;
     public TileBase leftWallTile;
     public TileBase rightWallTile;
+    public TileBase floorTile;
 
     [Header("Room Properties")]
     public int roomWidth = 20;
@@ -84,6 +85,73 @@ public class RoomController : MonoBehaviour
         }
 
         return new Vector3Int[0];
+    }
+
+    public void GenerateCorridors()
+    {
+        // Generar pasillo hacia la habitación de arriba (si conecta)
+        if (data.connectUp)
+        {
+            GenerateVerticalCorridor("up");
+        }
+
+        // Generar pasillo hacia la habitación de abajo (si conecta)
+        if (data.connectDown)
+        {
+            GenerateVerticalCorridor("down");
+        }
+
+        // Generar pasillo hacia la habitación de la izquierda (si conecta)
+        if (data.connectLeft)
+        {
+            GenerateHorizontalCorridor("left");
+        }
+
+        // Generar pasillo hacia la habitación de la derecha (si conecta)
+        if (data.connectRight)
+        {
+            GenerateHorizontalCorridor("right");
+        }
+    }
+
+    void GenerateVerticalCorridor(string direction)
+    {
+        // Centro horizontal de la habitación
+        int centerX = Mathf.FloorToInt(transform.position.x) + roomWidth / 2;
+
+        // Posición inicial en Y según la dirección
+        int startY = Mathf.FloorToInt(transform.position.y) + (direction == "up" ? roomHeight : 0);
+        int endY = startY + (direction == "up" ? roomHeight / 2 : -roomHeight / 2);
+
+        for (int y = startY; y != endY; y += (direction == "up" ? 1 : -1))
+        {
+            // Suelo del pasillo
+            wallTilemap.SetTile(new Vector3Int(centerX, y, 0), floorTile);
+
+            // Paredes del pasillo
+            wallTilemap.SetTile(new Vector3Int(centerX - 1, y, 0), downWallTile);
+            wallTilemap.SetTile(new Vector3Int(centerX + 1, y, 0), upWallTile);
+        }
+    }
+
+    void GenerateHorizontalCorridor(string direction)
+    {
+        // Centro vertical de la habitación
+        int centerY = Mathf.FloorToInt(transform.position.y) + roomHeight / 2;
+
+        // Posición inicial en X según la dirección
+        int startX = Mathf.FloorToInt(transform.position.x) + (direction == "right" ? roomWidth : 0);
+        int endX = startX + (direction == "right" ? roomWidth / 2 : -roomWidth / 2);
+
+        for (int x = startX; x != endX; x += (direction == "right" ? 1 : -1))
+        {
+            // Suelo del pasillo
+            wallTilemap.SetTile(new Vector3Int(x, centerY, 0), floorTile);
+
+            // Paredes del pasillo
+            wallTilemap.SetTile(new Vector3Int(x, centerY - 1, 0), downWallTile);
+            wallTilemap.SetTile(new Vector3Int(x, centerY + 1, 0), upWallTile);
+        }
     }
 
     TileBase GetTileForDirection(string direction, bool isDoor)

@@ -170,7 +170,7 @@ MonoBehaviour:
   gridHeight: 40
   roomWidthInUnityUnits: 30
   roomHeightInUnityUnits: 30
-  maxRooms: 10
+  maxRooms: 20
   startRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
   normalRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}
   shopRoomPrefab: {fileID: 3877007221720254726, guid: 5c02325f84f7bd7438dd08494b682e3a, type: 3}

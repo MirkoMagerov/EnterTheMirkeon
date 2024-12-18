@@ -54,8 +54,17 @@ MonoBehaviour:
   downWallTile: {fileID: 11400000, guid: c5e60df44f729f44dad553e32cc70e46, type: 2}
   leftWallTile: {fileID: 11400000, guid: 751e6999d710fb04190a82bfd19b4634, type: 2}
   rightWallTile: {fileID: 11400000, guid: 9b9533f099e4b70478ead160dfd307e4, type: 2}
+  floorTile: {fileID: 11400000, guid: a3847bc3158728341a516165beddc580, type: 2}
   roomWidth: 22
   roomHeight: 22
+  data:
+    gridX: 0
+    gridY: 0
+    roomType: 0
+    connectUp: 0
+    connectDown: 0
+    connectLeft: 0
+    connectRight: 0
 --- !u!1 &5439023585413292530
 GameObject:
   m_ObjectHideFlags: 0
