@@ -1,18 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameObject player;
+    public GameObject shopControllerPrefab;
+    public List<ShopItem> globalShopItems;
 
     [SerializeField] private GameObject playerPrefab;
 
     private void Awake()
     {
-        Debug.Log("Game Manager");
         if (Instance == null)
         {
             Instance = this;
@@ -31,6 +30,11 @@ public class GameManager : MonoBehaviour
         player.SetActive(true);
         player.transform.position = spawnPoint;
         CameraController.Instance.EnableCameraFollow(player.transform);
-        Debug.Log("Jugador spawneado en la primera habitación.");
+    }
+
+    public void HealPlayer(int healAmount)
+    {
+        PlayerLife playerLife = player.GetComponent<PlayerLife>();
+        playerLife.RegenerateHealth(healAmount);
     }
 }

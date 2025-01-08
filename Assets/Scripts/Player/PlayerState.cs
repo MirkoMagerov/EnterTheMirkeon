@@ -1,15 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
-    public static bool IsDashing { get; private set; }
-    public static bool IsInvulnerable { get; private set; }
+    public static PlayerState Instance;
 
-    public static void StartDash() { IsDashing = true; }
-    public static void StopDash() { IsDashing = false; }
+    private void Awake()
+    {
+        Instance = this;
+    }
 
-    public static void StartInvulnerability() { IsInvulnerable = true; }
-    public static void StopInvulnerability() { IsInvulnerable = false; }
+    public bool IsDashing { get; private set; }
+    public bool IsInvulnerable { get; private set; }
+
+    public void StartDash() { IsDashing = true; }
+    public void StopDash() { IsDashing = false; }
+
+    public void StartInvulnerability() { IsInvulnerable = true; }
+    public void StopInvulnerability() { IsInvulnerable = false; }
 }

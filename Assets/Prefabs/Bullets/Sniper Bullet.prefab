@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6513417156066079918}
   - component: {fileID: 5984609780246745765}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,8 @@ GameObject:
   - component: {fileID: 3532660639520049277}
   - component: {fileID: 7704016986277232528}
   - component: {fileID: 7581329828052159081}
-  m_Layer: 0
+  - component: {fileID: 8864209782596802313}
+  m_Layer: 8
   m_Name: Sniper Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,3 +209,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 801e28d627249054a8b6a3e575f64f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &8864209782596802313
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5340651712446323588}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.26

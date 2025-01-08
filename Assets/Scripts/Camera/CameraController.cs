@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float deadZoneRadius = 1.0f;
 
     private Transform player;
+    private Vector3 shakeOffset = Vector3.zero;
     private Vector3 velocity = Vector3.zero;
     private bool following = false;
 
@@ -44,6 +45,7 @@ public class CameraController : MonoBehaviour
 
             targetPosition.z = transform.position.z;
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition + shakeOffset, ref velocity, smoothTime);
         }
     }
 
@@ -52,5 +54,10 @@ public class CameraController : MonoBehaviour
         transform.position = player.position;
         this.player = player;
         following = true;
+    }
+
+    public void ApplyShakeOffset(Vector3 offset)
+    {
+        shakeOffset = offset;
     }
 }

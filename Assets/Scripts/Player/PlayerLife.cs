@@ -1,20 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerLife : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float health;
+    public event Action<int> OnHealthChanged;
+
+    [Header("Health Settings")]
+    [SerializeField] private int maxHealth = 6;
+    private int currentHealth;
+
+    private Animator anim;
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+        anim = GetComponentInChildren<Animator>();
+    }
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        Debug.Log($"Damage taken: {damage}, Total HP: {health}");
-        if (health <= 0) Die();
+        if (!PlayerState.Instance.IsInvulnerable)
+        {
+            anim.SetTrigger("Hit");
+            currentHealth -= (int)damage;
+            PlayerSounds.Instance.PlayHitSound();
+            OnHealthChanged.Invoke(currentHealth);
+            if (currentHealth <= 0) Die();
+        }
+    }
+
+    public void RegenerateHealth(int restoredHP)
+    {
+        currentHealth = Mathf.Min(currentHealth + restoredHP, maxHealth);
+        // Play regenerate sound
+        OnHealthChanged.Invoke(currentHealth);
     }
 
     private void Die()
     {
         Debug.Log("Player is dead");
+        Destroy(gameObject);
     }
+
+    public int GetMaxHealth() { return maxHealth; }
 }

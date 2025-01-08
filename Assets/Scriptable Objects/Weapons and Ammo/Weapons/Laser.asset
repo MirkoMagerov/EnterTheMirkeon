@@ -21,6 +21,7 @@ MonoBehaviour:
   reloadTime: 0
   laserWidth: 2
   laserDPS: 15
+  bulletSpawnOffset: {x: 2.1, y: 0}
   weaponType: 3
   weaponSprite: {fileID: 0}
   ammoType: {fileID: 0}

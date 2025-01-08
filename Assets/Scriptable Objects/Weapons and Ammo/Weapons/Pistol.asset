@@ -19,6 +19,9 @@ MonoBehaviour:
   magSize: 12
   totalBullets: 0
   reloadTime: 1.5
+  laserWidth: 0
+  laserDPS: 0
+  bulletSpawnOffset: {x: 1, y: 0}
   weaponType: 1
   weaponSprite: {fileID: 21300000, guid: b22e189f021724f45b7779fd841a4b25, type: 3}
   ammoType: {fileID: 11400000, guid: 829973e5f99875149b6c13bf9946519b, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol Bullet
   m_EditorClassIdentifier: 
   ammoName: Pistol Bullet
-  speed: 20
-  damage: 20
+  speed: 21
+  damage: 18
   lifetime: 5
   visualPrefab: {fileID: 5340651712446323588, guid: 7d0becaebfd0c5943b8f048d8812614a, type: 3}

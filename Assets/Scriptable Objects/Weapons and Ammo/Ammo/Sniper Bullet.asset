@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sniper Bullet
   m_EditorClassIdentifier: 
   ammoName: Sniper bullet
-  speed: 55
-  damage: 65
+  speed: 50
+  damage: 70
   lifetime: 5
   visualPrefab: {fileID: 5340651712446323588, guid: 48fb9df81cf7d5242871948f7cc3d4ef, type: 3}

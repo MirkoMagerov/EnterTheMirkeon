@@ -12,10 +12,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Invulnerable
+  - Enemy
+  - Bullet
+  - Player
   - 
   - 
   - 
@@ -47,6 +47,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3370391841
+    locked: 0
+  - name: Interactuables
+    uniqueID: 3195904213
     locked: 0
   - name: Crosshair
     uniqueID: 193783997

@@ -1,59 +1,41 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerDash : MonoBehaviour
 {
-    PlayerMovementInputActions playerMovementInput;
-
-    public delegate void DashStateChanged(bool isDashing);
-    public static event DashStateChanged OnDashStateChanged;
+    public static event Action<bool> OnDashStateChanged;
 
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCooldown = .8f;
+    [SerializeField] private float dashCooldown = 0.8f;
 
     private Rigidbody2D rb;
     private Vector2 dashDirection;
     private float dashCooldownTimer = 0f;
-
-    private void Awake()
-    {
-        playerMovementInput = new PlayerMovementInputActions();
-    }
+    private int originalLayer;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
+        InputManager.Instance.GetInputActions().Movement.Dash.performed += OnDash;
+        originalLayer = gameObject.layer;
     }
 
     void Update()
     {
-        if (PlayerState.IsDashing) return;
-
         if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
         }
-
-        if (Input.GetKeyDown(KeyCode.Space) && dashCooldownTimer <= 0)
-        {
-            StartDash();
-        }
-    }
-
-    private void OnEnable()
-    {
-        playerMovementInput.Enable();
-        playerMovementInput.PlayerMovement.Movement.performed += OnMovement;
     }
 
     private void OnDisable()
     {
-        playerMovementInput.Disable();
-        playerMovementInput.PlayerMovement.Movement.performed -= OnMovement;
+        InputManager.Instance.GetInputActions().Movement.Direction.performed -= OnMovement;
+        InputManager.Instance.GetInputActions().Movement.Dash.performed -= OnDash;
     }
 
     private void OnMovement(InputAction.CallbackContext context)
@@ -61,12 +43,21 @@ public class PlayerDash : MonoBehaviour
         dashDirection = context.ReadValue<Vector2>();
     }
 
+    private void OnDash(InputAction.CallbackContext context)
+    {
+        if (dashCooldownTimer <= 0 && !PlayerState.Instance.IsDashing)
+        {
+            StartDash();
+        }
+    }
+
     private void StartDash()
     {
-        PlayerState.StartInvulnerability();
-        PlayerState.StartDash();
+        PlayerState.Instance.StartInvulnerability();
+        PlayerState.Instance.StartDash();
         dashCooldownTimer = dashCooldown;
 
+        gameObject.layer = LayerMask.NameToLayer("Invulnerable");
         OnDashStateChanged?.Invoke(true);
 
         StartCoroutine(Dash());
@@ -79,8 +70,9 @@ public class PlayerDash : MonoBehaviour
         yield return new WaitForSeconds(dashDuration);
 
         rb.velocity = Vector2.zero;
-        PlayerState.StopDash();
-        PlayerState.StopInvulnerability();
+        PlayerState.Instance.StopDash();
+        PlayerState.Instance.StopInvulnerability();
+        gameObject.layer = originalLayer;
 
         OnDashStateChanged?.Invoke(false);
     }

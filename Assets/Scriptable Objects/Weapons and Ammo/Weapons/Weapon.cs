@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum WeaponType
@@ -22,6 +20,7 @@ public class Weapon : ScriptableObject
     public float reloadTime;
     public float laserWidth;
     public float laserDPS;
+    public Vector2 bulletSpawnOffset;
     public WeaponType weaponType;
     public Sprite weaponSprite;
     public Ammo ammoType;

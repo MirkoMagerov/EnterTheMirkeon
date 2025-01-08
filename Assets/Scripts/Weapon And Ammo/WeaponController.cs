@@ -1,7 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class WeaponController : MonoBehaviour
 {
@@ -11,11 +12,13 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentBulletsUI;
     [SerializeField] private TextMeshProUGUI totalBulletsUI;
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Slider reloadSlider;
 
     private float lastFireTime;
     private int currentMag;
     private int totalBullets;
     private bool isReloading = false;
+    private Coroutine shootingCoroutine;
 
     private Weapon currentWeapon;
     private WeaponInventory weaponInventory;
@@ -24,99 +27,173 @@ public class WeaponController : MonoBehaviour
     private void Awake()
     {
         weaponInventory = GetComponent<WeaponInventory>();
+        reloadSlider.gameObject.SetActive(false);
     }
 
     private void Start()
     {
-        if (currentWeapon != null)
-        {
-            currentMag = currentWeapon.magSize;
-        }
+        currentMag = currentWeapon.magSize;
+
+        var inputActions = InputManager.Instance.GetInputActions();
+        inputActions.WeaponSystem.Shoot.performed += StartShooting;
+        inputActions.WeaponSystem.Shoot.canceled += StopShooting;
+        inputActions.WeaponSystem.Reload.performed += HandleReload;
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        if (PlayerState.IsDashing) return;
+        var inputActions = InputManager.Instance.GetInputActions();
+        inputActions.WeaponSystem.Shoot.performed -= StartShooting;
+        inputActions.WeaponSystem.Shoot.canceled -= StopShooting;
+        inputActions.WeaponSystem.Reload.performed -= HandleReload;
+    }
 
-        HandleShooting();
+    private void StartShooting(InputAction.CallbackContext context)
+    {
+        if (isReloading || PlayerState.Instance.IsDashing) return;
 
-        if (Input.GetKeyDown(KeyCode.R) && !isReloading && currentMag < currentWeapon.magSize && (currentWeapon.hasInfiniteAmmo || totalBullets > 0))
+        if (currentWeapon.weaponType == WeaponType.Automatic)
         {
-            if (reloadCoroutine != null)
+            shootingCoroutine ??= StartCoroutine(AutomaticFire());
+        }
+        else
+        {
+            bool canFire = Time.time - lastFireTime >= 1f / currentWeapon.fireRate;
+
+            if (!canFire || !(currentWeapon.hasInfiniteAmmo || currentMag > 0)) return;
+
+            Vector2 directionToMouse = GetCorrectMousePosition();
+
+            switch (currentWeapon.weaponType)
             {
-                StopCoroutine(reloadCoroutine);
+                case WeaponType.SemiAutomatic:
+                    FireSingleBulletWeapon(directionToMouse);
+                    lastFireTime = Time.time;
+                    break;
+
+                case WeaponType.Shotgun:
+                    FireShotgunWeapon(directionToMouse);
+                    lastFireTime = Time.time;
+                    break;
+
+                case WeaponType.Laser:
+                    FireLaser(directionToMouse);
+                    lastFireTime = Time.time;
+                    break;
             }
-            reloadCoroutine = StartCoroutine(Reload());
         }
     }
 
-    void HandleShooting()
+    private void StopShooting(InputAction.CallbackContext context)
     {
-        if (isReloading) return;
-        
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePos - bulletSpawnPoint.position).normalized;
-
-        bool canFire = Time.time - lastFireTime >= 1f / currentWeapon.fireRate;
-
-        switch (currentWeapon.weaponType)
+        if (currentWeapon.weaponType == WeaponType.Automatic && shootingCoroutine != null)
         {
-            case WeaponType.Automatic:
-                if (Input.GetMouseButton(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
-                {
-                    Fire(direction);
-                    lastFireTime = Time.time;
-                }
-                break;
-
-            case WeaponType.SemiAutomatic:
-                if (Input.GetMouseButtonDown(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
-                {
-                    Fire(direction);
-                    lastFireTime = Time.time;
-                }
-                break;
-
-            case WeaponType.Shotgun:
-                if (Input.GetMouseButtonDown(0) && canFire && (currentWeapon.hasInfiniteAmmo || currentMag > 0))
-                {
-                    FireShotgun(direction);
-                    lastFireTime = Time.time;
-                }
-                break;
-            case WeaponType.Laser:
-                if (Input.GetMouseButton(0))
-                {
-                    Vector2 adjustedDirection = ((Vector2)mousePos - (Vector2)bulletSpawnPoint.position).normalized;
-
-                    float dotProduct = Vector2.Dot(adjustedDirection, (Vector2)bulletSpawnPoint.position - (Vector2)transform.position);
-                    if (dotProduct < 0)
-                    {
-                        adjustedDirection = -adjustedDirection;
-                    }
-
-                    FireLaser(adjustedDirection);
-                    lastFireTime = Time.time;
-                }
-                break;
+            StopCoroutine(shootingCoroutine);
+            shootingCoroutine = null;
         }
+    }
+
+    private IEnumerator AutomaticFire()
+    {
+        while (true)
+        {
+            if (Time.time - lastFireTime >= 1f / currentWeapon.fireRate)
+            {
+                Vector2 directionToMouse = GetCorrectMousePosition();
+
+                if (currentWeapon.hasInfiniteAmmo || currentMag > 0)
+                {
+                    FireSingleBulletWeapon(directionToMouse);
+                    lastFireTime = Time.time;
+                }
+                else
+                {
+                    Debug.Log("Sin munición, recarga necesaria");
+                    StopShooting(default);
+                    yield break;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    Vector2 GetCorrectMousePosition()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector2 directionToMouse = (mousePos - bulletSpawnPoint.position).normalized;
+        Vector2 directionToPlayer = (transform.position - bulletSpawnPoint.position).normalized;
+
+        float dotProduct = Vector2.Dot(directionToMouse, directionToPlayer);
+        return dotProduct > 0 ? -directionToMouse : directionToMouse;
+    }
+
+    void FireSingleBulletWeapon(Vector2 direction)
+    {
+        if (currentMag <= 0)
+        {
+            Debug.Log("Sin munición, recarga necesaria");
+            return;
+        }
+
+        // Aplica el SpreadAngle
+        Vector2 spreadDir = ApplySpreadAngle(direction);
+
+        // Instancia la bala con la dirección ligeramente dispersa
+        GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
+        {
+            bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag);
+        }
+
+        PlayerSounds.Instance.PlayLaserShot();
+        currentMag--;
+        currentBulletsUI.text = currentMag.ToString();
+
+        weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
+    }
+
+    void FireShotgunWeapon(Vector2 direction)
+    {
+        if (currentMag <= 0)
+        {
+            Debug.Log("Sin munición, recarga necesaria");
+            return;
+        }
+
+        for (int i = 0; i < currentWeapon.bulletsPerShot; i++)
+        {
+            Vector2 spreadDir = ApplySpreadAngle(direction);
+
+            // Instancia cada bala con la dirección ligeramente dispersa
+            GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
+            if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
+            {
+                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag);
+            }
+        }
+
+        PlayerSounds.Instance.PlayLaserShot();
+        currentMag -= currentWeapon.bulletsPerShot;
+        currentMag = Mathf.Max(currentMag, 0);
+        currentBulletsUI.text = currentMag.ToString();
+
+        weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
     }
 
     void FireLaser(Vector2 direction)
     {
-        // Lanzar un Raycast en la dirección especificada
         RaycastHit2D hit = Physics2D.Raycast(bulletSpawnPoint.position, direction, 15);
 
         Vector2 endPoint;
 
         if (hit.collider)
         {
-            // Si hay colisión, la línea termina en el punto de impacto
             endPoint = hit.point;
         }
         else
         {
-            // Si no hay colisión, la línea se extiende en la dirección especificada
             endPoint = (Vector2)bulletSpawnPoint.position + direction.normalized * 15;
         }
 
@@ -129,97 +206,15 @@ public class WeaponController : MonoBehaviour
         lineRenderer.SetPosition(1, end);
     }
 
-    public float waveFrequency = 5f;   // Frecuencia de la onda
-    public float waveAmplitude = 0.5f; // Altura de la onda
-    public int segmentCount = 20;      // Cantidad de segmentos en la línea
-    public float animationSpeed = 2f;  // Velocidad de animación de la onda
-
-    void DrawWavyLaser(Vector2 startPoint, Vector2 endPoint)
+    private void HandleReload(InputAction.CallbackContext context)
     {
-        lineRenderer.positionCount = segmentCount + 1;
-
-        Vector2 direction = (endPoint - startPoint).normalized;
-        float distance = Vector2.Distance(startPoint, endPoint);
-        float segmentLength = distance / segmentCount;
-
-        for (int i = 0; i <= segmentCount; i++)
+        if (!isReloading && currentMag < currentWeapon.magSize && (currentWeapon.hasInfiniteAmmo || totalBullets > 0))
         {
-            // Posición base del punto (lineal)
-            Vector2 point = startPoint + direction * (segmentLength * i);
-
-            // Agregar una onda sinusoidal
-            float waveOffset = Mathf.Sin((Time.time * animationSpeed) + i * waveFrequency) * waveAmplitude;
-
-            // Perpendicular a la dirección del láser para la onda
-            Vector2 perpendicular = new Vector2(-direction.y, direction.x);
-            point += perpendicular * waveOffset;
-
-            lineRenderer.SetPosition(i, point);
-        }
-    }
-
-    void Fire(Vector2 direction)
-    {
-        if (currentMag <= 0)
-        {
-            Debug.Log("Sin munición, recarga necesaria");
-            return;
-        }
-
-        // Aplica el SpreadAngle
-        float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2f, currentWeapon.spreadAngle / 2f);
-        Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
-
-        // Instancia la bala con la dirección dispersa
-        GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
-        {
-            bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, "player");
-        }
-
-        Debug.Log($"Disparo: Cargador restante: {currentMag}");
-
-        currentMag--;
-        currentBulletsUI.text = currentMag.ToString();
-
-        // Disminuye la munición en WeaponInventory si no tiene munición infinita
-        if (!currentWeapon.hasInfiniteAmmo)
-        {
-            weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
-        }
-    }
-
-    void FireShotgun(Vector2 direction)
-    {
-        if (currentMag <= 0)
-        {
-            Debug.Log("Sin munición, recarga necesaria");
-            return;
-        }
-
-        for (int i = 0; i < currentWeapon.bulletsPerShot; i++)
-        {
-            float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2, currentWeapon.spreadAngle / 2);
-            Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
-
-            // Instancia cada bala disparada con dispersión
-            GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
-            if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
+            if (reloadCoroutine != null)
             {
-                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, "Player");
+                StopCoroutine(reloadCoroutine);
             }
-        }
-
-        Debug.Log($"Disparo Shotgun: Cargador restante: {currentMag}");
-
-        currentMag -= currentWeapon.bulletsPerShot;
-        currentMag = Mathf.Max(currentMag, 0);
-        currentBulletsUI.text = currentMag.ToString();
-
-        // Disminuye la munición en WeaponInventory si no tiene munición infinita
-        if (!currentWeapon.hasInfiniteAmmo)
-        {
-            weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
+            reloadCoroutine = StartCoroutine(Reload());
         }
     }
 
@@ -227,30 +222,38 @@ public class WeaponController : MonoBehaviour
     {
         isReloading = true;
         Debug.Log($"Recargando: Cargador actual = {currentMag}, Balas totales = {totalBullets}, Tipo de bala = {currentWeapon.ammoType.name}");
-        yield return new WaitForSeconds(currentWeapon.reloadTime);
+
+        reloadSlider.gameObject.SetActive(true);
+        reloadSlider.value = 0f;
+        float elapsedTime = 0f;
+        while (elapsedTime < currentWeapon.reloadTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (reloadSlider != null)
+            {
+                reloadSlider.value = elapsedTime / currentWeapon.reloadTime;
+            }
+
+            yield return null;
+        }
 
         WeaponAmmoData ammoData = weaponInventory.GetAmmoData(currentWeapon);
 
-        if (!currentWeapon.hasInfiniteAmmo)
+        bool reloaded = weaponInventory.ReloadWeapon(currentWeapon);
+        if (reloaded)
         {
-            bool reloaded = weaponInventory.ReloadWeapon(currentWeapon);
-            if (reloaded)
-            {
-                currentMag = ammoData.currentMag;
-                totalBullets = ammoData.totalBullets;
-                Debug.Log("Recarga completada");
-            }
-            else
-            {
-                Debug.Log("No se pudo recargar: No hay balas suficientes o el cargador está lleno");
-            }
+            currentMag = ammoData.currentMag;
+            totalBullets = ammoData.totalBullets;
+            Debug.Log("Recarga completada");
         }
         else
         {
-            currentMag = ammoData.currentMag;
-            Debug.Log("Recarga completada para arma con balas infinitas");
+            Debug.Log("No se pudo recargar: No hay balas suficientes o el cargador está lleno");
         }
 
+
+        reloadSlider.gameObject.SetActive(false);
         isReloading = false;
         currentBulletsUI.text = currentMag.ToString();
         if (currentWeapon.hasInfiniteAmmo) totalBulletsUI.text = "∞";
@@ -276,8 +279,23 @@ public class WeaponController : MonoBehaviour
         isReloading = false;
         weaponHolder.EquipWeapon(weapon);
 
+        bulletSpawnPoint.localPosition = weapon.bulletSpawnOffset;
+
         if (weapon.hasInfiniteAmmo) totalBulletsUI.text = "∞";
         else totalBulletsUI.text = totalBullets.ToString();
         currentBulletsUI.text = currentMag.ToString();
+    }
+
+    public void RestartReloadSlider()
+    {
+        reloadSlider.value = 0;
+        reloadSlider.gameObject.SetActive(false);
+    }
+
+    Vector2 ApplySpreadAngle(Vector2 direction)
+    {
+        float angleOffset = Random.Range(-currentWeapon.spreadAngle / 2f, currentWeapon.spreadAngle / 2f);
+        Vector2 spreadDir = Quaternion.Euler(0, 0, angleOffset) * direction;
+        return spreadDir;
     }
 }

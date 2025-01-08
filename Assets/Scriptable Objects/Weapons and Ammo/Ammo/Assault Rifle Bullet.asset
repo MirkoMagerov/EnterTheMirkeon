@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Assault Rifle Bullet
   m_EditorClassIdentifier: 
   ammoName: Assault Rifle Bullet
-  speed: 25
-  damage: 24
+  speed: 27
+  damage: 22
   lifetime: 5
   visualPrefab: {fileID: 5340651712446323588, guid: e1fba4fa0c4da6c48ac4d85ba0ff65cc, type: 3}

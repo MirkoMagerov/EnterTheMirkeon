@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoName: Shotgun Cartriadge
   speed: 30
-  damage: 18
+  damage: 20
   lifetime: 5
   visualPrefab: {fileID: 5340651712446323588, guid: 5599d8930ae4a8740ae1d5455ab7bd6c, type: 3}

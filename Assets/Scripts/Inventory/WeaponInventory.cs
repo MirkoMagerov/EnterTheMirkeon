@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class WeaponInventory : MonoBehaviour
@@ -15,7 +14,7 @@ public class WeaponInventory : MonoBehaviour
     private int currentWeaponIndex = 0;
     private Dictionary<Weapon, WeaponAmmoData> weaponAmmo = new();
 
-    private void Start()
+    private void Awake()
     {
         if (TryGetComponent(out weaponController))
         {
@@ -23,31 +22,36 @@ public class WeaponInventory : MonoBehaviour
             EquipCurrentWeapon();
             UpdateUI();
         }
+    }
 
+    private void Start()
+    {
+        InputManager.Instance.GetInputActions().WeaponSystem.ScrollWheel.performed += OnScrollWheel;
         currentWeaponImageUI.preserveAspect = true;
         previousWeaponImageUI.preserveAspect = true;
         nextWeaponImageUI.preserveAspect = true;
     }
 
-    void Update()
+    private void OnDisable()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        InputManager.Instance.GetInputActions().WeaponSystem.ScrollWheel.performed -= OnScrollWheel;
+    }
 
-        if (scroll != 0f)
+    void OnScrollWheel(InputAction.CallbackContext context)
+    {
+        float scrollValue = context.ReadValue<float>();
+        weaponController.RestartReloadSlider();
+
+        if (scrollValue < 0)
         {
-            if (weapons.Count == 0) return;
-
-            if (scroll < 0)
-            {
-                SelectNextWeapon();
-            }
-            else if (scroll > 0)
-            {
-                SelectPreviousWeapon();
-            }
-
-            UpdateUI();
+            SelectNextWeapon();
         }
+        else if (scrollValue > 0)
+        {
+            SelectPreviousWeapon();
+        }
+
+        UpdateUI();
     }
 
     private void InitializeAmmo()
@@ -144,6 +148,13 @@ public class WeaponInventory : MonoBehaviour
         if (weaponAmmo.ContainsKey(weapon))
         {
             WeaponAmmoData ammoData = weaponAmmo[weapon];
+
+            if (weapon.hasInfiniteAmmo)
+            {
+                ammoData.currentMag = weapon.magSize;
+                Debug.Log($"Arma con balas infinitas recargada. Cargador: {ammoData.currentMag}/{weapon.magSize}");
+                return true;
+            }
 
             if (ammoData.currentMag >= weapon.magSize)
             {

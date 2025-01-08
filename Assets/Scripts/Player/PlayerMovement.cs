@@ -1,46 +1,43 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    PlayerMovementInputActions playerMovementInput;
-
     [SerializeField] private float moveSpeed;
 
+    private Vector2 knockbackForce;
+    private Animator anim;
     private Vector2 movementInput;
     private Rigidbody2D rb;
-    private bool isDashing;
-
-    private void Awake()
-    {
-        playerMovementInput = new PlayerMovementInputActions();
-    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponentInChildren<Animator>();
+
+        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
+    }
+
+    private void Update()
+    {
+        HandleAnimations();
     }
 
     private void FixedUpdate()
     {
-        if (isDashing) return;
+        if (PlayerState.Instance.IsDashing) return;
 
-        rb.velocity = movementInput.normalized * moveSpeed;
-    }
+        Vector2 moveVelocity = movementInput.normalized * moveSpeed;
 
-    private void OnEnable()
-    {
-        playerMovementInput.Enable();
-        playerMovementInput.PlayerMovement.Movement.performed += OnMovement;
-        PlayerDash.OnDashStateChanged += HandleDashStateChanged;
+        rb.velocity = moveVelocity + knockbackForce;
+
+        knockbackForce = Vector2.Lerp(knockbackForce, Vector2.zero, Time.fixedDeltaTime * 5f);
     }
 
     private void OnDisable()
     {
-        playerMovementInput.Disable();
-        playerMovementInput.PlayerMovement.Movement.performed -= OnMovement;
+        InputManager.Instance.GetInputActions().Movement.Direction.performed -= OnMovement;
     }
 
     private void OnMovement(InputAction.CallbackContext context)
@@ -48,8 +45,20 @@ public class PlayerMovement : MonoBehaviour
         movementInput = context.ReadValue<Vector2>();
     }
 
-    private void HandleDashStateChanged(bool dashing)
+    private void HandleAnimations()
     {
-        isDashing = dashing;
+        if (rb.velocity != Vector2.zero)
+        {
+            anim.SetBool("Running", true);
+        }
+        else
+        {
+            anim.SetBool("Running", false);
+        }
+    }
+
+    public void ApplyKnockback(Vector2 force)
+    {
+        knockbackForce = force;
     }
 }
