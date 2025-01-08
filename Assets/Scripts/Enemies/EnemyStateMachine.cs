@@ -10,34 +10,46 @@ public class EnemyStateMachine : MonoBehaviour
     private bool isDealingDamage = false;
 
     private EnemyState currentState;
-    private Transform player;
+    private GameObject player;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private bool playerAlive = true;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-        currentState = new IdleState(this, transform, player, animator);
+        currentState = new IdleState(this, transform, player.transform, animator);
     }
 
     private void Start()
     {
         if (explosive)
         {
-            ChangeState(new ExplosiveChaseState(this, transform, player, animator));
+            ChangeState(new ExplosiveChaseState(this, transform, player.transform, animator));
         }
         else
         {
-            ChangeState(new ChaseState(this, transform, player, animator));
+            ChangeState(new ChaseState(this, transform, player.transform, animator));
         }
     }
 
     private void Update()
     {
+        if (!playerAlive) return;
         FlipEnemy();
         currentState.Update();
+    }
+
+    private void OnEnable()
+    {
+        player.GetComponent<PlayerLife>().OnPlayerDeath += PlayerDead;
+    }
+
+    private void OnDisable()
+    {
+        player.GetComponent<PlayerLife>().OnPlayerDeath -= PlayerDead;
     }
 
     public void ChangeState(EnemyState newState)
@@ -47,13 +59,19 @@ public class EnemyStateMachine : MonoBehaviour
         currentState.Enter();
     }
 
+    public void PlayerDead()
+    {
+        playerAlive = false;
+        ChangeState(new IdleState(this, transform, player.transform, animator));
+    }
+
     private void FlipEnemy()
     {
-        if (transform.position.x < player.position.x)
+        if (transform.position.x < player.transform.position.x)
         {
             spriteRenderer.flipX = false;
         }
-        else if (transform.position.x > player.position.x)
+        else if (transform.position.x > player.transform.position.x)
         {
             spriteRenderer.flipX = true;
         }

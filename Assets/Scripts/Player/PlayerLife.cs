@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerLife : MonoBehaviour, IDamageable
 {
     public event Action<int> OnHealthChanged;
+    public event Action OnPlayerDeath;
 
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 6;
@@ -38,7 +39,7 @@ public class PlayerLife : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        Debug.Log("Player is dead");
+        OnPlayerDeath?.Invoke();
         Destroy(gameObject);
     }
 

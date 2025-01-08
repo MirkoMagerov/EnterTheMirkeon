@@ -7,10 +7,12 @@ public class Shake : MonoBehaviour
 
     public float duration = 0.2f;
     public AnimationCurve curve;
+    private CameraController cameraController;
 
     private void Awake()
     {
         Instance = this;
+        cameraController = GetComponent<CameraController>();
     }
 
     public void TriggerShake()
@@ -30,12 +32,11 @@ public class Shake : MonoBehaviour
 
             Vector2 shakeOffset = Random.insideUnitCircle * strength;
             //transform.position = new Vector3(startPosition.x + shakeOffset.x, startPosition.y + shakeOffset.y, startPosition.z);
-            CameraController.Instance.ApplyShakeOffset(new Vector3(shakeOffset.x, shakeOffset.y, 0));
+            cameraController.ApplyShakeOffset(new Vector3(shakeOffset.x, shakeOffset.y, 0));
 
             yield return null;
         }
 
-        //transform.position = startPosition;
-        CameraController.Instance.ApplyShakeOffset(Vector3.zero);
+        cameraController.ApplyShakeOffset(Vector3.zero);
     }
 }

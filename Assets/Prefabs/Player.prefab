@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e1f33a37b05b249b05d141912a3972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 6
 --- !u!114 &512809046681541155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5edce116332ff274aba495c63b445a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coins: 60
+  coins: 120
 --- !u!1 &457741870993500240
 GameObject:
   m_ObjectHideFlags: 0

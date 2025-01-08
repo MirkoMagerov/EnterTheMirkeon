@@ -1,7 +1,7 @@
+using OutlineFx;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class ShopItemDisplay : MonoBehaviour, IInteractuable
 {
@@ -14,11 +14,14 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
     private SpriteRenderer spriteRenderer;
     private CoinManager coinManager;
     private bool playerInShop = false;
+    private Outline outlineFx;
 
     private void Start()
     {
         coinManager = GameObject.FindGameObjectWithTag("Player").GetComponent<CoinManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        outlineFx = GetComponent<Outline>();
+        outlineFx.enabled = false;
         InitializeUI();
     }
 
@@ -52,14 +55,14 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
 
     public void SetOutline(bool enable)
     {
-        //outlineFx.enabled = enable;
+        outlineFx.enabled = enable;
     }
 
     private void InitializeUI()
     {
         spriteRenderer.sprite = shopItem.sprite;
 
-        itemNameText.text = shopItem.name;
+        itemNameText.text = shopItem.itemName;
         priceText.text = shopItem.price.ToString();
     }
 
@@ -87,7 +90,7 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
         switch (shopItem.type)
         {
             case ItemType.Weapon:
-                Debug.Log("Weapon purchased!");
+                GameManager.Instance.EquipWeapon(shopItem.weapon);
                 break;
             case ItemType.Health:
                 GameManager.Instance.HealPlayer(shopItem.healthAmount);

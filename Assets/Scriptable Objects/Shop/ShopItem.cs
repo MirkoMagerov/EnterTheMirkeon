@@ -16,4 +16,5 @@ public class ShopItem : ScriptableObject
     public Sprite sprite;
     public ItemType type;
     public int healthAmount;
+    public Weapon weapon;
 }

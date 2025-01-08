@@ -361,7 +361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1893473446
 AudioListener:
   m_ObjectHideFlags: 0
@@ -592,6 +592,8 @@ MonoBehaviour:
   globalShopItems:
   - {fileID: 11400000, guid: 7a89d94d8abe61d458a0cb48ff16651e, type: 2}
   - {fileID: 11400000, guid: bbac7beced816824ba0f5390484e7f0c, type: 2}
+  - {fileID: 11400000, guid: 3733a5e60c1570445bbf936254bfac3b, type: 2}
+  mainCamera: {fileID: 1893473445}
   playerPrefab: {fileID: 22131646393105513, guid: f3044fffe1c62b144844b21306e60e53, type: 3}
 --- !u!4 &1946686486
 Transform:

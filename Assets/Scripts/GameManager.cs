@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject shopControllerPrefab;
     public List<ShopItem> globalShopItems;
+    public GameObject mainCamera;
 
     [SerializeField] private GameObject playerPrefab;
 
@@ -29,12 +30,17 @@ public class GameManager : MonoBehaviour
     {
         player.SetActive(true);
         player.transform.position = spawnPoint;
-        CameraController.Instance.EnableCameraFollow(player.transform);
+        mainCamera.SetActive(true);
     }
 
     public void HealPlayer(int healAmount)
     {
         PlayerLife playerLife = player.GetComponent<PlayerLife>();
         playerLife.RegenerateHealth(healAmount);
+    }
+
+    public void EquipWeapon(Weapon weapon)
+    {
+        player.GetComponentInChildren<WeaponInventory>().PickUpWeapon(weapon);
     }
 }

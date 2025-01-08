@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d07606c4c6e43b44c99018765076201e, type: 3}
-  m_Name: Half Heart
+  m_Script: {fileID: 11500000, guid: 594d9a15ef7b629428925deedb84f272, type: 3}
+  m_Name: Sniper Bullet 100 dmg
   m_EditorClassIdentifier: 
-  itemName: Half Heart (Heal)
-  price: 25
-  sprite: {fileID: 21300000, guid: 5ff4fe0ced9cc694bbde9648522b9919, type: 3}
-  type: 1
-  healthAmount: 1
+  ammoName: Sniper Bullet 100 DMG
+  speed: 55
+  damage: 100
+  lifetime: 5
+  visualPrefab: {fileID: 5340651712446323588, guid: 48fb9df81cf7d5242871948f7cc3d4ef, type: 3}

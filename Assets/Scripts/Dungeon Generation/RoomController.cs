@@ -6,6 +6,7 @@ public class RoomController : MonoBehaviour
 {
     public Tilemap wallTilemap;
     public RoomData roomData;
+    public GameObject blackPanel;
 
     [Header("Door Positions")]
     public GameObject topDoorLeftPos;
@@ -305,12 +306,22 @@ public class RoomController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !roomActivated && 
-            (roomData.roomType == RoomType.Normal || roomData.roomType == RoomType.Boss))
+        if (collision.CompareTag("Player") && !roomActivated)
         {
+            blackPanel.SetActive(false);
             roomActivated = true;
-            DeactivateDoors();
-            SpawnEnemies();
+
+            if (roomData.roomType == RoomType.Normal)
+            {
+                SpawnEnemies();
+                DeactivateDoors();
+            }
+
+            else if (roomData.roomType == RoomType.Boss)
+            {
+                SpawnBoss();
+                DeactivateDoors();
+            }
         }
     }
 

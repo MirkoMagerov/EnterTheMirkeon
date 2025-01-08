@@ -76,8 +76,37 @@ public class DungeonGenerator : MonoBehaviour
         RoomData bossRoom = roomLayout[bossRoomPosition.x, bossRoomPosition.y];
         bossRoom.roomType = RoomType.Boss;
 
-        // 5. Calcular conexiones
+        // 5. Asegurar que haya una tienda
+        if (!shopPlaced)
+        {
+            PlaceShopRoom();
+        }
+
+        // 6. Calcular conexiones
         CalculateConnections();
+    }
+
+    void PlaceShopRoom()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                if (roomLayout[x, y] != null && roomLayout[x, y].roomType == RoomType.Normal)
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        if (validPositions.Count > 0)
+        {
+            Vector2Int shopPosition = validPositions[Random.Range(0, validPositions.Count)];
+            roomLayout[shopPosition.x, shopPosition.y].roomType = RoomType.Shop;
+            shopPlaced = true;
+        }
     }
 
     RoomType GetRandomRoomType()

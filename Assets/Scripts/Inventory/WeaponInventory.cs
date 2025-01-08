@@ -101,7 +101,7 @@ public class WeaponInventory : MonoBehaviour
             weaponAmmo[newWeapon] = new WeaponAmmoData(newWeapon.magSize, newWeapon.totalBullets);
             currentWeaponIndex = weapons.Count - 1;
             EquipCurrentWeapon();
-            Debug.Log("Picked up weapon: " + newWeapon.name);
+            UpdateUI();
         }
     }
 
@@ -111,7 +111,6 @@ public class WeaponInventory : MonoBehaviour
         {
             Weapon currentWeapon = weapons[currentWeaponIndex];
             WeaponAmmoData ammoData = weaponAmmo[currentWeapon];
-            Debug.Log("Equipping weapon: " + currentWeapon.weaponName);
             weaponController.SetWeapon(currentWeapon, ammoData.currentMag, ammoData.totalBullets);
         }
     }
