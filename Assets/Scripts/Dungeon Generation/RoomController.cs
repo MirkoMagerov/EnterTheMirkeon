@@ -305,7 +305,7 @@ public class RoomController : MonoBehaviour
     void SpawnBoss()
     {
         Vector3 spawnPosition = transform.position + Vector3.zero;
-        Instantiate(roomData.bossPrefab, spawnPosition, Quaternion.identity);
+        Instantiate(roomData.bossPrefab, spawnPosition, Quaternion.identity, transform);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

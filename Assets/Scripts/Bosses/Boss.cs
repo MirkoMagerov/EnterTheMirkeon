@@ -15,7 +15,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private Vector2 movementBounds = new(0, 0);
 
     private bool playerAlive = true;
-    private bool lastMoveRight = false;
+    private bool lastMoveRight = true;
     private int damageReduction = 0;
     private float attackCooldown;
     private float spiralAngle = 0f;
@@ -100,8 +100,8 @@ public class Boss : MonoBehaviour
     {
         anim.SetBool("Moving", true);
 
-        float rangeStart = movementBounds.x;
-        float rangeEnd = movementBounds.y;
+        float rangeStart = transform.position.x - Mathf.Abs(movementBounds.x);
+        float rangeEnd = transform.position.x + Mathf.Abs(movementBounds.y);
 
         float targetX = lastMoveRight ? rangeEnd : rangeStart;
         lastMoveRight = !lastMoveRight;

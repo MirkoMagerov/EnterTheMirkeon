@@ -128,7 +128,7 @@ MonoBehaviour:
   phaseOneAttackCooldown: 2
   phaseTwoAttackCooldown: 1.5
   phaseThreeAttackCooldown: 1
-  movementBounds: {x: -10, y: 10}
+  movementBounds: {x: -8, y: 8}
 --- !u!114 &5873443692635607864
 MonoBehaviour:
   m_ObjectHideFlags: 0

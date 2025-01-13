@@ -61,7 +61,7 @@ public class DungeonGenerator : MonoBehaviour
                 RoomType roomType = GetRandomRoomType();
                 roomLayout[newX, newY] = new RoomData(newX, newY, roomType)
                 {
-                    enemyPrefabs = GetEnemyPrefabsForRoomType(roomType),
+                    enemyPrefabs = enemies,
                     spawnPoints = GetSpawnPointsForRoomType(roomType)
                 };
                 currentX = newX;
@@ -74,6 +74,10 @@ public class DungeonGenerator : MonoBehaviour
 
         // 4. Marcarla como Boss Room
         RoomData bossRoom = roomLayout[bossRoomPosition.x, bossRoomPosition.y];
+        roomLayout[bossRoomPosition.x, bossRoomPosition.y] = new RoomData(bossRoomPosition.x, bossRoomPosition.y, RoomType.Boss)
+        {
+            bossPrefab = bosses[Random.Range(0, bosses.Length)],
+        };
         bossRoom.roomType = RoomType.Boss;
 
         // 5. Asegurar que haya una tienda
@@ -120,16 +124,6 @@ public class DungeonGenerator : MonoBehaviour
         }
         if (rand < 0.9f) return RoomType.Loot;
         return RoomType.Normal;
-    }
-
-    GameObject[] GetEnemyPrefabsForRoomType(RoomType type)
-    {
-        return type switch
-        {
-            RoomType.Normal => enemies,
-            RoomType.Boss => bosses,
-            _ => null,
-        };
     }
 
     Vector2[] GetSpawnPointsForRoomType(RoomType type)
