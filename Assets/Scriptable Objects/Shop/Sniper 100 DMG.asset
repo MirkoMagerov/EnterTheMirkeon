@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Sniper 100 DMG
   m_EditorClassIdentifier: 
   itemName: Mega-Sniper
-  price: 105
+  description: Sniper that does a lot of damage and is totally precise
+  price: 145
   sprite: {fileID: 21300000, guid: 81279e0b95718b54bbc1721eee31d873, type: 3}
   type: 0
   healthAmount: 0
   weapon: {fileID: 11400000, guid: f8aec51872dbdf344907627ed8dda242, type: 2}
+  consumableItem: {fileID: 0}

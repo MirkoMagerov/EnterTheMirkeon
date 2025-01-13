@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BossBullet : MonoBehaviour
 {
     public float speed;
+    public int damage;
     private Vector2 direction;
     private Rigidbody2D rb;
     private float lifetime = 5f;
@@ -29,16 +28,17 @@ public class BossBullet : MonoBehaviour
         rb.velocity = direction * speed;
     }
 
-    public void SetDirection(Vector2 newDirection)
+    public void SetDirectionAndDamage(Vector2 newDirection, int dmg)
     {
         direction = newDirection.normalized;
+        damage = dmg;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && TryGetComponent(out PlayerLife playerLife))
+        if (collision.CompareTag("Player") && collision.gameObject.TryGetComponent(out PlayerLife playerLife))
         {
-            playerLife.TakeDamage(2);
+            playerLife.TakeDamage(damage, gameObject);
             Destroy(gameObject);
         }
     }

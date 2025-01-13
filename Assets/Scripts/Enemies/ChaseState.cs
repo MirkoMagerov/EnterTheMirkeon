@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class ChaseState : EnemyState
 {
-    private float chaseSpeed = 5f;
-    private float attackRange = 5f;
+    private float chaseSpeed = 8f;
+    private float optimalDistance = 17f;
     private bool melee;
     private bool explosive;
+    private Rigidbody2D rb;
 
     public ChaseState(EnemyStateMachine stateMachine, Transform enemy, Transform player, Animator animator)
         : base(stateMachine, enemy, player, animator) {
         melee = stateMachine.melee;
         explosive = stateMachine.explosive;
+        rb = enemy.GetComponent<Rigidbody2D>();
     }
 
     public override void Enter()
@@ -20,22 +22,24 @@ public class ChaseState : EnemyState
 
     public override void Update()
     {
+        Vector2 direction = (player.position - enemy.position).normalized;
+
         if (melee || explosive)
         {
-            Vector2 direction = (player.position - enemy.position).normalized;
-            enemy.GetComponent<Rigidbody2D>().velocity = direction * chaseSpeed;
+            rb.velocity = direction * chaseSpeed;
         }
         else
         {
-            if (Vector2.Distance(enemy.position, player.position) <= attackRange)
+            float distance = Vector2.Distance(enemy.position, player.position);
+
+            if (distance <= optimalDistance)
             {
+                rb.velocity = Vector2.zero;
                 stateMachine.ChangeState(new AttackState(stateMachine, enemy, player, animator));
+                return;
             }
-            else
-            {
-                Vector2 direction = (player.position - enemy.position).normalized;
-                enemy.GetComponent<Rigidbody2D>().velocity = direction * chaseSpeed;
-            }
+
+            rb.velocity = direction * chaseSpeed;
         }
     }
 

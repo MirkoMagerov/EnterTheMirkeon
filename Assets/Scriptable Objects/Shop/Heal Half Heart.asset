@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Heal Half Heart
   m_EditorClassIdentifier: 
   itemName: Heal Half Heart
-  price: 25
+  description: Heals player for a half heart after buying
+  price: 20
   sprite: {fileID: 21300000, guid: 5ff4fe0ced9cc694bbde9648522b9919, type: 3}
   type: 1
   healthAmount: 1
   weapon: {fileID: 0}
+  consumableItem: {fileID: 0}

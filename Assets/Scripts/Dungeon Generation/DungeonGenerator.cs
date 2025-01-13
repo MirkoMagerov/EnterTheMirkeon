@@ -26,7 +26,7 @@ public class DungeonGenerator : MonoBehaviour
     private RoomData[,] roomLayout;
     private bool shopPlaced = false;
 
-    void Start()
+    public void GenerateDungeon()
     {
         GenerateLayoutData();
         InstantiateRooms();
@@ -139,12 +139,18 @@ public class DungeonGenerator : MonoBehaviour
             RoomType.Normal => new Vector2[]
             {
                 new Vector2(0, 0),
-                new Vector2(0, 1),
-                new Vector2(1, 0),
-                new Vector2(-1, 0),
-                new Vector2(0, -1),
-                new Vector2(1, 1),
-                new Vector2(-1, -1),
+                new Vector2(0, 1.5f),
+                new Vector2(0, 2.5f),
+                new Vector2(1.5f, 0),
+                new Vector2(2.5f, 0),
+                new Vector2(-1.5f, 0),
+                new Vector2(-2.5f, 0),
+                new Vector2(0, -1.5f),
+                new Vector2(0, -2.5f),
+                new Vector2(1.5f, 1.5f),
+                new Vector2(2.5f, 2.5f),
+                new Vector2(-1.5f, -1.5f),
+                new Vector2(-2.5f, -2.5f),
             },
             RoomType.Boss => new Vector2[]
             {

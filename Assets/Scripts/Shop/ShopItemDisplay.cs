@@ -9,6 +9,7 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
 
     [Header("UI Elements")]
     public TextMeshProUGUI itemNameText;
+    public TextMeshProUGUI descriptionText;
     public TextMeshProUGUI priceText;
 
     private SpriteRenderer spriteRenderer;
@@ -40,6 +41,7 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
         if (other.CompareTag("Player"))
         {
             playerInShop = true;
+            descriptionText.enabled = true;
             SetOutline(true);
         }
     }
@@ -49,6 +51,7 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
         if (other.CompareTag("Player"))
         {
             playerInShop = false;
+            descriptionText.enabled = false;
             SetOutline(false);
         }
     }
@@ -63,6 +66,8 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
         spriteRenderer.sprite = shopItem.sprite;
 
         itemNameText.text = shopItem.itemName;
+        descriptionText.text = shopItem.description;
+        descriptionText.enabled = false;
         priceText.text = shopItem.price.ToString();
     }
 
@@ -78,10 +83,6 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
 
                 Destroy(gameObject);
             }
-            else
-            {
-                Debug.LogError("Not enough coins!");
-            }
         }
     }
 
@@ -96,13 +97,9 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
                 GameManager.Instance.HealPlayer(shopItem.healthAmount);
                 break;
             case ItemType.Key:
-                Debug.Log("Purchased key");
                 break;
-            case ItemType.PassiveItem:
-                Debug.Log("Passive Item applied!");
-                break;
-            default:
-                Debug.LogWarning("Unknown item type!");
+            case ItemType.ConsumableItem:
+                GameObject.FindGameObjectWithTag("Player").GetComponent<ConsumablesInventory>().AddItem(shopItem.consumableItem);
                 break;
         }
     }

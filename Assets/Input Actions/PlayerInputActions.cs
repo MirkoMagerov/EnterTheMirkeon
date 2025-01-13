@@ -145,6 +145,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MeleeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""f6c307c5-1a6f-46af-b5f3-51140f23fcd9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -180,6 +189,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c5901c1-c753-43e7-a519-8fe02b69bab5"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -210,6 +230,82 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Consumable"",
+            ""id"": ""ef2da504-2f97-42f2-8a89-97c7fd939b16"",
+            ""actions"": [
+                {
+                    ""name"": ""SwitchItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ba77a8b-d99f-4150-b2c3-f81e5c6bc022"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""c7217148-1893-46e1-a5d7-1deb3f7de897"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""fffb5cc3-8acb-4b4f-95b6-732e2d0ad80d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8e7e8cd-25d3-4288-96f7-ae176c8581d9"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""PauseMenu"",
+            ""id"": ""3772c6a8-923a-42cf-bd7e-062d9ea88d49"",
+            ""actions"": [
+                {
+                    ""name"": ""PauseButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7565595-5d0a-4bcc-abf1-be0766c3893e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6b122be2-a4fb-4c12-b977-23d11dc7996c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -223,9 +319,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_WeaponSystem_Shoot = m_WeaponSystem.FindAction("Shoot", throwIfNotFound: true);
         m_WeaponSystem_ScrollWheel = m_WeaponSystem.FindAction("ScrollWheel", throwIfNotFound: true);
         m_WeaponSystem_Reload = m_WeaponSystem.FindAction("Reload", throwIfNotFound: true);
+        m_WeaponSystem_MeleeAttack = m_WeaponSystem.FindAction("MeleeAttack", throwIfNotFound: true);
         // Interactuable
         m_Interactuable = asset.FindActionMap("Interactuable", throwIfNotFound: true);
         m_Interactuable_Interact = m_Interactuable.FindAction("Interact", throwIfNotFound: true);
+        // Consumable
+        m_Consumable = asset.FindActionMap("Consumable", throwIfNotFound: true);
+        m_Consumable_SwitchItem = m_Consumable.FindAction("SwitchItem", throwIfNotFound: true);
+        m_Consumable_UseItem = m_Consumable.FindAction("UseItem", throwIfNotFound: true);
+        // PauseMenu
+        m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
+        m_PauseMenu_PauseButton = m_PauseMenu.FindAction("PauseButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -344,6 +448,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_WeaponSystem_Shoot;
     private readonly InputAction m_WeaponSystem_ScrollWheel;
     private readonly InputAction m_WeaponSystem_Reload;
+    private readonly InputAction m_WeaponSystem_MeleeAttack;
     public struct WeaponSystemActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -351,6 +456,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_WeaponSystem_Shoot;
         public InputAction @ScrollWheel => m_Wrapper.m_WeaponSystem_ScrollWheel;
         public InputAction @Reload => m_Wrapper.m_WeaponSystem_Reload;
+        public InputAction @MeleeAttack => m_Wrapper.m_WeaponSystem_MeleeAttack;
         public InputActionMap Get() { return m_Wrapper.m_WeaponSystem; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -369,6 +475,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @MeleeAttack.started += instance.OnMeleeAttack;
+            @MeleeAttack.performed += instance.OnMeleeAttack;
+            @MeleeAttack.canceled += instance.OnMeleeAttack;
         }
 
         private void UnregisterCallbacks(IWeaponSystemActions instance)
@@ -382,6 +491,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @MeleeAttack.started -= instance.OnMeleeAttack;
+            @MeleeAttack.performed -= instance.OnMeleeAttack;
+            @MeleeAttack.canceled -= instance.OnMeleeAttack;
         }
 
         public void RemoveCallbacks(IWeaponSystemActions instance)
@@ -445,6 +557,106 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public InteractuableActions @Interactuable => new InteractuableActions(this);
+
+    // Consumable
+    private readonly InputActionMap m_Consumable;
+    private List<IConsumableActions> m_ConsumableActionsCallbackInterfaces = new List<IConsumableActions>();
+    private readonly InputAction m_Consumable_SwitchItem;
+    private readonly InputAction m_Consumable_UseItem;
+    public struct ConsumableActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public ConsumableActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SwitchItem => m_Wrapper.m_Consumable_SwitchItem;
+        public InputAction @UseItem => m_Wrapper.m_Consumable_UseItem;
+        public InputActionMap Get() { return m_Wrapper.m_Consumable; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ConsumableActions set) { return set.Get(); }
+        public void AddCallbacks(IConsumableActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ConsumableActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ConsumableActionsCallbackInterfaces.Add(instance);
+            @SwitchItem.started += instance.OnSwitchItem;
+            @SwitchItem.performed += instance.OnSwitchItem;
+            @SwitchItem.canceled += instance.OnSwitchItem;
+            @UseItem.started += instance.OnUseItem;
+            @UseItem.performed += instance.OnUseItem;
+            @UseItem.canceled += instance.OnUseItem;
+        }
+
+        private void UnregisterCallbacks(IConsumableActions instance)
+        {
+            @SwitchItem.started -= instance.OnSwitchItem;
+            @SwitchItem.performed -= instance.OnSwitchItem;
+            @SwitchItem.canceled -= instance.OnSwitchItem;
+            @UseItem.started -= instance.OnUseItem;
+            @UseItem.performed -= instance.OnUseItem;
+            @UseItem.canceled -= instance.OnUseItem;
+        }
+
+        public void RemoveCallbacks(IConsumableActions instance)
+        {
+            if (m_Wrapper.m_ConsumableActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IConsumableActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ConsumableActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ConsumableActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ConsumableActions @Consumable => new ConsumableActions(this);
+
+    // PauseMenu
+    private readonly InputActionMap m_PauseMenu;
+    private List<IPauseMenuActions> m_PauseMenuActionsCallbackInterfaces = new List<IPauseMenuActions>();
+    private readonly InputAction m_PauseMenu_PauseButton;
+    public struct PauseMenuActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public PauseMenuActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PauseButton => m_Wrapper.m_PauseMenu_PauseButton;
+        public InputActionMap Get() { return m_Wrapper.m_PauseMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PauseMenuActions set) { return set.Get(); }
+        public void AddCallbacks(IPauseMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Add(instance);
+            @PauseButton.started += instance.OnPauseButton;
+            @PauseButton.performed += instance.OnPauseButton;
+            @PauseButton.canceled += instance.OnPauseButton;
+        }
+
+        private void UnregisterCallbacks(IPauseMenuActions instance)
+        {
+            @PauseButton.started -= instance.OnPauseButton;
+            @PauseButton.performed -= instance.OnPauseButton;
+            @PauseButton.canceled -= instance.OnPauseButton;
+        }
+
+        public void RemoveCallbacks(IPauseMenuActions instance)
+        {
+            if (m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPauseMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PauseMenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PauseMenuActions @PauseMenu => new PauseMenuActions(this);
     public interface IMovementActions
     {
         void OnDirection(InputAction.CallbackContext context);
@@ -455,9 +667,19 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnMeleeAttack(InputAction.CallbackContext context);
     }
     public interface IInteractuableActions
     {
         void OnInteract(InputAction.CallbackContext context);
+    }
+    public interface IConsumableActions
+    {
+        void OnSwitchItem(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
+    }
+    public interface IPauseMenuActions
+    {
+        void OnPauseButton(InputAction.CallbackContext context);
     }
 }

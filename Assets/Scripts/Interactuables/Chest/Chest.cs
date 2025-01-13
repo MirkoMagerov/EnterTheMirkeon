@@ -1,13 +1,13 @@
 using OutlineFx;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Chest : MonoBehaviour, IInteractuable
 {
     [Header("Chest Settings")]
-    public GameObject[] weaponPrefabs;
-    public Transform spawnPoint;
+    public List<Weapon> weaponsList;
 
     [Header("Interaction Settings")]
     public float interactionRange = 2f;
@@ -50,10 +50,13 @@ public class Chest : MonoBehaviour, IInteractuable
         anim.enabled = true;
         yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0).Length);
 
-        if (weaponPrefabs.Length > 0)
+        if (weaponsList.Count > 0)
         {
-            int randomIndex = Random.Range(0, weaponPrefabs.Length);
-            Instantiate(weaponPrefabs[randomIndex], spawnPoint.position, Quaternion.identity);
+            int randomIndex = Random.Range(0, weaponsList.Count);
+            WeaponInventory weaponInv = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<WeaponInventory>();
+            {
+                weaponInv.PickUpWeapon(weaponsList[randomIndex]);
+            }
         }
 
         yield return null;

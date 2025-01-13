@@ -7,7 +7,9 @@ public class EnemyStateMachine : MonoBehaviour
     public bool explosive;
     public float explosionRange;
     public float knockbackStrength;
+    public GameObject bulletSpawnPoint;
     private bool isDealingDamage = false;
+    [SerializeField] private bool defaultFacingRight = true;
 
     private EnemyState currentState;
     private GameObject player;
@@ -38,6 +40,7 @@ public class EnemyStateMachine : MonoBehaviour
     private void Update()
     {
         if (!playerAlive) return;
+
         FlipEnemy();
         currentState.Update();
     }
@@ -49,7 +52,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void OnDisable()
     {
-        player.GetComponent<PlayerLife>().OnPlayerDeath -= PlayerDead;
+        if (playerAlive && player != null)
+        {
+            player.GetComponent<PlayerLife>().OnPlayerDeath -= PlayerDead;
+        }
     }
 
     public void ChangeState(EnemyState newState)
@@ -61,20 +67,18 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void PlayerDead()
     {
+        player = null;
         playerAlive = false;
-        ChangeState(new IdleState(this, transform, player.transform, animator));
+        ChangeState(new IdleState(this, transform, transform, animator));
     }
 
     private void FlipEnemy()
     {
-        if (transform.position.x < player.transform.position.x)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (transform.position.x > player.transform.position.x)
-        {
-            spriteRenderer.flipX = true;
-        }
+        bool shouldFaceRight = transform.position.x < player.transform.position.x;
+
+        bool facingRight = defaultFacingRight ? shouldFaceRight : !shouldFaceRight;
+
+        spriteRenderer.flipX = !facingRight;
     }
 
     private IEnumerator DealContinuousDamage(PlayerLife playerLife, PlayerMovement playerMov, Vector2 knockbackDirection)
@@ -115,16 +119,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     public void DestroyGameObject()
     {
-        Debug.Log("Destroying explosive enemy");
         Destroy(gameObject);
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (explosive)
-        {
-            Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-            Gizmos.DrawSphere(transform.position, explosionRange);
-        }
     }
 }

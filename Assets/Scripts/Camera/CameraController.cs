@@ -14,9 +14,7 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        player = GameManager.Instance.player;
-        transform.position = player.transform.position;
-        following = true;
+        EnableCameraFollowing();
     }
 
     private void OnEnable()
@@ -32,6 +30,17 @@ public class CameraController : MonoBehaviour
     private void PlayerDead()
     {
         playerAlive = false;
+        player = null;
+    }
+
+    public void EnableCameraFollowing()
+    {
+        player = GameManager.Instance.player;
+        Vector3 newPosition = transform.position + player.transform.position;
+        newPosition.z = -10;
+        transform.position = newPosition;
+        following = true;
+        playerAlive = true;
     }
 
     private void LateUpdate()

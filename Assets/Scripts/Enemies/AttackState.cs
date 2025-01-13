@@ -2,21 +2,24 @@ using UnityEngine;
 
 public class AttackState : EnemyState
 {
-    private float attackCooldown = 1.5f;
+    private float attackCooldown = 1f;
     private float lastAttackTime;
+    private float stayInAttackDistance = 18f;
 
-    public AttackState(EnemyStateMachine stateMachine, Transform enemy, Transform player, Animator animator) 
+    public AttackState(EnemyStateMachine stateMachine, Transform enemy, Transform player, Animator animator)
         : base(stateMachine, enemy, player, animator) { }
 
     public override void Enter()
     {
-        Debug.Log("Entering Attack State");
+        PlayAnimation("Idle");
         lastAttackTime = Time.time;
     }
 
     public override void Update()
     {
-        if (Vector2.Distance(enemy.position, player.position) > 5f)
+        float distance = Vector2.Distance(enemy.position, player.position);
+
+        if (distance > stayInAttackDistance)
         {
             stateMachine.ChangeState(new ChaseState(stateMachine, enemy, player, animator));
             return;
@@ -31,12 +34,19 @@ public class AttackState : EnemyState
 
     public override void Exit()
     {
-        Debug.Log("Exiting Attack State");
+
     }
 
     private void Shoot()
     {
-        Debug.Log("Enemy Shoots!");
-        // Lógica para disparar balas
+        Vector2 direction = (player.position - enemy.position).normalized;
+        GameObject bullet = Object.Instantiate(
+            Resources.Load<GameObject>("EnemyBulletPrefab"),
+            stateMachine.bulletSpawnPoint.transform.position,
+            Quaternion.identity
+        );
+
+        bullet.GetComponent<EnemyBullet>().SetDirection(direction);
+        Object.Destroy(bullet, 6f);
     }
 }

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f7fa21b5736a147826591510a8481f, type: 3}
+  m_Name: Medkit
+  m_EditorClassIdentifier: 
+  itemName: Medkit
+  itemDescription: Heals player for 1 and a half heart when used
+  itemType: 3
+  itemIcon: {fileID: 21300000, guid: 72640057ad02b784585395e49e5f29bb, type: 3}
+  healthRestoreAmount: 3

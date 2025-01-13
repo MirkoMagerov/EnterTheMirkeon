@@ -14,14 +14,15 @@ public class BossLife : MonoBehaviour, IDamageable
     {
         slider.maxValue = health;
         slider.value = health;
-        slider.gameObject.SetActive(false);
         boss = GetComponent<Boss>();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage, GameObject obj)
     {
-        if (!slider.IsActive()) slider.gameObject.SetActive(true);
-        health -= damage;
+        int damageReduction = boss.GetDamageReduction();
+        int actualDamage = damage * (100 - damageReduction) / 100;
+
+        health -= actualDamage;
         slider.value = Math.Max(0, health);
         if (health <= 0) Die();
     }

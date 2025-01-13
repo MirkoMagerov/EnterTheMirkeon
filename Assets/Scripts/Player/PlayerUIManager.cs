@@ -16,6 +16,9 @@ public class PlayerUIManager : MonoBehaviour
     [Header("Coins")]
     [SerializeField] private TextMeshProUGUI coinsText;
 
+    [Header("Consumables")]
+    [SerializeField] private Image currentItemImage;
+
     private void Awake()
     {
         coinManager = GetComponent<CoinManager>();
@@ -42,6 +45,8 @@ public class PlayerUIManager : MonoBehaviour
 
     public void UpdateHealthUI(int health)
     {
+        AdjustHeartImages(playerLife.GetMaxHealth());
+
         for (int i = 0; i < heartImages.Length; i++)
         {
             int heartValue = (i + 1) * 2;
@@ -61,8 +66,40 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
 
+    private void AdjustHeartImages(int maxHealth)
+    {
+        int requiredHearts = Mathf.CeilToInt(maxHealth / 2f);
+
+        for (int i = 0; i < heartImages.Length; i++)
+        {
+            if (i < requiredHearts)
+            {
+                heartImages[i].sprite = emptyHeart;
+                heartImages[i].color = new Color(255,255,255, 255);
+            }
+            else
+            {
+                heartImages[i].sprite = null;
+                heartImages[i].color = new Color(255, 255, 255, 0);
+            }
+        }
+    }
+
     public void UpdateCoinsUI(int coins)
     {
         coinsText.text = coins.ToString();
+    }
+
+    public void UpdateConsumableUI(Sprite sprite, int consumableLength)
+    {
+        if (consumableLength == 0)
+        {
+            currentItemImage.color = new Color(255, 255, 255, 0);
+        }
+        else
+        {
+            currentItemImage.sprite = sprite;
+            currentItemImage.color = new Color(255, 255, 255, 255);
+        }
     }
 }

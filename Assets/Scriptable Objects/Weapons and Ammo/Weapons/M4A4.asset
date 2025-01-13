@@ -15,9 +15,9 @@ MonoBehaviour:
   weaponName: M4A4
   fireRate: 4.5
   bulletsPerShot: 1
-  spreadAngle: 8
+  spreadAngle: 20
   magSize: 25
-  totalBullets: 75
+  totalBullets: 100
   reloadTime: 2
   laserWidth: 0
   laserDPS: 0

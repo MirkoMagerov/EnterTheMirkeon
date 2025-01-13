@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
-
+    private bool isKnockedBack = false;
     private Vector2 knockbackForce;
     private Animator anim;
     private Vector2 movementInput;
@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
-
-        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
     }
 
     private void Update()
@@ -30,9 +28,24 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 moveVelocity = movementInput.normalized * moveSpeed;
 
-        rb.velocity = moveVelocity + knockbackForce;
+        // Reducir gradualmente la fuerza de knockback
+        if (isKnockedBack)
+        {
+            knockbackForce = Vector2.Lerp(knockbackForce, Vector2.zero, Time.fixedDeltaTime * 2f);
+            if (knockbackForce.magnitude < 0.1f)
+            {
+                isKnockedBack = false;
+                knockbackForce = Vector2.zero;
+            }
+        }
 
-        knockbackForce = Vector2.Lerp(knockbackForce, Vector2.zero, Time.fixedDeltaTime * 5f);
+        // Combinar movimiento con knockback
+        rb.velocity = moveVelocity + knockbackForce;
+    }
+
+    private void OnEnable()
+    {
+        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
     }
 
     private void OnDisable()
@@ -60,5 +73,14 @@ public class PlayerMovement : MonoBehaviour
     public void ApplyKnockback(Vector2 force)
     {
         knockbackForce = force;
+        isKnockedBack = true;
+    }
+
+    public IEnumerator DisableMovementCoroutine(float seconds)
+    {
+        float prevSpeed = moveSpeed;
+        moveSpeed = 0;
+        yield return new WaitForSeconds(seconds);
+        moveSpeed = prevSpeed;
     }
 }

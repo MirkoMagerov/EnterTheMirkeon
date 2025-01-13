@@ -19,8 +19,6 @@ public class PlayerDash : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
-        InputManager.Instance.GetInputActions().Movement.Dash.performed += OnDash;
         originalLayer = gameObject.layer;
     }
 
@@ -30,6 +28,12 @@ public class PlayerDash : MonoBehaviour
         {
             dashCooldownTimer -= Time.deltaTime;
         }
+    }
+
+    private void OnEnable()
+    {
+        InputManager.Instance.GetInputActions().Movement.Direction.performed += OnMovement;
+        InputManager.Instance.GetInputActions().Movement.Dash.performed += OnDash;
     }
 
     private void OnDisable()
@@ -53,6 +57,7 @@ public class PlayerDash : MonoBehaviour
 
     private void StartDash()
     {
+        PlayerSounds.Instance.PlayDashSound();
         PlayerState.Instance.StartInvulnerability();
         PlayerState.Instance.StartDash();
         dashCooldownTimer = dashCooldown;

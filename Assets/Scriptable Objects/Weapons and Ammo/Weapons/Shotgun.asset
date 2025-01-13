@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   weaponName: Simple Shotgun
-  fireRate: 1.1
+  fireRate: 1.4
   bulletsPerShot: 3
-  spreadAngle: 20
-  magSize: 18
-  totalBullets: 72
+  spreadAngle: 50
+  magSize: 21
+  totalBullets: 84
   reloadTime: 2.3
   laserWidth: 0
   laserDPS: 0

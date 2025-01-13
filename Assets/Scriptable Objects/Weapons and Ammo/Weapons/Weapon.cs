@@ -5,7 +5,6 @@ public enum WeaponType
     Automatic,
     SemiAutomatic,
     Shotgun,
-    Laser
 }
 
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "Weapons/Weapon")]

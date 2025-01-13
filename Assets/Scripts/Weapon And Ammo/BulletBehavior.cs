@@ -24,13 +24,13 @@ public class BulletBehavior : MonoBehaviour
         transform.Translate(speed * Time.deltaTime * direction);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag(shooterTag)) return;
+        if (collision.gameObject.CompareTag(shooterTag) || collision.gameObject.CompareTag("Player")) return;
 
         if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damage, gameObject);
             Destroy(gameObject);
         }
         else

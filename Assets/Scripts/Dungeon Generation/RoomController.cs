@@ -7,6 +7,8 @@ public class RoomController : MonoBehaviour
     public Tilemap wallTilemap;
     public RoomData roomData;
     public GameObject blackPanel;
+    public List<GameObject> skulls;
+    public GameObject chestPrefab;
 
     [Header("Door Positions")]
     public GameObject topDoorLeftPos;
@@ -142,9 +144,21 @@ public class RoomController : MonoBehaviour
     private void SetCorridors(bool connectUp, bool connectDown, bool connectLeft, bool connectRight)
     {
         topCorridor.SetActive(connectUp);
+
         rightCorridor.SetActive(connectRight);
+
         bottomCorridor.SetActive(connectDown);
+
         leftCorridor.SetActive(connectLeft);
+
+        if (roomData.roomType == RoomType.Boss)
+        {
+
+            skulls[0].SetActive(connectUp);
+            skulls[1].SetActive(connectRight);
+            skulls[2].SetActive(connectDown);
+            skulls[3].SetActive(connectLeft);
+        }
     }
 
     private void PlaceTile(GameObject doorMarker, TileBase tile)
@@ -192,9 +206,6 @@ public class RoomController : MonoBehaviour
             case DoorSide.LeftTop:
                 leftDoorTop = doorScript;
                 break;
-            default:
-                Debug.LogWarning($"Unknown DoorSide: {side}");
-                break;
         }
     }
 
@@ -221,27 +232,39 @@ public class RoomController : MonoBehaviour
             case RoomType.Start:
                 SpawnPlayer();
                 break;
-            case RoomType.Normal:
-                //SpawnEnemies();
-                break;
             case RoomType.Shop:
                 SpawnShopItems();
                 break;
             case RoomType.Loot:
                 SpawnLootChest();
                 break;
-            case RoomType.Boss:
-                SpawnBoss();
-                break;
         }
     }
 
     void SpawnPlayer()
     {
-        Debug.Log("Spawning player");
         Vector3 centerPosition = Vector3.zero + transform.position;
         GameManager.Instance.SpawnPlayerInFirstRoom(centerPosition);
     }
+
+    void SpawnShopItems()
+    {
+        Vector3 shopPosition = transform.position + new Vector3(0, 0, 0);
+        GameObject shopControllerInstance = Instantiate(GameManager.Instance.shopControllerPrefab, shopPosition, Quaternion.identity, transform);
+
+        if (shopControllerInstance.TryGetComponent<ShopController>(out var shopController))
+        {
+            shopController.allShopItems = GameManager.Instance.globalShopItems;
+
+            shopController.InitializeShop();
+        }
+    }
+
+    void SpawnLootChest()
+    {
+        Instantiate(chestPrefab, transform.position + new Vector3(0.55f, 0), Quaternion.identity, transform);
+    }
+
 
     private void SpawnEnemies()
     {
@@ -249,7 +272,6 @@ public class RoomController : MonoBehaviour
 
         int randomEnemyQuantity = Random.Range(3, Mathf.Min(roomData.spawnPoints.Length) + 1);
 
-        // Crear y barajar una lista de índices para los spawnPoints
         List<int> spawnPointIndices = new List<int>();
         for (int i = 0; i < roomData.spawnPoints.Length; i++)
         {
@@ -280,28 +302,10 @@ public class RoomController : MonoBehaviour
         }
     }
 
-    void SpawnShopItems()
-    {
-        Vector3 shopPosition = transform.position + new Vector3(0, 0, 0);
-        GameObject shopControllerInstance = Instantiate(GameManager.Instance.shopControllerPrefab, shopPosition, Quaternion.identity, transform);
-
-        ShopController shopController = shopControllerInstance.GetComponent<ShopController>();
-        if (shopController != null)
-        {
-            shopController.allShopItems = GameManager.Instance.globalShopItems;
-
-            shopController.InitializeShop();
-        }
-    }
-
-    void SpawnLootChest()
-    {
-        // Instancia un cofre de loot
-    }
-
     void SpawnBoss()
     {
-        // Instancia el boss en el centro de la sala
+        Vector3 spawnPosition = transform.position + Vector3.zero;
+        Instantiate(roomData.bossPrefab, spawnPosition, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

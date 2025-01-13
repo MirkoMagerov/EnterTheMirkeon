@@ -19,6 +19,7 @@ public class RoomData
     public RoomConnections connections;
 
     public GameObject[] enemyPrefabs;
+    public GameObject bossPrefab;
     public Vector2[] spawnPoints;
 
     public RoomData(int x, int y, RoomType type)

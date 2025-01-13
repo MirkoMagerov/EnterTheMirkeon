@@ -71,11 +71,6 @@ public class WeaponInventory : MonoBehaviour
         {
             currentWeaponIndex++;
             EquipCurrentWeapon();
-            Debug.Log("Switched to weapon: " + weapons[currentWeaponIndex].weaponName);
-        }
-        else
-        {
-            Debug.Log("Ya tienes equipada la última arma. No se puede cambiar a la siguiente.");
         }
     }
 
@@ -85,11 +80,6 @@ public class WeaponInventory : MonoBehaviour
         {
             currentWeaponIndex--;
             EquipCurrentWeapon();
-            Debug.Log("Switched to weapon: " + weapons[currentWeaponIndex].weaponName);
-        }
-        else
-        {
-            Debug.Log("Ya tienes equipada la primera arma. No se puede cambiar a la anterior.");
         }
     }
 
@@ -121,12 +111,7 @@ public class WeaponInventory : MonoBehaviour
         {
             return weaponAmmo[weapon];
         }
-        else
-        {
-            Debug.LogError("Weapon not available in WeaponInventory: " + weapon.weaponName);
-            weaponAmmo[weapon] = new WeaponAmmoData(weapon.magSize, weapon.totalBullets);
-            return weaponAmmo[weapon];
-        }
+        return null;
     }
 
     public void SetAmmoData(Weapon weapon, int newMag, int newTotal)
@@ -150,20 +135,16 @@ public class WeaponInventory : MonoBehaviour
 
             if (weapon.hasInfiniteAmmo)
             {
-                ammoData.currentMag = weapon.magSize;
-                Debug.Log($"Arma con balas infinitas recargada. Cargador: {ammoData.currentMag}/{weapon.magSize}");
-                return true;
+                ammoData.currentMag = weapon.magSize;return true;
             }
 
             if (ammoData.currentMag >= weapon.magSize)
             {
-                Debug.Log("El cargador ya está lleno.");
                 return false;
             }
 
             if (ammoData.totalBullets <= 0)
             {
-                Debug.Log("No hay balas disponibles para recargar.");
                 return false;
             }
 
@@ -173,28 +154,20 @@ public class WeaponInventory : MonoBehaviour
             ammoData.currentMag += bulletsToLoad;
             ammoData.totalBullets -= bulletsToLoad;
 
-            Debug.Log($"Recargado {bulletsToLoad} balas al {weapon.weaponName}. Cargador: {ammoData.currentMag}/{weapon.magSize}, Balas totales: {ammoData.totalBullets}");
             return true;
         }
 
-        Debug.LogError("Weapon not available in WeaponInventory: " + weapon.weaponName);
         return false;
     }
 
-    // Para añadir drops de balas o algo en un futuro
     public void AddBullets(Weapon weapon, int amount)
     {
-        if (weaponAmmo.ContainsKey(weapon))
-        {
-            weaponAmmo[weapon].totalBullets = Mathf.Min(weaponAmmo[weapon].totalBullets + amount, weapon.totalBullets);
-        }
-        else
-        {
-            weaponAmmo[weapon] = new WeaponAmmoData(weapon.magSize, Mathf.Min(amount, weapon.totalBullets));
-        }
+        weaponAmmo[weapon].totalBullets = weaponAmmo[weapon].totalBullets + amount;
     }
 
-    private void UpdateUI()
+    public List<Weapon> GetWeapons() { return weapons; }
+
+    public void UpdateUI()
     {
         currentWeaponImageUI.sprite = weapons[currentWeaponIndex].weaponSprite;
 

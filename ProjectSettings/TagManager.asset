@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - EnemyTarget
+  - EnemyBulletSpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -14,10 +16,10 @@ TagManager:
   - UI
   - Invulnerable
   - Enemy
-  - Bullet
+  - 
   - Player
-  - 
-  - 
+  - NoPost
+  - Post
   - 
   - 
   - 
@@ -45,11 +47,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Enemy
+    uniqueID: 3843185473
+    locked: 0
   - name: Player
     uniqueID: 3370391841
     locked: 0
+  - name: Bullet
+    uniqueID: 1257090133
+    locked: 0
   - name: Interactuables
     uniqueID: 3195904213
+    locked: 0
+  - name: Room Black Panel
+    uniqueID: 1586246203
     locked: 0
   - name: Crosshair
     uniqueID: 193783997

@@ -11,7 +11,6 @@ public class ShopController : MonoBehaviour
     {
         if (allShopItems == null || allShopItems.Count == 0 || spawnPoints.Length == 0)
         {
-            Debug.LogWarning("ShopController is not properly configured.");
             return;
         }
 
@@ -21,8 +20,6 @@ public class ShopController : MonoBehaviour
         {
             SpawnShopItem(selectedItems[i], spawnPoints[i].position);
         }
-
-        Debug.Log($"Shop initialized with {selectedItems.Count} items.");
     }
 
     private List<ShopItem> GetRandomShopItems(int count)

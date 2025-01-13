@@ -26,13 +26,10 @@ public class MouseAim : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameManager.Instance.gamePaused) return;
+
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         crosshair_1.transform.position = new Vector2(mousePos.x, mousePos.y);
-    }
-
-    private Vector2 GetDirectionToCrosshair(Vector2 position)
-    {
-        return (mousePos - position).normalized;
     }
 
     private void FlipPlayerLocalScale()
@@ -48,6 +45,4 @@ public class MouseAim : MonoBehaviour
             playerFlip.SetPlayerSpriteLocalScale(new Vector3(Mathf.Abs(playerSpriteLocalScale.x), playerSpriteLocalScale.y, playerSpriteLocalScale.z));
         }
     }
-
-    public Vector2 GetMousePos() => mousePos;
 }

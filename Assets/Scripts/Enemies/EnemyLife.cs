@@ -15,7 +15,7 @@ public class EnemyLife : MonoBehaviour, IDamageable
         slider.gameObject.SetActive(false);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage, GameObject obj)
     {
         if (!slider.IsActive()) slider.gameObject.SetActive(true);
         health -= damage;
@@ -27,7 +27,7 @@ public class EnemyLife : MonoBehaviour, IDamageable
     {
         slider.gameObject.SetActive(false);
         Instantiate(coin, transform.position, Quaternion.identity);
-        coin.GetComponent<Coin>().SetRandomCoins(3, 7);
+        coin.GetComponent<Coin>().SetRandomCoins(2, 5);
         Destroy(gameObject);
     }
 }

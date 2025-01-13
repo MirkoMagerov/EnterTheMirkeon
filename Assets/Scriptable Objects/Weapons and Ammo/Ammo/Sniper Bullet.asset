@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594d9a15ef7b629428925deedb84f272, type: 3}
   m_Name: Sniper Bullet
   m_EditorClassIdentifier: 
-  ammoName: Sniper bullet
+  ammoName: Sniper Bullet
   speed: 50
   damage: 70
   lifetime: 5

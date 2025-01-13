@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7704016986277232528}
   - component: {fileID: 7581329828052159081}
   - component: {fileID: 8729595103420985465}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Assault Rifle Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,10 +53,10 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5d049461b09463e4aabf9f32e2d24a9e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -924575455
-  m_SortingLayer: 1
+  m_SortingLayerID: 1257090133
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_Sprite: {fileID: -1525637357, guid: da00414f89342f5429aa1b8ef380f70e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -112,7 +112,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 1
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &7581329828052159081
@@ -156,7 +156,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7564315691842897745}
   - component: {fileID: 9199817960140418999}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
