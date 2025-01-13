@@ -40,4 +40,15 @@ public class DialogueTrigger : MonoBehaviour
             TriggerDialoge();
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            if (DialogueManager.Instance.isDialogueActive)
+            {
+                DialogueManager.Instance.EndDialogue();
+            }
+        }
+    }
 }

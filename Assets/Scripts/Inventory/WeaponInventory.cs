@@ -193,4 +193,9 @@ public class WeaponInventory : MonoBehaviour
             nextWeaponImageUI.color = new Color(0, 0, 0, 0f);
         }
     }
+
+    public bool HasWeapon(Weapon weapon)
+    {
+        return weapons.Contains(weapon);
+    }
 }

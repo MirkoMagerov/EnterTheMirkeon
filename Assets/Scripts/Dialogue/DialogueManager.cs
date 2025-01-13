@@ -18,6 +18,9 @@ public class DialogueManager : MonoBehaviour
     public Animator animator;
 
     private Queue<DialogueLine> dialogueLines = new();
+    private bool isTyping = false;
+    private Coroutine typingCoroutine = null;
+    private DialogueLine currentLine;
 
     private void Awake()
     {
@@ -35,8 +38,28 @@ public class DialogueManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Return) && isDialogueActive)
         {
-            DisplayNextLine();
+            if (isTyping)
+            {
+                CompleteCurrentLine();
+            }
+            else
+            {
+                DisplayNextLine();
+            }
         }
+    }
+
+    private void CompleteCurrentLine()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        isTyping = false;
+        typingCoroutine = null;
+
+        dialogueText.text = currentLine.line;
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -62,27 +85,33 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        DialogueLine currentLine = dialogueLines.Dequeue();
+        currentLine = dialogueLines.Dequeue();
 
         characterAvatarImage.sprite = currentLine.character.avatar;
         characterNameText.text = currentLine.character.name;
 
-        StopAllCoroutines();
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
 
-        StartCoroutine(TypeLine(currentLine));
+        typingCoroutine = StartCoroutine(TypeLine(currentLine));
     }
 
     public IEnumerator TypeLine(DialogueLine line)
     {
+        isTyping = true;
         dialogueText.text = "";
         foreach(char letter in line.line.ToCharArray())
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
+        isTyping = false;
+        typingCoroutine = null;
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         isDialogueActive = false;
         animator.Play("Hide");

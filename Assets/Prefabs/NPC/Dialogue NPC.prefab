@@ -428,34 +428,54 @@ MonoBehaviour:
   dialogue:
     dialogueLines:
     - character:
-        name: Gordo Supremo
-        avatar: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
-      line: "\xA1Hola, aventurero! Veo que est\xE1s listo para la acci\xF3n, pero
-        antes de lanzarte al peligro, d\xE9jame ense\xF1arte lo b\xE1sico. \xA1Presta
-        atenci\xF3n!"
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: "Ah, a fresh face! You look like you've seen your share of trouble...
+        or you're about to. Come closer\u2014I\u2019ve got a few tips to keep you
+        breathing out there."
     - character:
-        name: Gordo Supremo
-        avatar: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
-      line: "Movimiento: Usa las teclas W, A, S y D para moverte. \xA1Es como caminar,
-        pero m\xE1s \xE9pico!"
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'WASD: Use these keys to move around. Stay nimble, and you''ll survive
+        longer!'
     - character:
-        name: Gordo Supremo
-        avatar: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
-      line: "C\xE1mara m\xE1gica: Cuando alejas el rat\xF3n de tu personaje, \xA1tu
-        visi\xF3n se ampl\xEDa! Esto te permitir\xE1 explorar m\xE1s del mundo a
-        tu alrededor."
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: "Space: A quick dash makes you untouchable\u2014perfect for slipping
+        past enemies and bullets!"
     - character:
-        name: Gordo Supremo
-        avatar: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
-      line: "Dash emocionante: \xBFNecesitas esquivar algo r\xE1pido? Pulsa la barra
-        espaciadora (Espacio) para hacer un dash en la direcci\xF3n en la que te
-        est\xE1s moviendo."
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'Left Click: Fire your weapon with a steady hand. Aim true, and let nothing
+        stand in your way!'
     - character:
-        name: Gordo Supremo
-        avatar: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
-      line: "\xA1Por poco se me olvida! Durante el dash, eres invulnerable por un
-        peque\xF1o per\xEDodo de tiempo, por lo que, si eres preciso, \xA1podras
-        esquivar cualquier peligro!"
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'Mouse Wheel: Scroll through your arsenal to find the perfect weapon
+        for the moment.'
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'V: When foes get too close, strike them down with a melee attack!'
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: "Q: Use your consumable wisely\u2014it could be the difference between
+        life and death!"
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'Tab: Switch between consumables to find the one you need most in the
+        heat of battle.'
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: "E: Look for objects outlined in white. Press this to interact\u2014it
+        might just save your skin!"
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: 'Esc: Need a breather? Hit this to pause and collect your thoughts.'
 --- !u!1 &5879640615794834643
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +878,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8140484070221933936}
   - component: {fileID: 5468696958961973246}
+  - component: {fileID: 3606249053224406525}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -897,10 +918,10 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -918,10 +939,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bad6f823c0f99064e91a21c73e1e8969, type: 3}
+  m_SortingLayerID: -924575455
+  m_SortingLayer: 2
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -932,6 +953,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3606249053224406525
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7485729316124825557}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 60010664ba7f3804bb8ce33f1fe5a859, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8281848379670798280
 GameObject:
   m_ObjectHideFlags: 0

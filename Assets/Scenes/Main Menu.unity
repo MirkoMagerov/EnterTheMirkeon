@@ -886,6 +886,10 @@ PrefabInstance:
       value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
+      propertyPath: startRoomPrefab
+      value: 
+      objectReference: {fileID: 3877007221720254726, guid: 56c0c42bcc670f443a71962b81aa4bee, type: 3}
+    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
       propertyPath: enemies.Array.size
       value: 5
       objectReference: {fileID: 0}

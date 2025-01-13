@@ -52,10 +52,28 @@ public class Chest : MonoBehaviour, IInteractuable
 
         if (weaponsList.Count > 0)
         {
-            int randomIndex = Random.Range(0, weaponsList.Count);
             WeaponInventory weaponInv = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<WeaponInventory>();
+
+            Weapon selectedWeapon;
+            int attempts = 0;
+
+            do
             {
-                weaponInv.PickUpWeapon(weaponsList[randomIndex]);
+                int randomIndex = Random.Range(0, weaponsList.Count);
+                selectedWeapon = weaponsList[randomIndex];
+                attempts++;
+
+                if (attempts >= weaponsList.Count)
+                {
+                    selectedWeapon = null;
+                    break;
+                }
+            }
+            while (weaponInv.HasWeapon(selectedWeapon));
+
+            if (selectedWeapon != null)
+            {
+                weaponInv.PickUpWeapon(selectedWeapon);
             }
         }
 
