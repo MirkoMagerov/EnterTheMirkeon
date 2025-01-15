@@ -143,7 +143,7 @@ public class WeaponController : MonoBehaviour
         GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
         if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
         {
-            bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag);
+            bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag, currentWeapon.damagePerBullet);
         }
 
         PlayerSounds.Instance.PlayLaserShot();
@@ -168,7 +168,7 @@ public class WeaponController : MonoBehaviour
             GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
             if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
             {
-                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag);
+                bulletBehavior.Initialize(spreadDir, currentWeapon.ammoType, gameObject.tag, currentWeapon.damagePerBullet);
             }
         }
 

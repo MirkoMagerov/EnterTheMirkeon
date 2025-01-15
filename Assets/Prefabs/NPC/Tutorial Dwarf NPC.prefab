@@ -661,6 +661,16 @@ MonoBehaviour:
     - character:
         name: Dwarfy
         avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: Collect all the coins you find carefully, they might come in handy later
+        to trade for some juicy stuff!
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
+      line: And if you come across a chest, don't hesitate to open it. It's the best
+        way to get new weapons with full ammo completely for free!
+    - character:
+        name: Dwarfy
+        avatar: {fileID: 21300000, guid: edd7649c3ac9632408bf73c910da2949, type: 3}
       line: Remember that if you forget something, you can always come back here!
         Good luck and stay safe!
 --- !u!1 &8219334873364853825

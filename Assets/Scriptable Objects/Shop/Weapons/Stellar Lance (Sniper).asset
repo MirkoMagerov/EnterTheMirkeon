@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d07606c4c6e43b44c99018765076201e, type: 3}
-  m_Name: Heal Full Heart
+  m_Name: Stellar Lance (Sniper)
   m_EditorClassIdentifier: 
-  itemName: Heal Full Heart
-  description: Heals player for 1 heart after buying.
-  price: 45
-  sprite: {fileID: 21300000, guid: 47eec79eba906814295735e4deddbfeb, type: 3}
-  type: 1
-  healthAmount: 2
+  itemName: Stellar Lance (Sniper)
+  description: A long-range sniper rifle designed with a good bullet capacity and
+    short reload times.
+  price: 110
+  sprite: {fileID: 21300000, guid: 9f6c1d7567903e641a57d5a59743a291, type: 3}
+  type: 0
+  healthAmount: 0
   maxHealthIncrease: 0
-  weapon: {fileID: 0}
+  weapon: {fileID: 11400000, guid: 010ede630377eae4cab41238124b8a64, type: 2}
   consumableItem: {fileID: 0}

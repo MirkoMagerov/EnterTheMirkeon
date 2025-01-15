@@ -94,9 +94,11 @@ public class ShopItemDisplay : MonoBehaviour, IInteractuable
                 GameManager.Instance.EquipWeapon(shopItem.weapon);
                 break;
             case ItemType.Health:
-                GameManager.Instance.HealPlayer(shopItem.healthAmount);
-                break;
-            case ItemType.Key:
+                if (shopItem.healthAmount > 0) 
+                    GameManager.Instance.HealPlayer(shopItem.healthAmount);
+
+                if (shopItem.maxHealthIncrease > 0) 
+                    GameManager.Instance.IncreaseMaximumHealth(shopItem.maxHealthIncrease);
                 break;
             case ItemType.ConsumableItem:
                 GameObject.FindGameObjectWithTag("Player").GetComponent<ConsumablesInventory>().AddItem(shopItem.consumableItem);

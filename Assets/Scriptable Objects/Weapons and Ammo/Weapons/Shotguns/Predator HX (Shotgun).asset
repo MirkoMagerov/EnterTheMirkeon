@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
+  m_Name: Predator HX (Shotgun)
+  m_EditorClassIdentifier: 
+  weaponName: Predator HX
+  fireRate: 1.25
+  bulletsPerShot: 4
+  spreadAngle: 55
+  magSize: 26
+  totalBullets: 104
+  damagePerBullet: 26
+  reloadTime: 2.3
+  bulletSpawnOffset: {x: 0.8, y: 0.1}
+  weaponType: 2
+  weaponSprite: {fileID: 21300000, guid: 38a42786503e067498be93d584825f56, type: 3}
+  ammoType: {fileID: 11400000, guid: ff039cf16cf16754ea055158c8e4da45, type: 2}
+  hasInfiniteAmmo: 0

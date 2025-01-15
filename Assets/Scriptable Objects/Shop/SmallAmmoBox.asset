@@ -15,9 +15,10 @@ MonoBehaviour:
   itemName: Small Ammo Box
   description: 'Consumable: Restores 30% of the maximum bullet capacity for each
     weapon in the player''s inventory.'
-  price: 40
+  price: 45
   sprite: {fileID: 21300000, guid: 274941f16195c0d4f8bed6d1365a93f3, type: 3}
-  type: 3
+  type: 2
   healthAmount: 0
+  maxHealthIncrease: 0
   weapon: {fileID: 0}
   consumableItem: {fileID: 11400000, guid: 63ea59ca3e2abc24abf3bbd4d5424b05, type: 2}

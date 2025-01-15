@@ -68,6 +68,12 @@ public class GameManager : MonoBehaviour
         playerLife.RegenerateHealth(healAmount);
     }
 
+    public void IncreaseMaximumHealth(int maxHealthIncrease)
+    {
+        PlayerLife playerLife = player.GetComponent<PlayerLife>();
+        playerLife.AddHearts(maxHealthIncrease);
+    }
+
     public void EquipWeapon(Weapon weapon)
     {
         player.GetComponentInChildren<WeaponInventory>().PickUpWeapon(weapon);
@@ -100,8 +106,8 @@ public class GameManager : MonoBehaviour
         gamePaused = false;
         Time.timeScale = 1f;
         pauseCanvas.SetActive(false);
-        InputManager.Instance.GetInputActions().Enable();
         Cursor.visible = false;
+        InputManager.Instance.GetInputActions().Enable();
     }
 
     public void RestartDungeon()
@@ -161,8 +167,10 @@ public class GameManager : MonoBehaviour
         panel.SetActive(false);
     }
 
-    public void PlayerVictory()
+    public void AfterBossDefeath()
     {
+        foreach (Transform child in dungeonGenerator.transform) { Destroy(child.gameObject); }
+        dungeonCamera.SetActive(false);
         InputManager.Instance.GetInputActions().Disable();
         player.SetActive(false);
         Cursor.visible = true;

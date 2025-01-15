@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Medkit
   m_EditorClassIdentifier: 
   itemName: Medkit
-  description: 'Consumable: Heals player for 1 and a half heart when used'
+  description: 'Consumable: Heals player for 1 and a half heart when used.'
   price: 80
   sprite: {fileID: 21300000, guid: 72640057ad02b784585395e49e5f29bb, type: 3}
-  type: 3
+  type: 2
   healthAmount: 0
+  maxHealthIncrease: 0
   weapon: {fileID: 0}
   consumableItem: {fileID: 11400000, guid: d5f38bd51e8ea5d4c93a71b6113942b8, type: 2}

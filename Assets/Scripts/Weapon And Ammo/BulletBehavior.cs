@@ -4,15 +4,15 @@ public class BulletBehavior : MonoBehaviour
 {
     private Vector2 direction;
     private float speed;
-    private int damage;
     private float lifetime;
     private string shooterTag;
+    private int damage;
 
-    public void Initialize(Vector2 dir, Ammo ammo, string shooterTag)
+    public void Initialize(Vector2 dir, Ammo ammo, string shooterTag, int damage)
     {
         direction = dir.normalized;
         speed = ammo.speed;
-        damage = ammo.damage;
+        this.damage = damage;
         lifetime = ammo.lifetime;
         this.shooterTag = shooterTag;
 

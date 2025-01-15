@@ -30,6 +30,5 @@ public class BossLife : MonoBehaviour, IDamageable
     private void Die()
     {
         OnBossDead?.Invoke();
-        boss.GetComponentInChildren<Animator>().Play("Die");
     }
 }

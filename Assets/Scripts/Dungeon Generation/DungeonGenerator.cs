@@ -116,13 +116,14 @@ public class DungeonGenerator : MonoBehaviour
     RoomType GetRandomRoomType()
     {
         float rand = Random.value;
-        if (rand < 0.7f) return RoomType.Normal;
-        if (!shopPlaced && rand < 0.8f)
-        { 
-            shopPlaced = true; 
-            return RoomType.Shop; 
+
+        if (!shopPlaced && rand < 0.2f)
+        {
+            shopPlaced = true;
+            return RoomType.Shop;
         }
-        if (rand < 0.9f) return RoomType.Loot;
+        if (rand < 0.65f) return RoomType.Normal;
+        if (rand < 0.85f) return RoomType.Loot;
         return RoomType.Normal;
     }
 
@@ -132,19 +133,15 @@ public class DungeonGenerator : MonoBehaviour
         {
             RoomType.Normal => new Vector2[]
             {
-                new Vector2(0, 0),
-                new Vector2(0, 1.5f),
-                new Vector2(0, 2.5f),
-                new Vector2(1.5f, 0),
-                new Vector2(2.5f, 0),
-                new Vector2(-1.5f, 0),
-                new Vector2(-2.5f, 0),
-                new Vector2(0, -1.5f),
-                new Vector2(0, -2.5f),
+                new Vector2(-1.5f, 1.5f),
+                new Vector2(0f, 1.5f),
                 new Vector2(1.5f, 1.5f),
-                new Vector2(2.5f, 2.5f),
+                new Vector2(-1.5f, 0),
+                new Vector2(0, 0),
+                new Vector2(1.5f, 0),
                 new Vector2(-1.5f, -1.5f),
-                new Vector2(-2.5f, -2.5f),
+                new Vector2(0, -1.5f),
+                new Vector2(1.5f, -1.5f),
             },
             RoomType.Boss => new Vector2[]
             {

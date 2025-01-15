@@ -693,12 +693,16 @@ MonoBehaviour:
   globalShopItems:
   - {fileID: 11400000, guid: 7a89d94d8abe61d458a0cb48ff16651e, type: 2}
   - {fileID: 11400000, guid: bbac7beced816824ba0f5390484e7f0c, type: 2}
-  - {fileID: 11400000, guid: 3733a5e60c1570445bbf936254bfac3b, type: 2}
   - {fileID: 11400000, guid: 52758521d14e532458e19011792d95fd, type: 2}
   - {fileID: 11400000, guid: 3b55234be9695c04ba61185485780faf, type: 2}
   - {fileID: 11400000, guid: bdac75abeaffb17429ff95ea3d05043a, type: 2}
   - {fileID: 11400000, guid: d53b541066502e740a3e27d9fd90e918, type: 2}
   - {fileID: 11400000, guid: 851da4a0160303b41b31bc24b35f1b4a, type: 2}
+  - {fileID: 11400000, guid: d935d1b56f56ccb47ade9cd8b160714e, type: 2}
+  - {fileID: 11400000, guid: 80ea90750c079754ca5db74b908907d2, type: 2}
+  - {fileID: 11400000, guid: ee66d4e7c283cc34f8efda71ab52421a, type: 2}
+  - {fileID: 11400000, guid: e50c512d2dd3f104c8a4ce33b1c56866, type: 2}
+  - {fileID: 11400000, guid: ad0617b33833ab146a664462300fb049, type: 2}
   dungeonCamera: {fileID: 0}
   dungeonGenerator: {fileID: 3569556099606318471}
   pauseCanvas: {fileID: 650011149851811119}

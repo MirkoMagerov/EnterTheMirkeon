@@ -14,7 +14,7 @@ public class ShopController : MonoBehaviour
             return;
         }
 
-        List<ShopItem> selectedItems = GetRandomShopItems(4);
+        List<ShopItem> selectedItems = GetRandomShopItems(spawnPoints.Length);
 
         for (int i = 0; i < selectedItems.Count && i < spawnPoints.Length; i++)
         {

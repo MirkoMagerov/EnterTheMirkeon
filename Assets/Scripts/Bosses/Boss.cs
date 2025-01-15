@@ -38,14 +38,14 @@ public class Boss : MonoBehaviour
 
     private void OnEnable()
     {
-        bossLife.OnBossDead += HandleBossDeath;
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLife>().OnPlayerDeath += OnPlayerDeath;
+        bossLife.OnBossDead += OnBossDeath;
     }
 
     private void OnDisable()
     {
-        bossLife.OnBossDead -= HandleBossDeath;
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLife>().OnPlayerDeath -= OnPlayerDeath;
+        bossLife.OnBossDead -= OnBossDeath;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -84,15 +84,6 @@ public class Boss : MonoBehaviour
             {
                 yield return PhaseThree();
             }
-        }
-
-        if (!playerAlive)
-        {
-            HandlePlayerDeath();
-        }
-        else
-        {
-            HandleBossDeath();
         }
     }
 
@@ -287,25 +278,21 @@ public class Boss : MonoBehaviour
 
     public int GetDamageReduction() { return damageReduction; }
 
-    private void OnPlayerDeath()
-    {
-        playerAlive = false;
-        playerTarget = null;
-    }
-
-    private void HandleBossDeath()
+    private void OnBossDeath()
     {
         StopCoroutine(mainCoroutine);
         anim.SetBool("Moving", false);
         anim.Play("Dead");
         GameManager.Instance.ChangeSceneWithTransition("Credits", () =>
         {
-            GameManager.Instance.PlayerVictory();
+            GameManager.Instance.AfterBossDefeath();
         });
     }
 
-    private void HandlePlayerDeath()
+    private void OnPlayerDeath()
     {
+        playerAlive = false;
+        playerTarget = null;
         StopCoroutine(mainCoroutine);
         anim.SetBool("Moving", false);
         anim.Play("Idle");

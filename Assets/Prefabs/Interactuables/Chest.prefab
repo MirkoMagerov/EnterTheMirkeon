@@ -129,9 +129,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponsList:
-  - {fileID: 11400000, guid: 078e5d8e3bbae2f4aa94af3af1b55f19, type: 2}
-  - {fileID: 11400000, guid: f8aec51872dbdf344907627ed8dda242, type: 2}
-  interactionRange: 2
+  - {fileID: 11400000, guid: 04752f6c04eb76a4f84bd7b4ab52dbd8, type: 2}
+  - {fileID: 11400000, guid: 99a429a1f562822478029fc6f23c7c3e, type: 2}
+  - {fileID: 11400000, guid: 2a6e1d32ffaa1d44bbcb04762112999c, type: 2}
+  - {fileID: 11400000, guid: 2ae89d3f7a5dec1458e48d6e8f9194d7, type: 2}
+  - {fileID: 11400000, guid: 010ede630377eae4cab41238124b8a64, type: 2}
+  - {fileID: 11400000, guid: 639e2375d0dc7c449afc816a249298e9, type: 2}
+  - {fileID: 11400000, guid: 2ae89d3f7a5dec1458e48d6e8f9194d7, type: 2}
+  - {fileID: 11400000, guid: 3c7dd04b6f6330d4a86532108f08320e, type: 2}
+  interactionRange: 2.3
 --- !u!1 &6164457793818619683
 GameObject:
   m_ObjectHideFlags: 0

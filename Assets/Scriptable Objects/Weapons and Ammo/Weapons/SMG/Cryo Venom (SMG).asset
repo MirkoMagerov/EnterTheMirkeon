@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
-  m_Name: Starter Pistol
+  m_Name: Cryo Venom (SMG)
   m_EditorClassIdentifier: 
-  weaponName: Pistol
-  fireRate: 3.3
+  weaponName: Cryo Venom
+  fireRate: 5.7
   bulletsPerShot: 1
   spreadAngle: 25
-  magSize: 15
-  totalBullets: 0
-  damagePerBullet: 19
-  reloadTime: 1.4
-  bulletSpawnOffset: {x: 1, y: 0}
-  weaponType: 1
-  weaponSprite: {fileID: 21300000, guid: b22e189f021724f45b7779fd841a4b25, type: 3}
-  ammoType: {fileID: 11400000, guid: 829973e5f99875149b6c13bf9946519b, type: 2}
-  hasInfiniteAmmo: 1
+  magSize: 34
+  totalBullets: 136
+  damagePerBullet: 22
+  reloadTime: 2
+  bulletSpawnOffset: {x: 1.1, y: 0}
+  weaponType: 0
+  weaponSprite: {fileID: 21300000, guid: a5bcbac326c454c4fb082d0cc77d4246, type: 3}
+  ammoType: {fileID: 11400000, guid: 114c9f556cb2d6d4d8733dd09e29854c, type: 2}
+  hasInfiniteAmmo: 0

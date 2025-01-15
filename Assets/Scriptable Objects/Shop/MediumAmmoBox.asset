@@ -15,9 +15,10 @@ MonoBehaviour:
   itemName: Medium Ammo Box
   description: 'Consumable: Restores 55% of the maximum bullet capacity for each
     weapon in the player''s inventory.'
-  price: 60
+  price: 65
   sprite: {fileID: 21300000, guid: 5fefe44fcf6a6fb4898c167d941f993b, type: 3}
-  type: 3
+  type: 2
   healthAmount: 0
+  maxHealthIncrease: 0
   weapon: {fileID: 0}
   consumableItem: {fileID: 11400000, guid: 58cefb931690b064fa66fe0043f85bad, type: 2}

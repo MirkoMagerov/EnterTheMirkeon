@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
-  m_Name: Sniper
+  m_Name: Falcon AR-17 (AR)
   m_EditorClassIdentifier: 
-  weaponName: Sniper
-  fireRate: 1
+  weaponName: Falcon AR-17
+  fireRate: 4.5
   bulletsPerShot: 1
-  spreadAngle: 10
-  magSize: 10
-  totalBullets: 40
-  reloadTime: 1.85
-  laserWidth: 0
-  laserDPS: 0
+  spreadAngle: 20
+  magSize: 25
+  totalBullets: 100
+  damagePerBullet: 27
+  reloadTime: 2
   bulletSpawnOffset: {x: 1, y: 0}
-  weaponType: 1
-  weaponSprite: {fileID: 21300000, guid: d47476a5179fe9243b2994588082843a, type: 3}
-  ammoType: {fileID: 11400000, guid: 20744bac19255604da47ffdc952e0c72, type: 2}
+  weaponType: 0
+  weaponSprite: {fileID: 21300000, guid: 2fc4c5e6f34c87a47a9177d2d618b486, type: 3}
+  ammoType: {fileID: 11400000, guid: 56338f9d5646d9643ac0bf3d93839b75, type: 2}
   hasInfiniteAmmo: 0

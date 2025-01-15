@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
-  m_Name: Sniper InstaKill
+  m_Name: Stellar Lance (Sniper)
   m_EditorClassIdentifier: 
-  weaponName: Deadly Sniper
-  fireRate: 1.25
+  weaponName: Stellar Lance
+  fireRate: 1.35
   bulletsPerShot: 1
-  spreadAngle: 5
-  magSize: 13
-  totalBullets: 52
-  reloadTime: 1.95
-  laserWidth: 0
-  laserDPS: 0
-  bulletSpawnOffset: {x: 1.1, y: 0}
+  spreadAngle: 12
+  magSize: 14
+  totalBullets: 56
+  damagePerBullet: 85
+  reloadTime: 1.5
+  bulletSpawnOffset: {x: 1, y: 0}
   weaponType: 1
-  weaponSprite: {fileID: 21300000, guid: 81279e0b95718b54bbc1721eee31d873, type: 3}
-  ammoType: {fileID: 11400000, guid: 3bd03b39f0fe4e04c9bc4f17d3c11938, type: 2}
+  weaponSprite: {fileID: 21300000, guid: 9f6c1d7567903e641a57d5a59743a291, type: 3}
+  ammoType: {fileID: 11400000, guid: 20744bac19255604da47ffdc952e0c72, type: 2}
   hasInfiniteAmmo: 0

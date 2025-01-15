@@ -45,7 +45,6 @@ public class PlayerLife : MonoBehaviour, IDamageable
     {
         if (!PlayerState.Instance.IsInvulnerable)
         {
-            Debug.Log($"Taked damage from {obj.name}");
             anim.SetTrigger("Hit");
             currentHealth -= damage;
             PlayerSounds.Instance.PlayHitSound();

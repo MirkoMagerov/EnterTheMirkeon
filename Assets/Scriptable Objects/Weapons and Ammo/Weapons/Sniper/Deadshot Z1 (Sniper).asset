@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
-  m_Name: Starter Pistol
+  m_Name: Deadshot Z1 (Sniper)
   m_EditorClassIdentifier: 
-  weaponName: Pistol
-  fireRate: 3.3
+  weaponName: Deadshot Z1
+  fireRate: 1.15
   bulletsPerShot: 1
-  spreadAngle: 25
-  magSize: 15
-  totalBullets: 0
-  damagePerBullet: 19
-  reloadTime: 1.4
-  bulletSpawnOffset: {x: 1, y: 0}
+  spreadAngle: 7
+  magSize: 13
+  totalBullets: 52
+  damagePerBullet: 100
+  reloadTime: 2
+  bulletSpawnOffset: {x: 1.1, y: 0}
   weaponType: 1
-  weaponSprite: {fileID: 21300000, guid: b22e189f021724f45b7779fd841a4b25, type: 3}
-  ammoType: {fileID: 11400000, guid: 829973e5f99875149b6c13bf9946519b, type: 2}
-  hasInfiniteAmmo: 1
+  weaponSprite: {fileID: 21300000, guid: 81279e0b95718b54bbc1721eee31d873, type: 3}
+  ammoType: {fileID: 11400000, guid: 3bd03b39f0fe4e04c9bc4f17d3c11938, type: 2}
+  hasInfiniteAmmo: 0

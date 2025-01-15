@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d07606c4c6e43b44c99018765076201e, type: 3}
-  m_Name: Heal Full Heart
+  m_Name: Predator HX (Shotgun)
   m_EditorClassIdentifier: 
-  itemName: Heal Full Heart
-  description: Heals player for 1 heart after buying.
-  price: 45
-  sprite: {fileID: 21300000, guid: 47eec79eba906814295735e4deddbfeb, type: 3}
-  type: 1
-  healthAmount: 2
+  itemName: Predator HX (Shotgun)
+  description: A high-capacity shotgun with unmatched fire power. Fires 4 bullets
+    per shot.
+  price: 100
+  sprite: {fileID: 21300000, guid: 38a42786503e067498be93d584825f56, type: 3}
+  type: 0
+  healthAmount: 0
   maxHealthIncrease: 0
-  weapon: {fileID: 0}
+  weapon: {fileID: 11400000, guid: 8cfa8c9a9b0a6894598e651fa3374344, type: 2}
   consumableItem: {fileID: 0}

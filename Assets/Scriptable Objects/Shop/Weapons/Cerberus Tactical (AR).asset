@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d07606c4c6e43b44c99018765076201e, type: 3}
-  m_Name: Heal Full Heart
+  m_Name: Cerberus Tactical (AR)
   m_EditorClassIdentifier: 
-  itemName: Heal Full Heart
-  description: Heals player for 1 heart after buying.
-  price: 45
-  sprite: {fileID: 21300000, guid: 47eec79eba906814295735e4deddbfeb, type: 3}
-  type: 1
-  healthAmount: 2
+  itemName: Cerberus Tactical (AR)
+  description: A modular and a precise high-caliber rifle with a big bullet magazine
+  price: 105
+  sprite: {fileID: 21300000, guid: 95c89b8ccf59c71498dceced5bfaa7fa, type: 3}
+  type: 0
+  healthAmount: 0
   maxHealthIncrease: 0
-  weapon: {fileID: 0}
+  weapon: {fileID: 11400000, guid: 63fe2d93e6958da43a4471effbcdd5c7, type: 2}
   consumableItem: {fileID: 0}

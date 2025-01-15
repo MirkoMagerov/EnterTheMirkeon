@@ -6,11 +6,10 @@ using UnityEngine.InputSystem;
 
 public class Chest : MonoBehaviour, IInteractuable
 {
-    [Header("Chest Settings")]
+    [Header("Loot Settings")]
     public List<Weapon> weaponsList;
 
     [Header("Interaction Settings")]
-    public float interactionRange = 2f;
     private bool isPlayerNearby = false;
     private bool isOpened = false;
 

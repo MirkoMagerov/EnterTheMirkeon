@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d07606c4c6e43b44c99018765076201e, type: 3}
-  m_Name: Heal Full Heart
+  m_Name: Ion Spitter (SMG)
   m_EditorClassIdentifier: 
-  itemName: Heal Full Heart
-  description: Heals player for 1 heart after buying.
-  price: 45
-  sprite: {fileID: 21300000, guid: 47eec79eba906814295735e4deddbfeb, type: 3}
-  type: 1
-  healthAmount: 2
+  itemName: Ion Spitter (SMG)
+  description: A high-velocity SMG built for rapid, relentless fire. Perfect for
+    dealing with a big amount of enemies at once
+  price: 90
+  sprite: {fileID: 21300000, guid: a5bcbac326c454c4fb082d0cc77d4246, type: 3}
+  type: 0
+  healthAmount: 0
   maxHealthIncrease: 0
-  weapon: {fileID: 0}
+  weapon: {fileID: 11400000, guid: 078e5d8e3bbae2f4aa94af3af1b55f19, type: 2}
   consumableItem: {fileID: 0}
