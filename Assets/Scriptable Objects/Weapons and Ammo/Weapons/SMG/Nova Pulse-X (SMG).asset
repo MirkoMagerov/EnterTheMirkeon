@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Nova Pulse-X (SMG)
   m_EditorClassIdentifier: 
   weaponName: Nova Pulse-X
-  fireRate: 5.85
+  fireRate: 5.95
   bulletsPerShot: 1
   spreadAngle: 27
   magSize: 36
   totalBullets: 144
-  damagePerBullet: 19
+  damagePerBullet: 17
   reloadTime: 1.8
   bulletSpawnOffset: {x: 1.1, y: 0}
   weaponType: 0

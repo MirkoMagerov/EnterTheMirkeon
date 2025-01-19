@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4423530603597261763}
   - component: {fileID: 4896932344103893464}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7704016986277232528}
   - component: {fileID: 7581329828052159081}
   - component: {fileID: 5438246518469031025}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Shotgun Cartridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d049461b09463e4aabf9f32e2d24a9e, type: 2}
+  - {fileID: 2100000, guid: 4471ffc88a4dab44b8ba4c5ab5a99b38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1257090133
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 433977596, guid: 34f315ee238b39944a40d0b22e590fd0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

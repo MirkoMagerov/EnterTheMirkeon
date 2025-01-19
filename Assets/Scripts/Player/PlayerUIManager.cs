@@ -18,6 +18,7 @@ public class PlayerUIManager : MonoBehaviour
 
     [Header("Consumables")]
     [SerializeField] private Image currentItemImage;
+    [SerializeField] private TextMeshProUGUI currentItemName;
 
     private void Awake()
     {
@@ -90,15 +91,17 @@ public class PlayerUIManager : MonoBehaviour
         coinsText.text = coins.ToString();
     }
 
-    public void UpdateConsumableUI(Sprite sprite, int consumableLength)
+    public void UpdateConsumableUI(ConsumableItem item, int consumableLength)
     {
         if (consumableLength == 0)
         {
+            currentItemName.text = string.Empty;
             currentItemImage.color = new Color(255, 255, 255, 0);
         }
         else
         {
-            currentItemImage.sprite = sprite;
+            currentItemName.text = item.itemName;
+            currentItemImage.sprite = item.itemIcon;
             currentItemImage.color = new Color(255, 255, 255, 255);
         }
     }

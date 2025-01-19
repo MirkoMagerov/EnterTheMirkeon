@@ -4,15 +4,16 @@ public class PlayerSounds : MonoBehaviour
 {
     public static PlayerSounds Instance;
 
-    public AudioClip hitSoundClip;
-    public AudioClip laserShotClip;
-    public AudioClip reloadClip;
-    public AudioClip emptyMagazineClip;
-    public AudioClip swordAttackClip;
-    public AudioClip wooshDashClip;
-
-    private float ogVolume;
-    private AudioSource playerAudioSource;
+    public AudioSource hitSoundAudioSource;
+    public AudioSource laserShotAudioSource;
+    public AudioSource reloadAudioSource;
+    public AudioSource emptyMagazineAudioSource;
+    public AudioSource swordAttackAudioSource;
+    public AudioSource wooshDashAudioSource;
+    public AudioSource pickUpWeaponAudioSource;
+    public AudioSource pickUpCoinAudioSource;
+    public AudioSource collectableUsedAudioSource;
+    public AudioSource playerDeathAudioSource;
 
     private void Awake()
     {
@@ -26,57 +27,53 @@ public class PlayerSounds : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        playerAudioSource = GetComponent<AudioSource>();
-        ogVolume = playerAudioSource.volume;
-    }
-
     public void PlayHitSound()
     {
-        playerAudioSource.volume = 1;
-        playerAudioSource.clip = hitSoundClip;
-        playerAudioSource.Play();
-        playerAudioSource.volume = ogVolume;
+        hitSoundAudioSource.Play();
     }
 
     public void PlayLaserShot()
     {
-        playerAudioSource.clip = laserShotClip;
-        playerAudioSource.Play();
+        laserShotAudioSource.Play();
     }
 
     public void PlayReloadSound()
     {
-        playerAudioSource.volume = 1;
-        playerAudioSource.clip = reloadClip;
-        playerAudioSource.Play();
-        playerAudioSource.volume = ogVolume;
+        reloadAudioSource.Play();
     }
 
     public void PlayEmptyMgazineSound()
     {
-        playerAudioSource.volume = 1;
-        playerAudioSource.clip = emptyMagazineClip;
-        playerAudioSource.Play();
-        playerAudioSource.volume = ogVolume;
+        emptyMagazineAudioSource.Play();
     }
 
     public void PlaySwordAttackSound()
     {
-        playerAudioSource.clip = swordAttackClip;
-        playerAudioSource.Play();
+        swordAttackAudioSource.Play();
     }
 
     public void PlayDashSound()
     {
-        playerAudioSource.clip = wooshDashClip;
-        playerAudioSource.Play();
+        wooshDashAudioSource.Play();
     }
 
-    public void StopActualSoundClip()
+    public void PlayPickUpWeaponSound()
     {
-        playerAudioSource.Stop();
-        playerAudioSource.clip = null;
+        pickUpWeaponAudioSource.Play();
+    }
+
+    public void PlayPickUpCoinSound()
+    {
+        pickUpCoinAudioSource.Play();
+    }
+
+    public void PlayCollectableItemUsedSound()
+    {
+        collectableUsedAudioSource.Play();
+    }
+
+    public void PlayPlayerDeathAudioSound()
+    {
+        playerDeathAudioSource.Play();
     }
 }

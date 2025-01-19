@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject deathCanvas;
     public bool gamePaused = false;
     private bool playerDead = false;
+    private MusicManager musicManager;
 
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject panel;
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
             InputManager.Instance.GetInputActions().Disable();
             DontDestroyOnLoad(player);
             player.SetActive(false);
+            musicManager = GetComponent<MusicManager>();
         }
         else
         {
@@ -94,6 +95,7 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
+        musicManager.PauseMusic();
         gamePaused = true;
         Time.timeScale = 0f;
         pauseCanvas.SetActive(true);
@@ -103,6 +105,7 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        musicManager.UnPauseMusic();
         gamePaused = false;
         Time.timeScale = 1f;
         pauseCanvas.SetActive(false);
@@ -174,5 +177,15 @@ public class GameManager : MonoBehaviour
         InputManager.Instance.GetInputActions().Disable();
         player.SetActive(false);
         Cursor.visible = true;
+    }
+
+    public void PlayBossMusic()
+    {
+        musicManager.PlayBossMusic();
+    }
+
+    public void StopBossMusic()
+    {
+        musicManager.StopBossMusic();
     }
 }

@@ -10,7 +10,8 @@ public class DungeonGenerator : MonoBehaviour
     public int roomWidthInUnityUnits = 20;
     public int roomHeightInUnityUnits = 20;
 
-    public int maxRooms = 10;
+    public int minRooms = 8;
+    public int maxRooms = 15;
 
     [Header("Room Prefabs")]
     public GameObject startRoomPrefab;
@@ -44,8 +45,10 @@ public class DungeonGenerator : MonoBehaviour
         int currentX = startX;
         int currentY = startY;
 
+        int roomCount = 1;
+
         // 2. Generar las habitaciones
-        for (int i = 0; i < maxRooms - 1; i++)
+        while (roomCount < maxRooms)
         {
             int dir = Random.Range(0, 4);
             int newX = currentX;
@@ -66,6 +69,10 @@ public class DungeonGenerator : MonoBehaviour
                 };
                 currentX = newX;
                 currentY = newY;
+                roomCount++;
+
+                // Detener generación si se alcanza el mínimo y ocurre una probabilidad
+                if (roomCount >= minRooms && Random.value < 0.17f) break;
             }
         }
 
@@ -122,8 +129,7 @@ public class DungeonGenerator : MonoBehaviour
             shopPlaced = true;
             return RoomType.Shop;
         }
-        if (rand < 0.65f) return RoomType.Normal;
-        if (rand < 0.85f) return RoomType.Loot;
+        if (rand < 0.35f) return RoomType.Loot;
         return RoomType.Normal;
     }
 

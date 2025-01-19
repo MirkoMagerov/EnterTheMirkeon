@@ -198,6 +198,7 @@ MonoBehaviour:
   health: 100
   slider: {fileID: 4197280708310823043}
   coin: {fileID: 581002352792233225, guid: e7c19eb32debd3e4ea7518530c8bb575, type: 3}
+  deathParticlesPrefab: {fileID: 1690014387273625843, guid: b88fbb83739d939469517e6c7da3ee92, type: 3}
 --- !u!114 &8060208328323509988
 MonoBehaviour:
   m_ObjectHideFlags: 0

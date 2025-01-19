@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Medkit
   itemDescription: Heals player for 1 and a half heart when used
-  itemType: 3
+  itemType: 2
   itemIcon: {fileID: 21300000, guid: 72640057ad02b784585395e49e5f29bb, type: 3}
   healthRestoreAmount: 3

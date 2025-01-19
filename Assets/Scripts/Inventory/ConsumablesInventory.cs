@@ -78,7 +78,7 @@ public class ConsumablesInventory : MonoBehaviour
         }
         else
         {
-            playerUIManager.UpdateConsumableUI(currentItem.itemIcon, consumableItems.Count);
+            playerUIManager.UpdateConsumableUI(currentItem, consumableItems.Count);
         }
     }
 

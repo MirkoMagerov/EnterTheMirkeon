@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 3623018157505698808}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.24, y: -2.17, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -389,6 +389,7 @@ MonoBehaviour:
   health: 100
   slider: {fileID: 9169061881757575487}
   coin: {fileID: 581002352792233225, guid: e7c19eb32debd3e4ea7518530c8bb575, type: 3}
+  deathParticlesPrefab: {fileID: 1690014387273625843, guid: b88fbb83739d939469517e6c7da3ee92, type: 3}
 --- !u!114 &5691367711049421565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +408,8 @@ MonoBehaviour:
   knockbackStrength: 25
   bulletSpawnPoint: {fileID: 0}
   defaultFacingRight: 1
+  shootAudioSource: {fileID: 0}
+  explosionAudioSource: {fileID: 0}
 --- !u!1 &5336298939426405097
 GameObject:
   m_ObjectHideFlags: 0

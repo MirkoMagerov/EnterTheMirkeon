@@ -9,6 +9,7 @@ public class RoomController : MonoBehaviour
     public GameObject blackPanel;
     public List<GameObject> skulls;
     public GameObject chestPrefab;
+    public GameObject tutorialNpcPrefab;
 
     [Header("Door Positions")]
     public GameObject topDoorLeftPos;
@@ -243,6 +244,7 @@ public class RoomController : MonoBehaviour
 
     void SpawnPlayer()
     {
+        Instantiate(tutorialNpcPrefab, transform.position + new Vector3(-6, 5, transform.position.z), Quaternion.identity, gameObject.transform);
         Vector3 centerPosition = Vector3.zero + transform.position;
         GameManager.Instance.SpawnPlayerInFirstRoom(centerPosition);
     }
@@ -323,6 +325,7 @@ public class RoomController : MonoBehaviour
 
             else if (roomData.roomType == RoomType.Boss)
             {
+                GameManager.Instance.PlayBossMusic();
                 SpawnBoss();
                 DeactivateDoors();
             }

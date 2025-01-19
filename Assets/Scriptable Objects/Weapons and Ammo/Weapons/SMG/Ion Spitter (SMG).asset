@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Ion Spitter (SMG)
   m_EditorClassIdentifier: 
   weaponName: Ion Spitter
-  fireRate: 6.2
+  fireRate: 6.3
   bulletsPerShot: 1
   spreadAngle: 30
   magSize: 40
   totalBullets: 160
-  damagePerBullet: 17
+  damagePerBullet: 15
   reloadTime: 1.75
   bulletSpawnOffset: {x: 1.1, y: 0}
   weaponType: 0

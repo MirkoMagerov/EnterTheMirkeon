@@ -885,26 +885,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
-      propertyPath: startRoomPrefab
-      value: 
-      objectReference: {fileID: 3877007221720254726, guid: 56c0c42bcc670f443a71962b81aa4bee, type: 3}
-    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
-      propertyPath: enemies.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
-      propertyPath: enemies.Array.data[2]
-      value: 
-      objectReference: {fileID: 3623018157505698808, guid: 985b6dfa7cfead641bb4480c6420efb2, type: 3}
-    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
-      propertyPath: enemies.Array.data[3]
-      value: 
-      objectReference: {fileID: 2923619617234336817, guid: 0d1cdbaa1eab34a4ea921adb5a56512f, type: 3}
-    - target: {fileID: 3569556099606318471, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
-      propertyPath: enemies.Array.data[4]
-      value: 
-      objectReference: {fileID: 6492551450336237757, guid: 24017e66845bf0e40a104d2be8e2d357, type: 3}
     - target: {fileID: 5469292456949741994, guid: cf058b630155d2e41965bbabdd8d0722, type: 3}
       propertyPath: dungeonCamera
       value: 
@@ -1433,7 +1413,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.14117648, g: 0.07450981, b: 0.10196079, a: 0}
+  m_BackGroundColor: {r: 0.101960786, g: 0.047058824, b: 0.06666667, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

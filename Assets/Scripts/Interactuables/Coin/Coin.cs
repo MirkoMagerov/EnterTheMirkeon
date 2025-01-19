@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    [SerializeField] private Material pickUpMaterial;
     [SerializeField] private int coins;
     [SerializeField] private float moveSpeed;
     private bool hasTarget;
     private Vector3 targetPosition;
     private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void FixedUpdate()
@@ -43,9 +48,16 @@ public class Coin : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            spriteRenderer.material = pickUpMaterial;
             CoinManager coinManager = collision.GetComponent<CoinManager>();
             coinManager.AddCoins(coins);
-            Destroy(gameObject);
+            PlayerSounds.Instance.PlayPickUpCoinSound();
+            anim.SetTrigger("PickUp");
         }
+    }
+
+    public void DestroyCoin()
+    {
+        Destroy(gameObject);
     }
 }

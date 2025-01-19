@@ -4,14 +4,14 @@ using UnityEngine;
 public class AmmoBox : ConsumableItem
 {
     [SerializeField] private int percentatgeTotalBulletsToAdd;
-    public override void UseItem(GameObject player)
+    public override void ApplyEffect(GameObject player)
     {
         WeaponInventory inventory = player.GetComponentInChildren<WeaponInventory>();
 
         foreach(Weapon weapon in inventory.GetWeapons())
         {
-            WeaponAmmoData ammoData = inventory.GetAmmoData(weapon);
-            inventory.AddBullets(weapon, ammoData.totalBullets * percentatgeTotalBulletsToAdd / 100);
+            int bulletsToAdd = Mathf.FloorToInt(weapon.totalBullets * percentatgeTotalBulletsToAdd / 100);
+            inventory.AddBullets(weapon, bulletsToAdd);
         }
 
         WeaponController weaponController = player.GetComponentInChildren<WeaponController>();

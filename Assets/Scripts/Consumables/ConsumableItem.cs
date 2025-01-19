@@ -13,11 +13,9 @@ public abstract class ConsumableItem : ScriptableObject
 
     public virtual void UseItem(GameObject player)
     {
+        PlayerSounds.Instance.PlayCollectableItemUsedSound();
         ApplyEffect(player);
     }
 
-    protected virtual void ApplyEffect(GameObject player)
-    {
-
-    }
+    public abstract void ApplyEffect(GameObject player);
 }

@@ -38,6 +38,7 @@ public class ExplosiveChaseState : ChaseState
     {
         if (!isExploding)
         {
+            stateMachine.PlayExplosionAudio();
             enemy.GetComponent<BoxCollider2D>().enabled = false;
             enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             PlayAnimation("Explosion");

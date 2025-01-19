@@ -18,7 +18,7 @@ MonoBehaviour:
   spreadAngle: 13
   magSize: 30
   totalBullets: 120
-  damagePerBullet: 24
+  damagePerBullet: 27
   reloadTime: 2.2
   bulletSpawnOffset: {x: 1, y: 0}
   weaponType: 0

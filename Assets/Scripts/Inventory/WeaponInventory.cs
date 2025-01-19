@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class WeaponInventory : MonoBehaviour
     [SerializeField] private Image currentWeaponImageUI;
     [SerializeField] private Image previousWeaponImageUI;
     [SerializeField] private Image nextWeaponImageUI;
+    [SerializeField] private TextMeshProUGUI currentWeaponName;
 
     private WeaponController weaponController;
     private int currentWeaponIndex = 0;
@@ -170,6 +172,7 @@ public class WeaponInventory : MonoBehaviour
     public void UpdateUI()
     {
         currentWeaponImageUI.sprite = weapons[currentWeaponIndex].weaponSprite;
+        currentWeaponName.text = weapons[currentWeaponIndex].weaponName;
 
         previousWeaponImageUI.sprite = null;
         if (currentWeaponIndex - 1 >= 0 && weapons[currentWeaponIndex - 1] != null)

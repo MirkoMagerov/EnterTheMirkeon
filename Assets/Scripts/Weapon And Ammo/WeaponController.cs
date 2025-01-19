@@ -13,6 +13,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI totalBulletsUI;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Slider reloadSlider;
+    [SerializeField] private GameObject muzzleFlash;
 
     private float lastFireTime;
     private int currentMag;
@@ -81,6 +82,11 @@ public class WeaponController : MonoBehaviour
                     lastFireTime = Time.time;
                     break;
             }
+
+            if (currentMag == 0)
+            {
+                TryReload();
+            }
         }
     }
 
@@ -139,7 +145,7 @@ public class WeaponController : MonoBehaviour
         }
 
         Vector2 spreadDir = ApplySpreadAngle(direction);
-
+        
         GameObject bullet = Instantiate(currentWeapon.ammoType.visualPrefab, bulletSpawnPoint.position, Quaternion.identity);
         if (bullet.TryGetComponent<BulletBehavior>(out var bulletBehavior))
         {
@@ -180,7 +186,7 @@ public class WeaponController : MonoBehaviour
         weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
     }
 
-    private void HandleReload(InputAction.CallbackContext context)
+    private void TryReload()
     {
         if (!isReloading && currentMag < currentWeapon.magSize && (currentWeapon.hasInfiniteAmmo || totalBullets > 0))
         {
@@ -190,6 +196,11 @@ public class WeaponController : MonoBehaviour
             }
             reloadCoroutine = StartCoroutine(Reload());
         }
+    }
+
+    private void HandleReload(InputAction.CallbackContext context)
+    {
+        TryReload();
     }
 
     private IEnumerator Reload()
@@ -234,7 +245,6 @@ public class WeaponController : MonoBehaviour
     {
         if (reloadCoroutine != null)
         {
-            PlayerSounds.Instance.StopActualSoundClip();
             StopCoroutine(reloadCoroutine);
             isReloading = false;
             reloadCoroutine = null;
@@ -281,7 +291,6 @@ public class WeaponController : MonoBehaviour
         isMeleeAttacking = true;
         if (reloadCoroutine != null)
         {
-            PlayerSounds.Instance.StopActualSoundClip();
             isReloading = false;
             reloadSlider.value = 0f;
             reloadSlider.gameObject.SetActive(false);

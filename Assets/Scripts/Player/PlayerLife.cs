@@ -82,6 +82,8 @@ public class PlayerLife : MonoBehaviour, IDamageable
 
     private void Die()
     {
+        PlayerSounds.Instance.PlayPlayerDeathAudioSound();
+        GameManager.Instance.StopBossMusic();
         OnPlayerDeath?.Invoke();
         GameManager.Instance.ActivateDeathCanvas();
         Destroy(gameObject);

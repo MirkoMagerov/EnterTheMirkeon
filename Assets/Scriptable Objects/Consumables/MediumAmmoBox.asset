@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Medium Ammo Box
   itemDescription: Restores 55% of the maximum bullet capacity for each weapon in
     the player's inventory.
-  itemType: 3
+  itemType: 2
   itemIcon: {fileID: 21300000, guid: 5fefe44fcf6a6fb4898c167d941f993b, type: 3}
   healthRestoreAmount: 0
   percentatgeTotalBulletsToAdd: 55

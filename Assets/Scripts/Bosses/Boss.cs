@@ -21,6 +21,8 @@ public class Boss : MonoBehaviour
     private float spiralAngle = 0f;
     private Coroutine mainCoroutine;
     private GameObject playerTarget;
+    private float leftLimit;
+    private float rightLimit;
 
     private void Awake()
     {
@@ -32,6 +34,8 @@ public class Boss : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         playerTarget = GameObject.FindGameObjectWithTag("EnemyTarget");
+        rightLimit = transform.position.x - Mathf.Abs(movementBounds.x);
+        leftLimit = transform.position.x + Mathf.Abs(movementBounds.y);
 
         StartMainCoroutine();
     }
@@ -78,10 +82,12 @@ public class Boss : MonoBehaviour
             }
             else if (bossLife.health > 1350)
             {
+                bossLife.ChangeColorPhase(2);
                 yield return PhaseTwo();
             }
             else
             {
+                bossLife.ChangeColorPhase(3);
                 yield return PhaseThree();
             }
         }
@@ -91,10 +97,7 @@ public class Boss : MonoBehaviour
     {
         anim.SetBool("Moving", true);
 
-        float rangeStart = transform.position.x - Mathf.Abs(movementBounds.x);
-        float rangeEnd = transform.position.x + Mathf.Abs(movementBounds.y);
-
-        float targetX = lastMoveRight ? rangeEnd : rangeStart;
+        float targetX = lastMoveRight ? rightLimit : leftLimit;
         lastMoveRight = !lastMoveRight;
 
         FlipEnemy(targetX > transform.position.x);
@@ -296,5 +299,25 @@ public class Boss : MonoBehaviour
         StopCoroutine(mainCoroutine);
         anim.SetBool("Moving", false);
         anim.Play("Idle");
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Solo dibujar si estás en el editor y los bounds tienen sentido
+        if (movementBounds != Vector2.zero)
+        {
+            Gizmos.color = Color.yellow;
+
+            // Dibujar los puntos de los límites
+            Vector3 leftBound = new Vector3(transform.position.x - Mathf.Abs(movementBounds.x), transform.position.y, transform.position.z);
+            Vector3 rightBound = new Vector3(transform.position.x + Mathf.Abs(movementBounds.y), transform.position.y, transform.position.z);
+
+            // Dibujar esferas en los límites
+            Gizmos.DrawSphere(leftBound, 0.2f);
+            Gizmos.DrawSphere(rightBound, 0.2f);
+
+            // Dibujar una línea entre los límites
+            Gizmos.DrawLine(leftBound, rightBound);
+        }
     }
 }

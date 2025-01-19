@@ -650,6 +650,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9187691748725148820}
   - component: {fileID: 5469292456949741994}
+  - component: {fileID: 6632778099820646843}
+  - component: {fileID: 3991229293957173738}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -711,6 +713,119 @@ MonoBehaviour:
   animator: {fileID: 1239175134354494335}
   panel: {fileID: 4726288604763260213}
   playerPrefab: {fileID: 22131646393105513, guid: f3044fffe1c62b144844b21306e60e53, type: 3}
+--- !u!114 &6632778099820646843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2453533958086709887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6428bdd0186a854e9e527455896269b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music:
+  - {fileID: 8300000, guid: 9f7ae2867016de64690ba78c92eb42c8, type: 3}
+  - {fileID: 8300000, guid: 75d75a2b8556c70408aaccc9344599e5, type: 3}
+  - {fileID: 8300000, guid: a131089ceab59524688078622cb5afde, type: 3}
+  bossMusic: {fileID: 8300000, guid: 9846c12b35d33614db8e6239b255e090, type: 3}
+--- !u!82 &3991229293957173738
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2453533958086709887}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.125
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3756620232775246257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2015,8 +2130,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: maxRooms
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: minRooms
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: startRoomPrefab
+      value: 
+      objectReference: {fileID: 3877007221720254726, guid: 56c0c42bcc670f443a71962b81aa4bee, type: 3}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
       propertyPath: enemies.Array.size
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
       propertyPath: enemies.Array.data[0]
@@ -2026,6 +2153,18 @@ PrefabInstance:
       propertyPath: enemies.Array.data[1]
       value: 
       objectReference: {fileID: 66175537605672692, guid: d2c19796aac0b8b42b0f638c0abd68d6, type: 3}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: enemies.Array.data[2]
+      value: 
+      objectReference: {fileID: 3623018157505698808, guid: 985b6dfa7cfead641bb4480c6420efb2, type: 3}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: enemies.Array.data[3]
+      value: 
+      objectReference: {fileID: 2923619617234336817, guid: 0d1cdbaa1eab34a4ea921adb5a56512f, type: 3}
+    - target: {fileID: 4469377828248048082, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
+      propertyPath: enemies.Array.data[4]
+      value: 
+      objectReference: {fileID: 6492551450336237757, guid: 24017e66845bf0e40a104d2be8e2d357, type: 3}
     - target: {fileID: 5994139355505085747, guid: 5a72b9bee70dcf4418f1ea017fe7da53, type: 3}
       propertyPath: m_Name
       value: Dungeon Generator

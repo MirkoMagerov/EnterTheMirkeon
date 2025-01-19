@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Small Ammo Box
   itemDescription: Restores 30% of the maximum bullet capacity for each weapon in
     the player's inventory.
-  itemType: 3
+  itemType: 2
   itemIcon: {fileID: 21300000, guid: 274941f16195c0d4f8bed6d1365a93f3, type: 3}
   healthRestoreAmount: 0
   percentatgeTotalBulletsToAdd: 30

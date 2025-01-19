@@ -6,8 +6,11 @@ public class BossLife : MonoBehaviour, IDamageable
 {
     public event Action OnBossDead;
 
+    [SerializeField] private Color secondPhaseColor;
+    [SerializeField] private Color thirdPhaseColor;
     [SerializeField] public float health;
     [SerializeField] private Slider slider;
+    private SpriteRenderer spriteRenderer;
     private Boss boss;
 
     private void Start()
@@ -15,6 +18,7 @@ public class BossLife : MonoBehaviour, IDamageable
         slider.maxValue = health;
         slider.value = health;
         boss = GetComponent<Boss>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void TakeDamage(int damage, GameObject obj)
@@ -27,8 +31,23 @@ public class BossLife : MonoBehaviour, IDamageable
         if (health <= 0) Die();
     }
 
+    public void ChangeColorPhase(int phase)
+    {
+        switch(phase)
+        {
+            case 2:
+                spriteRenderer.color = secondPhaseColor;
+                break;
+            case 3:
+                spriteRenderer.color = thirdPhaseColor;
+                break;
+            default: break;
+        }
+    }
+
     private void Die()
     {
         OnBossDead?.Invoke();
+        this.enabled = false;
     }
 }

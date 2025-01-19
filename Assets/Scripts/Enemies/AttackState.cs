@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class AttackState : EnemyState
 {
-    private float attackCooldown = 1f;
+    private float minAttackCooldown = 0.7f;
+    private float maxAttackCooldown = 1.7f;
+    private float attackCooldown;
     private float lastAttackTime;
     private float stayInAttackDistance = 18f;
 
@@ -12,6 +14,7 @@ public class AttackState : EnemyState
     public override void Enter()
     {
         PlayAnimation("Idle");
+        ResetAttackCooldown();
         lastAttackTime = Time.time;
     }
 
@@ -45,8 +48,14 @@ public class AttackState : EnemyState
             stateMachine.bulletSpawnPoint.transform.position,
             Quaternion.identity
         );
+        stateMachine.PlayBulletShootAudio();
 
         bullet.GetComponent<EnemyBullet>().SetDirection(direction);
         Object.Destroy(bullet, 6f);
+    }
+
+    private void ResetAttackCooldown()
+    {
+        attackCooldown = Random.Range(minAttackCooldown, maxAttackCooldown);
     }
 }

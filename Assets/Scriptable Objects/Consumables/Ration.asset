@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: Ration
   itemDescription: Heals player for 1 full heart and is automatically used before
     the player dies
-  itemType: 3
+  itemType: 2
   itemIcon: {fileID: 21300000, guid: b732c60e43f885e46b83d9bbf396575f, type: 3}
   healthRestoreAmount: 2

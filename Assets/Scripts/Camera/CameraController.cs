@@ -17,11 +17,6 @@ public class CameraController : MonoBehaviour
         EnableCameraFollowing();
     }
 
-    private void OnEnable()
-    {
-        player.GetComponent<PlayerLife>().OnPlayerDeath += PlayerDead;
-    }
-
     private void OnDisable()
     {
         player.GetComponent<PlayerLife>().OnPlayerDeath -= PlayerDead;
@@ -36,6 +31,7 @@ public class CameraController : MonoBehaviour
     public void EnableCameraFollowing()
     {
         player = GameManager.Instance.player;
+        player.GetComponent<PlayerLife>().OnPlayerDeath += PlayerDead;
         Vector3 newPosition = transform.position + player.transform.position;
         newPosition.z = -10;
         transform.position = newPosition;

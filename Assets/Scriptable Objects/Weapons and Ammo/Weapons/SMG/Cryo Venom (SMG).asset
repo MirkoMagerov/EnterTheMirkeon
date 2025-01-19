@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Cryo Venom (SMG)
   m_EditorClassIdentifier: 
   weaponName: Cryo Venom
-  fireRate: 5.7
+  fireRate: 5.8
   bulletsPerShot: 1
   spreadAngle: 25
   magSize: 34
   totalBullets: 136
-  damagePerBullet: 22
+  damagePerBullet: 18
   reloadTime: 2
   bulletSpawnOffset: {x: 1.1, y: 0}
   weaponType: 0

@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e309d678559713346850896c8f0c7bbf, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.53396225, b: 0.53396225, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   phaseOneAttackCooldown: 2
   phaseTwoAttackCooldown: 1.5
   phaseThreeAttackCooldown: 1
-  movementBounds: {x: -12, y: 12}
+  movementBounds: {x: -15, y: 15}
 --- !u!114 &5873443692635607864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,7 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4d0788622ac9f41966859293428b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2150
+  secondPhaseColor: {r: 1, g: 0.76862746, b: 0.76862746, a: 1}
+  thirdPhaseColor: {r: 1, g: 0.53333336, b: 0.53333336, a: 1}
+  health: 3650
   slider: {fileID: 7220850597249026766}
 --- !u!50 &5833548195639997708
 Rigidbody2D:

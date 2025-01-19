@@ -10,6 +10,8 @@ public class EnemyStateMachine : MonoBehaviour
     public GameObject bulletSpawnPoint;
     private bool isDealingDamage = false;
     [SerializeField] private bool defaultFacingRight = true;
+    [SerializeField] private AudioSource shootAudioSource;
+    [SerializeField] private AudioSource explosionAudioSource;
 
     private EnemyState currentState;
     private GameObject player;
@@ -115,6 +117,16 @@ public class EnemyStateMachine : MonoBehaviour
         {
             isDealingDamage = false;
         }
+    }
+
+    public void PlayBulletShootAudio()
+    {
+        shootAudioSource.Play();
+    }
+
+    public void PlayExplosionAudio()
+    {
+        explosionAudioSource.Play();
     }
 
     public void DestroyGameObject()

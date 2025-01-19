@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d21f6b8cb25247488614f64957e43c3, type: 3}
   m_Name: Starter Pistol
   m_EditorClassIdentifier: 
-  weaponName: Pistol
+  weaponName: Peashooter
   fireRate: 3.3
   bulletsPerShot: 1
   spreadAngle: 25
