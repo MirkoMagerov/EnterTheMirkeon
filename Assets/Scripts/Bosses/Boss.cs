@@ -76,11 +76,11 @@ public class Boss : MonoBehaviour
     {
         while (bossLife.health > 0 && playerAlive)
         {
-            if (bossLife.health > 2850)
+            if (bossLife.health > 2500)
             {
                 yield return PhaseOne();
             }
-            else if (bossLife.health > 1350)
+            else if (bossLife.health > 950)
             {
                 bossLife.ChangeColorPhase(2);
                 yield return PhaseTwo();

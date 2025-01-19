@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e309d678559713346850896c8f0c7bbf, type: 3}
-  m_Color: {r: 1, g: 0.53396225, b: 0.53396225, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   phaseOneAttackCooldown: 2
   phaseTwoAttackCooldown: 1.5
   phaseThreeAttackCooldown: 1
-  movementBounds: {x: -15, y: 15}
+  movementBounds: {x: -11.5, y: 11.5}
 --- !u!114 &5873443692635607864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secondPhaseColor: {r: 1, g: 0.76862746, b: 0.76862746, a: 1}
   thirdPhaseColor: {r: 1, g: 0.53333336, b: 0.53333336, a: 1}
-  health: 3650
+  health: 3500
   slider: {fileID: 7220850597249026766}
 --- !u!50 &5833548195639997708
 Rigidbody2D:
@@ -507,8 +507,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 101.89134}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 98.25}
+  m_SizeDelta: {x: 307.7819, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7170975366477106354
 CanvasRenderer:
@@ -538,10 +538,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Boss
+  m_text: Malikoth
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed360382e7e1d294abf7110b336007a9, type: 2}
+  m_sharedMaterial: {fileID: 8505557714280557936, guid: ed360382e7e1d294abf7110b336007a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -565,8 +565,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44
-  m_fontSizeBase: 44
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
