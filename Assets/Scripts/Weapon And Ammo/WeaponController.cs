@@ -112,6 +112,20 @@ public class WeaponController : MonoBehaviour
                 {
                     FireSingleBulletWeapon(directionToMouse);
                     lastFireTime = Time.time;
+
+                    if (currentMag == 0)
+                    {
+                        if (TryReload())
+                        {
+                            yield return new WaitUntil(() => !isReloading);
+                        }
+                        else
+                        {
+                            PlayerSounds.Instance.PlayEmptyMgazineSound();
+                            StopShooting(default);
+                            yield break;
+                        }
+                    }
                 }
                 else
                 {
@@ -186,7 +200,7 @@ public class WeaponController : MonoBehaviour
         weaponInventory.SetAmmoData(currentWeapon, currentMag, totalBullets);
     }
 
-    private void TryReload()
+    private bool TryReload()
     {
         if (!isReloading && currentMag < currentWeapon.magSize && (currentWeapon.hasInfiniteAmmo || totalBullets > 0))
         {
@@ -195,7 +209,9 @@ public class WeaponController : MonoBehaviour
                 StopCoroutine(reloadCoroutine);
             }
             reloadCoroutine = StartCoroutine(Reload());
+            return true;
         }
+        return false;
     }
 
     private void HandleReload(InputAction.CallbackContext context)

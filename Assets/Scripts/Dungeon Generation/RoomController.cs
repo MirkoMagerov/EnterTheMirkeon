@@ -290,7 +290,7 @@ public class RoomController : MonoBehaviour
             int randomIndex = Random.Range(0, roomData.enemyPrefabs.Length);
             GameObject enemyPrefab = roomData.enemyPrefabs[randomIndex];
 
-            Vector3 spawnPosition = transform.position + new Vector3(spawnPoint.x, spawnPoint.y, 0);
+            Vector3 spawnPosition = transform.position + (Vector3)spawnPoint;
             Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         }
     }

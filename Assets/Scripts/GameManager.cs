@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     public bool gamePaused = false;
     private bool playerDead = false;
     private MusicManager musicManager;
+    private bool gameStarted = false;
 
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject panel;
@@ -40,9 +42,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Dungeon" && !playerDead)
+        InputManager.Instance.GetInputActions().PauseMenu.PauseButton.performed += CheckPause;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.Instance.GetInputActions().PauseMenu.PauseButton.performed -= CheckPause;
+    }
+
+    private void CheckPause(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (SceneManager.GetActiveScene().name == "Dungeon" && !playerDead)
         {
             if (Time.timeScale == 0f)
             {
@@ -82,10 +94,14 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        ChangeSceneWithTransition("Dungeon", () =>
+        if (!gameStarted)
         {
-            dungeonGenerator.GenerateDungeon();
-        });
+            gameStarted = true;
+            ChangeSceneWithTransition("Dungeon", () =>
+            {
+                dungeonGenerator.GenerateDungeon();
+            });
+        }
     }
 
     public void ExitGame()
@@ -100,6 +116,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         pauseCanvas.SetActive(true);
         InputManager.Instance.GetInputActions().Disable();
+        InputManager.Instance.GetInputActions().PauseMenu.Enable();
         Cursor.visible = true;
     }
 
@@ -115,6 +132,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartDungeon()
     {
+        gameStarted = false;
         foreach (Transform child in dungeonGenerator.transform) { Destroy(child.gameObject); }
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

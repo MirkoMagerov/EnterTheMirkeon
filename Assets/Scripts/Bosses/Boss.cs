@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
+    private const int SECOND_PHASE_HEALTH_CHANGE = 2900;
+    private const int THIRD_PHASE_HEALTH_CHANGE = 1450;
+
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private BossLife bossLife;
@@ -33,7 +36,7 @@ public class Boss : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        playerTarget = GameObject.FindGameObjectWithTag("EnemyTarget");
+        playerTarget = GameManager.Instance.player;
         rightLimit = transform.position.x - Mathf.Abs(movementBounds.x);
         leftLimit = transform.position.x + Mathf.Abs(movementBounds.y);
 
@@ -42,27 +45,22 @@ public class Boss : MonoBehaviour
 
     private void OnEnable()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLife>().OnPlayerDeath += OnPlayerDeath;
+        GameManager.Instance.player.GetComponent<PlayerLife>().OnPlayerDeath += OnPlayerDeath;
         bossLife.OnBossDead += OnBossDeath;
     }
 
     private void OnDisable()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLife>().OnPlayerDeath -= OnPlayerDeath;
+        GameManager.Instance.player.GetComponent<PlayerLife>().OnPlayerDeath -= OnPlayerDeath;
         bossLife.OnBossDead -= OnBossDeath;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && bossLife.health > 0)
+        if (collision.gameObject.TryGetComponent<IDamageable>(out var playerLife) && bossLife.health > 0)
         {
-            PlayerLife playerLife = collision.gameObject.GetComponent<PlayerLife>();
-
-            if (playerLife != null)
-            {
-                int damage = 1;
-                playerLife.TakeDamage(damage, gameObject);
-            }
+            int damage = 1;
+            playerLife.TakeDamage(damage);
         }
     }
 
@@ -76,11 +74,11 @@ public class Boss : MonoBehaviour
     {
         while (bossLife.health > 0 && playerAlive)
         {
-            if (bossLife.health > 2500)
+            if (bossLife.health > SECOND_PHASE_HEALTH_CHANGE)
             {
                 yield return PhaseOne();
             }
-            else if (bossLife.health > 950)
+            else if (bossLife.health > THIRD_PHASE_HEALTH_CHANGE)
             {
                 bossLife.ChangeColorPhase(2);
                 yield return PhaseTwo();
@@ -90,6 +88,41 @@ public class Boss : MonoBehaviour
                 bossLife.ChangeColorPhase(3);
                 yield return PhaseThree();
             }
+        }
+    }
+
+    private IEnumerator PhaseOne()
+    {
+        attackCooldown = phaseOneAttackCooldown;
+
+        while (bossLife.health > SECOND_PHASE_HEALTH_CHANGE && playerAlive)
+        {
+            yield return Move();
+            yield return AttackPatternOne();
+        }
+    }
+
+    private IEnumerator PhaseTwo()
+    {
+        attackCooldown = phaseTwoAttackCooldown;
+        damageReduction = 15;
+
+        while (bossLife.health > THIRD_PHASE_HEALTH_CHANGE && playerAlive)
+        {
+            yield return Move();
+            yield return AttackPatternTwo();
+        }
+    }
+
+    private IEnumerator PhaseThree()
+    {
+        attackCooldown = phaseThreeAttackCooldown;
+        damageReduction = 25;
+
+        while (bossLife.health > 0 && playerAlive)
+        {
+            yield return Move();
+            yield return AttackPatternThree();
         }
     }
 
@@ -112,41 +145,6 @@ public class Boss : MonoBehaviour
 
         anim.SetBool("Moving", false);
         yield return new WaitForSeconds(.75f);
-    }
-
-    private IEnumerator PhaseOne()
-    {
-        attackCooldown = phaseOneAttackCooldown;
-
-        while (bossLife.health > 2850 && playerAlive)
-        {
-            yield return Move();
-            yield return AttackPatternOne();
-        }
-    }
-
-    private IEnumerator PhaseTwo()
-    {
-        attackCooldown = phaseTwoAttackCooldown;
-        damageReduction = 15;
-
-        while (bossLife.health > 1350 && playerAlive)
-        {
-            yield return Move();
-            yield return AttackPatternTwo();
-        }
-    }
-
-    private IEnumerator PhaseThree()
-    {
-        attackCooldown = phaseThreeAttackCooldown;
-        damageReduction = 25;
-
-        while (bossLife.health > 0 && playerAlive)
-        {
-            yield return Move();
-            yield return AttackPatternThree();
-        }
     }
 
     private IEnumerator AttackPatternOne()
@@ -299,25 +297,5 @@ public class Boss : MonoBehaviour
         StopCoroutine(mainCoroutine);
         anim.SetBool("Moving", false);
         anim.Play("Idle");
-    }
-
-    private void OnDrawGizmos()
-    {
-        // Solo dibujar si estás en el editor y los bounds tienen sentido
-        if (movementBounds != Vector2.zero)
-        {
-            Gizmos.color = Color.yellow;
-
-            // Dibujar los puntos de los límites
-            Vector3 leftBound = new Vector3(transform.position.x - Mathf.Abs(movementBounds.x), transform.position.y, transform.position.z);
-            Vector3 rightBound = new Vector3(transform.position.x + Mathf.Abs(movementBounds.y), transform.position.y, transform.position.z);
-
-            // Dibujar esferas en los límites
-            Gizmos.DrawSphere(leftBound, 0.2f);
-            Gizmos.DrawSphere(rightBound, 0.2f);
-
-            // Dibujar una línea entre los límites
-            Gizmos.DrawLine(leftBound, rightBound);
-        }
     }
 }

@@ -1,6 +1,5 @@
-using UnityEngine;
 
 public interface IDamageable
 {
-    void TakeDamage(int damage, GameObject obj);
+    void TakeDamage(int damage);
 }

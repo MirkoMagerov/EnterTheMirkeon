@@ -30,7 +30,7 @@ public class BulletBehavior : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
-            damageable.TakeDamage(damage, gameObject);
+            damageable.TakeDamage(damage);
             Destroy(gameObject);
         }
         else

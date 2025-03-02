@@ -49,7 +49,7 @@ public class PlayerDash : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext context)
     {
-        if (dashCooldownTimer <= 0 && !PlayerState.Instance.IsDashing)
+        if (dashCooldownTimer <= 0 && !PlayerState.Instance.IsDashing && dashDirection != Vector2.zero)
         {
             StartDash();
         }

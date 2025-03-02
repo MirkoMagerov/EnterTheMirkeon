@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class EnemyLife : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float health;
+    [SerializeField] private int health;
     [SerializeField] private Slider slider;
     [SerializeField] private GameObject coin;
     [SerializeField] private GameObject deathParticlesPrefab;
@@ -18,10 +18,11 @@ public class EnemyLife : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void TakeDamage(int damage, GameObject obj)
+    public void TakeDamage(int damage)
     {
         if (!slider.IsActive()) slider.gameObject.SetActive(true);
         health -= damage;
+        health = Mathf.Max(0, health);
         slider.value = Math.Max(0, health);
         if (health <= 0) Die();
     }

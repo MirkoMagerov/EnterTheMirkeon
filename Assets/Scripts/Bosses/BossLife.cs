@@ -21,12 +21,13 @@ public class BossLife : MonoBehaviour, IDamageable
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void TakeDamage(int damage, GameObject obj)
+    public void TakeDamage(int damage)
     {
         int damageReduction = boss.GetDamageReduction();
         int actualDamage = damage * (100 - damageReduction) / 100;
 
         health -= actualDamage;
+        health = Math.Max(0, health);
         slider.value = Math.Max(0, health);
         if (health <= 0) Die();
     }

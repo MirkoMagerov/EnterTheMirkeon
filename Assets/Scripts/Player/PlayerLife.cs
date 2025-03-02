@@ -41,29 +41,6 @@ public class PlayerLife : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(int damage, GameObject obj)
-    {
-        if (!PlayerState.Instance.IsInvulnerable)
-        {
-            anim.SetTrigger("Hit");
-            currentHealth -= damage;
-            PlayerSounds.Instance.PlayHitSound();
-            OnHealthChanged?.Invoke(currentHealth);
-            if (currentHealth <= 0)
-            {
-                bool rationUsed = GetComponent<ConsumablesInventory>().UseRationBeforeDeath();
-                if (rationUsed)
-                {
-                    return;
-                }
-                else
-                {
-                    Die();
-                }
-            }
-        }
-    }
-
     public void RegenerateHealth(int restoredHP)
     {
         currentHealth = Mathf.Min(currentHealth + restoredHP, maxHealth);

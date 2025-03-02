@@ -9,7 +9,7 @@ public class Sword : MonoBehaviour
     {
         if (collision.TryGetComponent<EnemyLife>(out var enemyLife))
         {
-            enemyLife.TakeDamage(swordDamage, gameObject);
+            enemyLife.TakeDamage(swordDamage);
 
             if (collision.TryGetComponent<Rigidbody2D>(out var enemyRigidbody))
             {

@@ -1556,6 +1556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapons:
   - {fileID: 11400000, guid: 9395d660b0ee56342aa35f9c21e6b109, type: 2}
+  - {fileID: 11400000, guid: 63fe2d93e6958da43a4471effbcdd5c7, type: 2}
   currentWeaponImageUI: {fileID: 578953227098925341}
   previousWeaponImageUI: {fileID: 6913906163524965271}
   nextWeaponImageUI: {fileID: 2751598873879926103}
